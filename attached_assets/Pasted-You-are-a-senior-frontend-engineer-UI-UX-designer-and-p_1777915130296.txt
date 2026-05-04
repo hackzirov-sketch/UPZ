@@ -1,0 +1,311 @@
+You are a senior frontend engineer, UI/UX designer, and product designer.
+
+Build a production-quality landing page for a startup web platform called “Universal Productivity Zone”.
+
+The landing page must clearly explain the product before the user logs in. It should feel like a modern SaaS/startup website, not a simple template.
+
+PROJECT IDEA:
+Universal Productivity Zone is an all-in-one productivity ecosystem where users can learn skills, find jobs, collaborate with teams, manage tasks and projects, communicate through chats, grow as freelancers, and use AI assistants.
+
+The platform personalizes the user experience after registration based on profession, goal, and experience level.
+
+DESIGN DIRECTION:
+Use a Modern Minimal Light design.
+
+Visual style:
+- Soft milk-white background: #F7FAFC
+- White cards: #FFFFFF
+- Dark main text: #111827
+- Secondary text: #6B7280
+- Light borders: #E5E7EB
+- Accent colors: #6366F1 and #3B82F6
+- Soft shadows
+- Large rounded corners
+- Clean spacing
+- Apple / Notion / modern SaaS inspired
+- Premium, emotional, clean, and trustworthy
+- Avoid clutter
+- Avoid too much color
+- Avoid aggressive animations
+
+TECH STACK:
+- React
+- TypeScript
+- Tailwind CSS
+- Framer Motion
+- Lottie React
+
+RESPONSIVENESS:
+The page must be fully responsive:
+- desktop
+- tablet
+- mobile
+
+PAGE STRUCTURE:
+
+1. HEADER
+Create a sticky modern header with:
+- Logo text: Universal Productivity Zone
+- Navigation links:
+  Features
+  How it works
+  For whom
+  AI Assistant
+  Contact
+- Buttons:
+  Login
+  Get Started
+
+The header should have a clean white/transparent look with subtle blur or shadow.
+
+2. HERO SECTION
+Create a powerful hero section.
+
+Headline:
+“Work. Learn. Earn. All in one place.”
+
+Subheadline:
+“Universal Productivity Zone helps users learn skills, find jobs, manage teams, grow as freelancers, and work with AI-powered productivity tools in one personalized workspace.”
+
+Buttons:
+- Get Started
+- Explore Features
+
+Right side:
+Use a large Lottie animation from the provided Lottie sources. Pick the most suitable app/productivity animation.
+
+Hero should look premium and emotional.
+
+3. PROBLEM SECTION
+Explain the problem clearly:
+Users currently use separate platforms for:
+- learning
+- job search
+- team communication
+- project management
+- file sharing
+- freelancing
+- payments
+- productivity
+
+This causes:
+- wasted time
+- scattered workflow
+- low productivity
+- poor team control
+- difficulty for beginners
+
+4. SOLUTION SECTION
+Explain the solution:
+Universal Productivity Zone combines:
+- personalized workspace
+- chat
+- dashboard
+- tasks and notes
+- learning
+- freelancing
+- AI assistant
+- professional communities
+- future payment tools
+
+Use clean cards or split layout.
+
+5. FEATURES SECTION
+Create modern feature cards.
+
+Features:
+- Personalized Workspace
+  Description: Workspace changes based on user profession and goals.
+
+- Chat System
+  Description: 1–1, group, team, and project-based communication.
+
+- Dashboard
+  Description: Track productivity, team progress, charts, and reports.
+
+- Tasks & Notes
+  Description: Manage to-dos, important notes, deadlines, and project ideas.
+  Use the data analysis Lottie animation for this card.
+
+- Learning System
+  Description: Users can learn skills and grow professionally.
+  Use the student Lottie animation.
+
+- Freelance & Hiring
+  Description: The platform helps train freelancers from zero and connects them with real projects.
+  Use the search-for-employee Lottie animation.
+
+- Content & Social Media Tools
+  Description: Useful for content creators, SMM specialists, mobilographers, and marketers.
+  Use social media influencer, content manager, or SEO animations.
+
+- Universal Bank
+  Description: Future section for local payments, wallets, freelance income, and crypto wallet support.
+  Use the money animation.
+
+- AI Assistant
+  Description: AI helps with tasks, learning, project ideas, summaries, and productivity.
+
+6. HOW IT WORKS SECTION
+Create a 3-step process:
+
+Step 1:
+Sign up
+
+Step 2:
+Choose your profession, goal, and experience level
+
+Step 3:
+Get a personalized workspace
+
+Make this section visually clear with numbers, cards, and small animations.
+
+7. FOR WHOM SECTION
+Create cards for target users:
+
+- Developers
+  GitHub integration, AI coding help, project dashboard
+
+- Teachers
+  Course management, student progress, class tools, educational communication
+
+- Students
+  Learning path, notes, tasks, self-development
+
+- Freelancers
+  Portfolio, projects, client communication, income tools
+
+- Content creators / Mobilographers
+  Instagram, YouTube, content planning, media workflow
+
+- SMM specialists
+  Campaign planning, analytics, social media tools
+
+- Designers
+  Portfolio, project files, feedback, team collaboration
+
+- Teams and companies
+  Team control, project management, productivity statistics
+
+8. AI ASSISTANT SECTION
+Create a dedicated section that feels futuristic but still minimal.
+
+Explain that AI can help with:
+- task suggestions
+- learning support
+- project planning
+- summaries
+- productivity tips
+- team assistance
+
+Use a suitable Lottie animation from the provided collections.
+
+9. FREELANCER ECOSYSTEM SECTION
+This is important.
+
+Explain:
+Universal Productivity Zone is not just a freelance website.
+It helps users become freelancers from zero.
+
+Flow:
+Learn → Practice → Build portfolio → Join team → Work on real projects → Earn
+
+This section should feel inspiring and important.
+
+10. FINAL CTA SECTION
+Title:
+“Start building your future workspace today.”
+
+Text:
+“Join a platform designed for learning, working, collaboration, and professional growth.”
+
+Buttons:
+- Get Started
+- Login
+
+11. FOOTER
+Include:
+- Product
+- Features
+- Community
+- Contact
+- Privacy
+- Universal Productivity Zone copyright
+
+LOTTIE SOURCES:
+Use these Lottie collections and individual animations.
+Choose animations according to meaning and section relevance.
+
+Collections:
+https://lottiefiles.com/collections/app-lLxVQyKZES
+https://lottiefiles.com/collections/ikhtiar-animations-DERagjMAOO
+https://lottiefiles.com/collections/moein-DC9phbO8JY
+
+Individual animations:
+Student / Learning:
+https://lottiefiles.com/free-animation/student-YSyIYv8kL6
+
+Search for employee / hiring:
+https://lottiefiles.com/free-animation/search-for-employee-30zQHdFgAg
+
+Revenue / business growth:
+https://lottiefiles.com/free-animation/revenue-tuJQOIS7CB
+
+Social media influencer:
+https://lottiefiles.com/free-animation/social-media-influencer-lXqDr6OUmm
+
+Content manager:
+https://lottiefiles.com/free-animation/content-manager-qYUQIUcijE
+
+SEO:
+https://lottiefiles.com/free-animation/search-engine-optimization-g4xfEcVwCG
+
+Tasks & Notes / Data analysis:
+https://lottiefiles.com/free-animation/isometric-data-analysis-ShxkGwzoGW
+
+Money / Universal Bank:
+https://lottiefiles.com/free-animation/money-9Rs7JUzu1D
+
+IMPORTANT LOTTIE RULES:
+- If a Lottie page URL cannot be used directly as JSON, use Lottie embed method or prepare the component so JSON URLs can be added later.
+- Do not break the UI if animation fails.
+- Add fallback placeholder cards if animation cannot load.
+- Use animations only where meaningful.
+- Do not overload the page with too many animations.
+
+MOTION RULES:
+Use Framer Motion:
+- fade-in on scroll
+- slight card lift on hover
+- subtle button scale on hover/tap
+- smooth hero entrance
+- no aggressive bouncing
+- no slow heavy animations
+
+COMPONENT STRUCTURE:
+Create reusable components:
+- Header
+- Hero
+- ProblemSection
+- SolutionSection
+- FeatureCard
+- HowItWorks
+- ForWhom
+- AISection
+- FreelancerEcosystem
+- CTA
+- Footer
+
+CODE QUALITY:
+- Use clean TypeScript
+- Use reusable arrays/data objects for cards
+- Avoid repeating code
+- Keep components readable
+- Use semantic HTML
+- Use accessible buttons and links
+- Add comments where useful
+- Make the layout scalable for future sections
+
+OUTPUT:
+Create a polished landing page that looks ready for a real startup demo.
+The result should impress an admin/investor and clearly explain why Universal Productivity Zone is useful.

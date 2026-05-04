@@ -56,10 +56,10 @@ export function AIAssistantSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <div
-              className="w-full max-w-md rounded-3xl bg-indigo-950/60 border border-indigo-500/20 shadow-2xl backdrop-blur-sm flex items-center justify-center"
+              className="relative w-full max-w-md rounded-3xl bg-indigo-950/60 border border-indigo-500/20 shadow-2xl backdrop-blur-sm overflow-hidden flex items-center justify-center"
               style={{ height: "380px" }}
             >
-              <div className="absolute inset-0 rounded-3xl bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.18),transparent_70%)]" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.18),transparent_70%)] pointer-events-none" />
               <LottieAnimation
                 url="/animations/learning.json"
                 fallback={
@@ -68,7 +68,7 @@ export function AIAssistantSection() {
                     <span className="text-sm text-indigo-300">Animation loading</span>
                   </div>
                 }
-                className="w-full h-full p-6 relative z-10"
+                className="w-full h-full p-6 z-10"
               />
             </div>
           </motion.div>

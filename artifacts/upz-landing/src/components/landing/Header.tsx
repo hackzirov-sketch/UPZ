@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
@@ -9,6 +9,7 @@ export function Header() {
   const { t } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [, navigate] = useLocation();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -53,10 +54,19 @@ export function Header() {
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center gap-2">
           <LanguageSwitcher />
-          <Button variant="outline" className="font-medium" data-testid="button-login">
+          <Button
+            variant="outline"
+            className="font-medium"
+            data-testid="button-login"
+            onClick={() => navigate("/onboarding")}
+          >
             {t("header.login")}
           </Button>
-          <Button className="bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 text-white border-0" data-testid="button-get-started">
+          <Button
+            className="bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 text-white border-0"
+            data-testid="button-get-started"
+            onClick={() => navigate("/onboarding")}
+          >
             {t("header.getStarted")}
           </Button>
         </div>
@@ -91,10 +101,13 @@ export function Header() {
             ))}
           </nav>
           <div className="flex flex-col gap-2 mt-2">
-            <Button variant="outline" className="w-full justify-center">
+            <Button variant="outline" className="w-full justify-center" onClick={() => navigate("/onboarding")}>
               {t("header.login")}
             </Button>
-            <Button className="w-full justify-center bg-gradient-to-r from-indigo-500 to-blue-500 text-white border-0">
+            <Button
+              className="w-full justify-center bg-gradient-to-r from-indigo-500 to-blue-500 text-white border-0"
+              onClick={() => navigate("/onboarding")}
+            >
               {t("header.getStarted")}
             </Button>
           </div>

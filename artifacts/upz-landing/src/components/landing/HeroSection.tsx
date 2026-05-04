@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { LottieAnimation } from "./LottieAnimation";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "wouter";
 
 export function HeroSection() {
   const { t } = useTranslation();
+  const [, navigate] = useLocation();
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -58,7 +60,7 @@ export function HeroSection() {
             </motion.p>
 
             <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-              <Button size="lg" className="w-full sm:w-auto bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 text-white border-0 shadow-lg shadow-indigo-500/25 h-12 px-8 text-base" data-testid="button-hero-get-started">
+              <Button size="lg" onClick={() => navigate("/onboarding")} className="w-full sm:w-auto bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 text-white border-0 shadow-lg shadow-indigo-500/25 h-12 px-8 text-base" data-testid="button-hero-get-started">
                 {t("hero.getStarted")}
               </Button>
               <Button size="lg" variant="ghost" className="w-full sm:w-auto group h-12 px-8 text-base font-medium" data-testid="button-hero-explore">

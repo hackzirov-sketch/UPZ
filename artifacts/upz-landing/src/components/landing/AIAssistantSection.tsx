@@ -61,7 +61,7 @@ export function AIAssistantSection() {
             >
               <div className="absolute inset-0 rounded-3xl bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.18),transparent_70%)]" />
               <LottieAnimation
-                url="/animations/ai.json"
+                url="/animations/learning.json"
                 fallback={
                   <div className="flex flex-col items-center gap-3 text-indigo-400">
                     <Brain className="w-20 h-20 opacity-60" />

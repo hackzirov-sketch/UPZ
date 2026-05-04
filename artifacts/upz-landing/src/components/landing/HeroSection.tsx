@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight, LayoutDashboard } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { LottieAnimation } from "./LottieAnimation";
@@ -21,8 +21,8 @@ export function HeroSection() {
   return (
     <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-background">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] overflow-hidden -z-10 pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[400px] rounded-full bg-indigo-500/10 blur-3xl opacity-50" />
-        <div className="absolute top-[20%] right-[-5%] w-[30%] h-[300px] rounded-full bg-blue-500/10 blur-3xl opacity-50" />
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[400px] rounded-full bg-indigo-500/10 blur-3xl opacity-60" />
+        <div className="absolute top-[20%] right-[-5%] w-[30%] h-[300px] rounded-full bg-blue-500/10 blur-3xl opacity-60" />
       </div>
 
       <div className="container mx-auto px-4">
@@ -69,19 +69,16 @@ export function HeroSection() {
           </motion.div>
 
           <motion.div
-            className="flex-1 w-full max-w-[600px] lg:max-w-none relative"
+            className="flex-1 w-full max-w-[560px] lg:max-w-none relative"
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
           >
-            <div className="aspect-square md:aspect-[4/3] lg:aspect-square relative flex items-center justify-center">
-              <LottieAnimation
-                url="https://assets2.lottiefiles.com/packages/lf20_fcfjwiyb.json"
-                fallback={<LayoutDashboard className="w-32 h-32 text-indigo-200" />}
-                className="w-full h-full max-w-[500px]"
-              />
-            </div>
+            <LottieAnimation
+              url="/animations/hero.json"
+              className="w-full h-full max-w-[520px] mx-auto"
+            />
           </motion.div>
         </div>
       </div>

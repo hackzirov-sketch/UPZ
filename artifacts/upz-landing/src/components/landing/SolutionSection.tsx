@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Layers, MessageSquare, BarChart3, CheckSquare, BookOpen, Briefcase, Bot, Users, Wallet } from "lucide-react";
+import { LottieAnimation } from "./LottieAnimation";
 import { useTranslation } from "react-i18next";
 
 const MODULE_ICONS = [Layers, MessageSquare, BarChart3, CheckSquare, BookOpen, Briefcase, Bot, Users, Wallet];
@@ -44,6 +45,7 @@ export function SolutionSection() {
             </div>
           </motion.div>
 
+          {/* Right side: Lottie animation showing the rocket/growth */}
           <motion.div
             className="flex-1 w-full"
             initial={{ opacity: 0, x: 30 }}
@@ -51,32 +53,19 @@ export function SolutionSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="relative rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 shadow-xl p-8 aspect-square md:aspect-[4/3] flex items-center justify-center overflow-hidden">
-              <div className="relative w-48 h-48 bg-white rounded-full shadow-2xl flex items-center justify-center z-10 border-4 border-indigo-50">
-                <div className="text-center">
-                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-500 mx-auto flex items-center justify-center text-white font-bold text-2xl shadow-md mb-2">
-                    U
+            <div className="relative rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 shadow-xl overflow-hidden aspect-square md:aspect-[4/3] flex items-center justify-center p-4">
+              <LottieAnimation
+                url="/animations/rocket.json"
+                fallback={
+                  <div className="relative w-48 h-48 bg-white rounded-full shadow-2xl flex items-center justify-center border-4 border-indigo-50">
+                    <div className="text-center">
+                      <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-500 mx-auto flex items-center justify-center text-white font-bold text-2xl shadow-md mb-2">U</div>
+                      <span className="font-bold text-foreground">UPZ Core</span>
+                    </div>
                   </div>
-                  <span className="font-bold text-foreground">UPZ Core</span>
-                </div>
-                {[0, 1, 2, 3, 4, 5].map((i) => {
-                  const angle = (i * 60) * (Math.PI / 180);
-                  const radius = 140;
-                  const x = Math.cos(angle) * radius;
-                  const y = Math.sin(angle) * radius;
-                  return (
-                    <motion.div
-                      key={i}
-                      className="absolute w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center border border-border"
-                      style={{ x, y }}
-                      animate={{ y: [y - 5, y + 5, y - 5] }}
-                      transition={{ duration: 4, repeat: Infinity, delay: i * 0.5, ease: "easeInOut" }}
-                    >
-                      <div className="w-2 h-2 rounded-full bg-indigo-500" />
-                    </motion.div>
-                  );
-                })}
-              </div>
+                }
+                className="w-full h-full max-w-[420px] mx-auto"
+              />
             </div>
           </motion.div>
         </div>

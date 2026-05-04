@@ -1,0 +1,265 @@
+Now continue the project after the landing page.
+
+Build the internal MVP app design for Universal Productivity Zone after Login/Get Started.
+
+Important:
+This is ONLY MVP, not the full platform.
+Do not build Community, News, Universal Bank, AI Assistant full system yet.
+Only create MVP frontend demo with mock data and localStorage.
+
+Tech stack:
+- React + TypeScript
+- Tailwind CSS
+- Framer Motion
+- lucide-react
+- lottie-react if needed
+
+Design direction:
+- Internal app should use Modern Minimal Dark UI
+- Landing page remains Modern Minimal Light
+- After login, user enters a focused dark productivity workspace
+
+Colors:
+- Main background: #0B0F14
+- Sidebar: #0F172A
+- Cards: #111827
+- Border: rgba(255,255,255,0.08)
+- Text: #E5E7EB
+- Secondary text: #9CA3AF
+- Accent: #6366F1 and #3B82F6
+
+Internal app layout:
+- Left sidebar
+- Topbar
+- Main content area
+- Optional right panel where useful
+
+Sidebar sections:
+1. Home
+2. Dashboard
+3. Workspace
+4. Chat
+5. Tasks & Notes
+6. Profile
+7. Settings
+
+Use lucide-react icons:
+- Home: Home
+- Dashboard: BarChart3
+- Workspace: Layers or BriefcaseBusiness
+- Chat: MessageCircle
+- Tasks & Notes: ListTodo / FileText
+- Profile: User
+- Settings: Settings
+
+Flow:
+Landing page → Get Started/Login → Onboarding → Internal App Dashboard
+
+Onboarding:
+Create a clean multi-step onboarding flow after Get Started.
+
+Ask:
+1. Profession:
+- Developer
+- Teacher
+- Student
+- Freelancer
+- Designer
+- SMM Specialist
+- Content Creator / Mobilographer
+
+2. Goal:
+- Learn skills
+- Find work
+- Manage team
+- Build portfolio
+- Freelance
+
+3. Experience:
+- Beginner
+- Intermediate
+- Advanced
+
+Important:
+Do NOT ask users to connect integrations during onboarding.
+Integrations must be managed later in Settings.
+
+After onboarding:
+Save answers to localStorage.
+Use answers to personalize Workspace, Dashboard, Profile, and suggested tools.
+
+Home page:
+Show:
+- real-time clock
+- day, month, year
+- username
+- account age / joined days
+- today’s quick actions
+- recent activity
+- personalized welcome message based on profession
+
+Dashboard:
+Show mock statistics:
+- completed tasks
+- active projects
+- team progress
+- productivity score
+- weekly activity chart
+- simple cards and charts
+
+Workspace:
+Personalized by profession.
+
+Examples:
+Developer:
+- GitHub card
+- Code projects
+- Repository overview placeholder
+- Dev task board
+
+Teacher:
+- Class tools
+- Student progress
+- Lesson notes
+- Calendar placeholder
+
+Content Creator / Mobilographer:
+- Instagram card
+- YouTube card
+- Content planning
+- Media workflow
+
+SMM Specialist:
+- Campaign planning
+- SEO card
+- Social media analytics placeholder
+
+Designer:
+- Portfolio projects
+- Design files
+- Feedback board
+
+Freelancer:
+- Portfolio
+- Client projects
+- Work proposals
+- Earnings placeholder
+
+Important:
+These are demo cards only.
+No real integrations yet.
+
+Chat:
+Build frontend-only chat UI:
+- 1–1 chat
+- group chat
+- team chat
+- project chat
+Use mock users and mock messages.
+Allow sending a new message locally.
+Message should appear in UI immediately.
+No backend required.
+
+Tasks & Notes:
+Create:
+- To-do list
+- Important notes
+- Add task
+- Mark task as done
+- Add note
+Use localStorage to save demo tasks and notes.
+
+Profile:
+Show:
+- avatar placeholder
+- username
+- profession
+- experience level
+- goals
+- skills
+- certificates placeholder
+- portfolio placeholder
+- GitHub repos placeholder if user is Developer
+
+Settings:
+Create settings page with:
+- account settings
+- notification settings
+- integration settings
+
+Integration cards:
+- GitHub
+- Telegram
+- Instagram
+- YouTube
+- Google Drive
+- Mail
+- Calendar
+- Class
+
+Each integration card:
+- icon
+- description
+- Connect button
+- status: Not connected / Connected demo
+Use local state or localStorage.
+Do not require real API.
+
+Motion:
+Use Framer Motion:
+- page transitions
+- card hover lift
+- sidebar active animation
+- chat message fade-in
+- modal fade/scale
+Keep animations subtle and fast.
+
+Code quality:
+- Component-based architecture
+- Reusable Layout component
+- Reusable Sidebar
+- Reusable Card
+- Reusable Button
+- Reusable StatCard
+- Reusable IntegrationCard
+- Use mock data files
+- Use TypeScript types
+
+Suggested structure:
+src/
+  components/
+    layout/
+      AppLayout.tsx
+      Sidebar.tsx
+      Topbar.tsx
+    ui/
+      Card.tsx
+      Button.tsx
+      StatCard.tsx
+      IntegrationCard.tsx
+  pages/
+    Landing.tsx
+    Login.tsx
+    Onboarding.tsx
+    Home.tsx
+    Dashboard.tsx
+    Workspace.tsx
+    Chat.tsx
+    TasksNotes.tsx
+    Profile.tsx
+    Settings.tsx
+  data/
+    mockData.ts
+  types/
+    index.ts
+  utils/
+    storage.ts
+
+Important:
+- Keep this as MVP frontend demo only.
+- Do not overbuild.
+- Make it look like a real product.
+- Make landing light and internal app dark.
+- Use mock data and localStorage.
+- Make navigation between pages work.
+- The result should be ready to show to admin/investor as a working frontend MVP demo.

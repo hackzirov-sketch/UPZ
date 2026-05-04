@@ -17,7 +17,7 @@ const FEATURE_VISUALS: FeatureVisual[] = [
   { kind: "lottie", url: "/animations/freelance.json",fallbackIcon: <Users className="w-10 h-10 text-indigo-500" /> },
   { kind: "icon", icon: <Share2 className="w-10 h-10 text-blue-500" />, bg: "from-sky-50 to-blue-100" },
   { kind: "icon", icon: <Wallet className="w-10 h-10 text-indigo-500" />, bg: "from-violet-50 to-indigo-100" },
-  { kind: "lottie", url: "/animations/ai.json",       fallbackIcon: <Bot className="w-10 h-10 text-blue-500" /> },
+  { kind: "lottie", url: "/animations/ai2.json",      fallbackIcon: <Bot className="w-10 h-10 text-blue-500" /> },
 ];
 
 export function FeaturesSection() {

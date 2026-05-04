@@ -1,0 +1,113 @@
+{
+  "header": {
+    "nav": {
+      "features": "Imkoniyatlar",
+      "howItWorks": "Qanday ishlaydi",
+      "forWhom": "Kim uchun",
+      "aiAssistant": "AI Yordamchi"
+    },
+    "login": "Kirish",
+    "getStarted": "Boshlash"
+  },
+  "hero": {
+    "badge": "Yagona Mahsuldorlik Platformasi",
+    "headline1": "Ishlang. O'rganing. Toping.",
+    "headline2": "Hammasi bir joyda.",
+    "subheadline": "Universal Productivity Zone foydalanuvchilarga ko'nikmalar o'rganish, ish topish, jamoalarni boshqarish, frilanser sifatida o'sish va AI bilan ishlashga yordam beradi — barchasi bitta shaxsiylashtirilgan ish maydonida.",
+    "getStarted": "Boshlash",
+    "exploreFeatures": "Imkoniyatlarni ko'rish"
+  },
+  "problem": {
+    "title": "Tarqoq ilovalar muammosi",
+    "subtitle": "Bugungi mutaxassislar ishlarini bajarish uchun o'nlab ilovalardan foydalanishga majbur.",
+    "tools": ["O'rganish", "Ish qidirish", "Jamoa chati", "Loyiha boshqaruvi", "Fayl ulashish", "Frilanserlik", "To'lovlar", "Mahsuldorlik"],
+    "conclusion": "Bitta platforma. Hammasi."
+  },
+  "solution": {
+    "title": "Kerakli hamma narsa, nihoyat birlashdi",
+    "subtitle": "UPZ kasbiy o'sish va kunlik ish uchun barcha muhim vositalarni yagona, izchil muhitda birlashtiradi.",
+    "modules": [
+      "Shaxsiylashtirilgan ish maydoni",
+      "Chat",
+      "Boshqaruv paneli",
+      "Vazifalar va eslatmalar",
+      "O'rganish",
+      "Frilanserlik",
+      "AI Yordamchi",
+      "Hamjamiyatlar",
+      "To'lovlar"
+    ]
+  },
+  "features": {
+    "title": "Har bir mutaxassis uchun kuchli imkoniyatlar",
+    "subtitle": "Ishlash, o'rganish va o'sish uchun kerak bo'lgan hamma narsa, chiroyli integratsiyalangan.",
+    "items": [
+      { "title": "Shaxsiylashtirilgan ish maydoni", "description": "Sizning rolingizga — dasturchi, dizayner yoki yaratuvchi — moslashuvchi muhit." },
+      { "title": "Chat tizimi", "description": "Tashqi messenjer ilovalariga ehtiyoj qoldirmaydigan, jamoalar va mijozlar uchun ichki muloqot vositalari." },
+      { "title": "Boshqaruv paneli", "description": "Barcha loyihalar, vazifalar va moliyaviy ko'rsatkichlar bo'yicha real vaqt tahlili." },
+      { "title": "Vazifalar va eslatmalar", "description": "To'g'ridan-to'g'ri bilim bazangizga ulangan kuchli loyiha boshqaruvi." },
+      { "title": "O'rganish tizimi", "description": "Martaba maqsadlaringizga moslashtirilgan integral kurslar va ko'nikma oshirish yo'llari." },
+      { "title": "Frilanserlik va yollash", "description": "Bir xil platformada ish toping, iste'dod yollang va shartnomalarni boshqaring." },
+      { "title": "Kontent va ijtimoiy tarmoq vositalari", "description": "Bir nechta kanallardagi kontent strategiyangizni rejalashtiring, jadvallashtiring va boshqaring." },
+      { "title": "Universal Bank", "description": "Tashqi to'lov shluzsiz hisob-fakturalar, to'lovlar va moliyaviy hisobni boshqaring." },
+      { "title": "AI Yordamchi", "description": "Xabarlar yaratish, loyihalarni rejalashtirish va ma'lumotlarni jamlashda yordam beruvchi AI." }
+    ]
+  },
+  "howItWorks": {
+    "title": "3 oddiy qadamda boshlang",
+    "steps": [
+      { "title": "Ro'yxatdan o'ting", "desc": "Bir necha soniyada hisobingizni yarating" },
+      { "title": "Profilingizni sozlang", "desc": "Kasbingizni, maqsadingizni va tajriba darajangizni tanlang" },
+      { "title": "Ish maydoningizni oling", "desc": "To'liq shaxsiylashtirilgan mahsuldorlik muhitini qabul qiling" }
+    ]
+  },
+  "forWhom": {
+    "title": "Har bir mutaxassis uchun qurilgan",
+    "subtitle": "Siz nima qilsangiz ham, UPZ sizga moslashadi.",
+    "personas": [
+      { "role": "Dasturchilar", "tags": ["GitHub integratsiyasi", "AI kodlash yordami", "Loyiha paneli"] },
+      { "role": "O'qituvchilar", "tags": ["Kurs boshqaruvi", "O'quvchi taraqqiyoti", "Sinf vositalari"] },
+      { "role": "Talabalar", "tags": ["O'rganish yo'li", "Eslatmalar", "Vazifalar"] },
+      { "role": "Frilanserlar", "tags": ["Portfolio", "Mijoz muloqoti", "Daromad vositalari"] },
+      { "role": "Kontent yaratuvchilar", "tags": ["Media ish oqimi", "Kontent rejalashtirish", "Ijtimoiy tarmoq"] },
+      { "role": "SMM mutaxassislari", "tags": ["Kampaniya rejalashtirish", "Tahlil", "Ijtimoiy vositalar"] },
+      { "role": "Dizaynerlar", "tags": ["Loyiha fayllari", "Fikr-mulohaza", "Jamoa hamkorligi"] },
+      { "role": "Jamoalar va kompaniyalar", "tags": ["Jamoa nazorati", "Loyiha boshqaruvi", "Statistika"] }
+    ]
+  },
+  "ai": {
+    "title": "AI mahsuldorlik hamkoringiz bilan tanishing",
+    "subtitle": "Ish hayotingizning har bir qismida aqlli yordam. Elektron xat yozishdan tortib butun loyiha tsiklini rejalashtirishgacha.",
+    "features": ["Vazifa takliflari", "O'rganishni qo'llab-quvvatlash", "Loyiha rejalashtirish", "Aqlli xulosa", "Mahsuldorlik maslahatlari", "Jamoa yordami"]
+  },
+  "freelancer": {
+    "title": "Noldan frilanser bo'ling",
+    "subtitle": "UPZ shunchaki frilanserlik bozori emas — bu yangi boshlovchidan ishlaydigan mutaxassisga to'liq yo'l.",
+    "steps": ["O'rganish", "Amaliyot", "Portfolio yaratish", "Jamoaga kirish", "Haqiqiy loyihalar", "Daromad"]
+  },
+  "cta": {
+    "title": "Bugun kelajak ish maydoningizni qurishni boshlang.",
+    "subtitle": "O'rganish, ishlash, hamkorlik va kasbiy o'sish uchun mo'ljallangan platformaga qo'shiling.",
+    "getStarted": "Boshlash",
+    "login": "Kirish",
+    "joinCount": "{{count}}+ mutaxassis bilan qo'shiling"
+  },
+  "footer": {
+    "tagline": "Universal Productivity Zone — tarqoq vositalaringizni almashtiruvchi yagona ish maydoni. Bir joyda ishlang, o'rganing va toping.",
+    "product": "Mahsulot",
+    "features": "Imkoniyatlar",
+    "howItWorks": "Qanday ishlaydi",
+    "pricing": "Narxlar",
+    "roadmap": "Yo'l xaritasi",
+    "community": "Hamjamiyat",
+    "blog": "Blog",
+    "discord": "Discord",
+    "twitter": "Twitter",
+    "github": "GitHub",
+    "legal": "Huquqiy",
+    "privacy": "Maxfiylik siyosati",
+    "terms": "Foydalanish shartlari",
+    "contact": "Aloqa",
+    "copyright": "© {{year}} Universal Productivity Zone. Barcha huquqlar himoyalangan."
+  }
+}

@@ -2,24 +2,25 @@ import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export function Header() {
+  const { t } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const navLinks = [
-    { label: "Features", href: "#features" },
-    { label: "How it Works", href: "#how-it-works" },
-    { label: "For Whom", href: "#for-whom" },
-    { label: "AI Assistant", href: "#ai-assistant" },
+    { label: t("header.nav.features"), href: "#features" },
+    { label: t("header.nav.howItWorks"), href: "#how-it-works" },
+    { label: t("header.nav.forWhom"), href: "#for-whom" },
+    { label: t("header.nav.aiAssistant"), href: "#ai-assistant" },
   ];
 
   return (
@@ -40,7 +41,7 @@ export function Header() {
         <nav className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
             <a
-              key={link.label}
+              key={link.href}
               href={link.href}
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
@@ -50,23 +51,28 @@ export function Header() {
         </nav>
 
         {/* Desktop Actions */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-2">
+          <LanguageSwitcher />
           <Button variant="outline" className="font-medium" data-testid="button-login">
-            Log in
+            {t("header.login")}
           </Button>
           <Button className="bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 text-white border-0" data-testid="button-get-started">
-            Get Started
+            {t("header.getStarted")}
           </Button>
         </div>
 
-        {/* Mobile Menu Toggle */}
-        <button
-          className="md:hidden p-2 text-foreground"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {/* Mobile: language + hamburger */}
+        <div className="md:hidden flex items-center gap-1">
+          <LanguageSwitcher />
+          <button
+            className="p-2 text-foreground"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+            data-testid="button-mobile-menu"
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Nav Drawer */}
@@ -75,7 +81,7 @@ export function Header() {
           <nav className="flex flex-col gap-4">
             {navLinks.map((link) => (
               <a
-                key={link.label}
+                key={link.href}
                 href={link.href}
                 className="text-base font-medium text-foreground py-2 border-b border-border/50"
                 onClick={() => setMobileMenuOpen(false)}
@@ -84,12 +90,12 @@ export function Header() {
               </a>
             ))}
           </nav>
-          <div className="flex flex-col gap-2 mt-4">
+          <div className="flex flex-col gap-2 mt-2">
             <Button variant="outline" className="w-full justify-center">
-              Log in
+              {t("header.login")}
             </Button>
             <Button className="w-full justify-center bg-gradient-to-r from-indigo-500 to-blue-500 text-white border-0">
-              Get Started
+              {t("header.getStarted")}
             </Button>
           </div>
         </div>

@@ -1,56 +1,53 @@
 import { motion } from "framer-motion";
 import { Sparkles, Brain, Clock, FileText, Lightbulb, Users } from "lucide-react";
 import { LottieAnimation } from "./LottieAnimation";
+import { useTranslation } from "react-i18next";
+
+const AI_ICONS = [Sparkles, Brain, Clock, FileText, Lightbulb, Users];
 
 export function AIAssistantSection() {
-  const features = [
-    { icon: Sparkles, text: "Task suggestions" },
-    { icon: Brain, text: "Learning support" },
-    { icon: Clock, text: "Project planning" },
-    { icon: FileText, text: "Smart summaries" },
-    { icon: Lightbulb, text: "Productivity tips" },
-    { icon: Users, text: "Team assistance" },
-  ];
+  const { t } = useTranslation();
+  const features = t("ai.features", { returnObjects: true }) as string[];
 
   return (
     <section id="ai-assistant" className="py-24 relative overflow-hidden bg-foreground">
-      {/* Background gradient mesh */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 z-0 opacity-90" />
-      
+
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-16">
-          <motion.div 
+          <motion.div
             className="flex-1 text-white"
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">Meet your AI productivity partner</h2>
-            <p className="text-lg md:text-xl text-indigo-200 mb-10 max-w-xl">
-              Intelligent assistance for every part of your work life. From drafting emails to planning entire project lifecycles.
-            </p>
-            
+            <h2 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">{t("ai.title")}</h2>
+            <p className="text-lg md:text-xl text-indigo-200 mb-10 max-w-xl">{t("ai.subtitle")}</p>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {features.map((feature, i) => (
-                <motion.div 
-                  key={feature.text}
-                  className="flex items-center gap-4"
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.3, delay: i * 0.1 }}
-                >
-                  <div className="w-12 h-12 rounded-full bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center flex-shrink-0">
-                    <feature.icon className="w-5 h-5 text-indigo-400" />
-                  </div>
-                  <span className="font-medium text-indigo-50 text-lg">{feature.text}</span>
-                </motion.div>
-              ))}
+              {features.map((feature, i) => {
+                const Icon = AI_ICONS[i] ?? Sparkles;
+                return (
+                  <motion.div
+                    key={i}
+                    className="flex items-center gap-4"
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.3, delay: i * 0.1 }}
+                  >
+                    <div className="w-12 h-12 rounded-full bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-5 h-5 text-indigo-400" />
+                    </div>
+                    <span className="font-medium text-indigo-50 text-lg">{feature}</span>
+                  </motion.div>
+                );
+              })}
             </div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="flex-1 w-full flex justify-center lg:justify-end"
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -59,8 +56,8 @@ export function AIAssistantSection() {
           >
             <div className="w-full max-w-lg aspect-square relative flex items-center justify-center rounded-3xl bg-indigo-950/50 border border-indigo-500/20 shadow-2xl overflow-hidden backdrop-blur-sm">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.15),transparent_70%)]" />
-              <LottieAnimation 
-                url="https://assets9.lottiefiles.com/packages/lf20_qdcf5bmi.json" 
+              <LottieAnimation
+                url="https://assets9.lottiefiles.com/packages/lf20_qdcf5bmi.json"
                 fallback={<Brain className="w-32 h-32 text-indigo-400 opacity-50" />}
                 className="w-full h-full p-8"
               />

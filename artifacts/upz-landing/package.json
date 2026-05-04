@@ -76,6 +76,9 @@
   },
   "dependencies": {
     "@lottiefiles/react-lottie-player": "^3.6.0",
-    "lottie-react": "^2.4.1"
+    "i18next": "^26.0.8",
+    "i18next-browser-languagedetector": "^8.2.1",
+    "lottie-react": "^2.4.1",
+    "react-i18next": "^17.0.6"
   }
 }

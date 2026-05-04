@@ -1,0 +1,113 @@
+{
+  "header": {
+    "nav": {
+      "features": "Features",
+      "howItWorks": "How it Works",
+      "forWhom": "For Whom",
+      "aiAssistant": "AI Assistant"
+    },
+    "login": "Log in",
+    "getStarted": "Get Started"
+  },
+  "hero": {
+    "badge": "All-in-One Productivity Platform",
+    "headline1": "Work. Learn. Earn.",
+    "headline2": "All in one place.",
+    "subheadline": "Universal Productivity Zone helps users learn skills, find jobs, manage teams, grow as freelancers, and work with AI-powered productivity tools in one personalized workspace.",
+    "getStarted": "Get Started",
+    "exploreFeatures": "Explore Features"
+  },
+  "problem": {
+    "title": "The fragmented tool problem",
+    "subtitle": "Professionals today juggle dozens of apps just to get work done.",
+    "tools": ["Learning", "Job Search", "Team Chat", "Project Mgmt", "File Sharing", "Freelancing", "Payments", "Productivity"],
+    "conclusion": "One platform. All of it."
+  },
+  "solution": {
+    "title": "Everything you need, finally unified",
+    "subtitle": "UPZ brings together all the essential tools for professional growth and daily work into a single, cohesive environment designed to eliminate friction.",
+    "modules": [
+      "Personalized Workspace",
+      "Chat",
+      "Dashboard",
+      "Tasks & Notes",
+      "Learning",
+      "Freelancing",
+      "AI Assistant",
+      "Communities",
+      "Payments"
+    ]
+  },
+  "features": {
+    "title": "Powerful features for every professional",
+    "subtitle": "Everything you need to work, learn, and grow, beautifully integrated.",
+    "items": [
+      { "title": "Personalized Workspace", "description": "A tailored environment that adapts to your specific role, whether you're a developer, designer, or creator." },
+      { "title": "Chat System", "description": "Built-in communication tools for teams and clients, eliminating the need for external messaging apps." },
+      { "title": "Dashboard", "description": "Real-time analytics and overview of all your ongoing projects, tasks, and financial metrics." },
+      { "title": "Tasks & Notes", "description": "Powerful project management connected directly to your knowledge base." },
+      { "title": "Learning System", "description": "Integrated courses and skill-building paths tailored to your career goals." },
+      { "title": "Freelance & Hiring", "description": "Find jobs, hire talent, and manage contracts all within the same platform." },
+      { "title": "Content & Social Tools", "description": "Plan, schedule, and manage your content strategy across multiple channels." },
+      { "title": "Universal Bank", "description": "Manage invoices, payments, and financial tracking natively without external gateways." },
+      { "title": "AI Assistant", "description": "Context-aware AI that helps draft messages, plan projects, and summarize information." }
+    ]
+  },
+  "howItWorks": {
+    "title": "Get started in 3 simple steps",
+    "steps": [
+      { "title": "Sign Up", "desc": "Create your account in seconds" },
+      { "title": "Set Your Profile", "desc": "Choose your profession, goal, and experience level" },
+      { "title": "Get Your Workspace", "desc": "Receive a fully personalized productivity environment" }
+    ]
+  },
+  "forWhom": {
+    "title": "Built for every professional",
+    "subtitle": "Whatever you do, UPZ adapts to you.",
+    "personas": [
+      { "role": "Developers", "tags": ["GitHub integration", "AI coding help", "Project dashboard"] },
+      { "role": "Teachers", "tags": ["Course management", "Student progress", "Class tools"] },
+      { "role": "Students", "tags": ["Learning path", "Notes", "Tasks"] },
+      { "role": "Freelancers", "tags": ["Portfolio", "Client communication", "Income tools"] },
+      { "role": "Content Creators", "tags": ["Media workflow", "Content planning", "Social integrations"] },
+      { "role": "SMM Specialists", "tags": ["Campaign planning", "Analytics", "Social tools"] },
+      { "role": "Designers", "tags": ["Project files", "Feedback", "Team collaboration"] },
+      { "role": "Teams & Companies", "tags": ["Team control", "Project management", "Stats"] }
+    ]
+  },
+  "ai": {
+    "title": "Meet your AI productivity partner",
+    "subtitle": "Intelligent assistance for every part of your work life. From drafting emails to planning entire project lifecycles.",
+    "features": ["Task suggestions", "Learning support", "Project planning", "Smart summaries", "Productivity tips", "Team assistance"]
+  },
+  "freelancer": {
+    "title": "Become a freelancer from zero",
+    "subtitle": "UPZ isn't just a freelance marketplace — it's the complete path from beginner to earning professional.",
+    "steps": ["Learn", "Practice", "Build Portfolio", "Join Team", "Real Projects", "Earn"]
+  },
+  "cta": {
+    "title": "Start building your future workspace today.",
+    "subtitle": "Join a platform designed for learning, working, collaboration, and professional growth.",
+    "getStarted": "Get Started",
+    "login": "Log in",
+    "joinCount": "Join {{count}}+ professionals"
+  },
+  "footer": {
+    "tagline": "Universal Productivity Zone is the all-in-one workspace that replaces your scattered tools. Work, learn, and earn in one place.",
+    "product": "Product",
+    "features": "Features",
+    "howItWorks": "How it Works",
+    "pricing": "Pricing",
+    "roadmap": "Roadmap",
+    "community": "Community",
+    "blog": "Blog",
+    "discord": "Discord",
+    "twitter": "Twitter",
+    "github": "GitHub",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "contact": "Contact",
+    "copyright": "© {{year}} Universal Productivity Zone. All rights reserved."
+  }
+}

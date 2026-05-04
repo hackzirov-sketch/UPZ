@@ -2,92 +2,59 @@ import { motion } from "framer-motion";
 import { Layers, MessageSquare, BarChart3, Share2, Wallet, Bot } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { LottieAnimation } from "./LottieAnimation";
+import { useTranslation } from "react-i18next";
+
+const FEATURE_ICONS = [
+  <Layers className="w-8 h-8 text-indigo-500" />,
+  <MessageSquare className="w-8 h-8 text-blue-500" />,
+  <BarChart3 className="w-8 h-8 text-indigo-500" />,
+  null,
+  null,
+  null,
+  <Share2 className="w-8 h-8 text-blue-500" />,
+  <Wallet className="w-8 h-8 text-indigo-500" />,
+  <Bot className="w-8 h-8 text-blue-500" />,
+];
+
+const FEATURE_ANIMATIONS = [
+  null, null, null,
+  "https://assets5.lottiefiles.com/packages/lf20_qp1q7mct.json",
+  "https://assets7.lottiefiles.com/packages/lf20_v4jerjlb.json",
+  "https://assets5.lottiefiles.com/packages/lf20_qp1q7mct.json",
+  null, null, null,
+];
 
 export function FeaturesSection() {
-  const features = [
-    {
-      title: "Personalized Workspace",
-      description: "A tailored environment that adapts to your specific role, whether you're a developer, designer, or creator.",
-      icon: <Layers className="w-8 h-8 text-indigo-500" />,
-      type: "icon"
-    },
-    {
-      title: "Chat System",
-      description: "Built-in communication tools for teams and clients, eliminating the need for external messaging apps.",
-      icon: <MessageSquare className="w-8 h-8 text-blue-500" />,
-      type: "icon"
-    },
-    {
-      title: "Dashboard",
-      description: "Real-time analytics and overview of all your ongoing projects, tasks, and financial metrics.",
-      icon: <BarChart3 className="w-8 h-8 text-indigo-500" />,
-      type: "icon"
-    },
-    {
-      title: "Tasks & Notes",
-      description: "Powerful project management connected directly to your knowledge base.",
-      url: "https://assets5.lottiefiles.com/packages/lf20_qp1q7mct.json",
-      type: "animation"
-    },
-    {
-      title: "Learning System",
-      description: "Integrated courses and skill-building paths tailored to your career goals.",
-      url: "https://assets7.lottiefiles.com/packages/lf20_v4jerjlb.json",
-      type: "animation"
-    },
-    {
-      title: "Freelance & Hiring",
-      description: "Find jobs, hire talent, and manage contracts all within the same platform.",
-      url: "https://assets5.lottiefiles.com/packages/lf20_qp1q7mct.json",
-      type: "animation"
-    },
-    {
-      title: "Content & Social Tools",
-      description: "Plan, schedule, and manage your content strategy across multiple channels.",
-      icon: <Share2 className="w-8 h-8 text-blue-500" />,
-      type: "icon"
-    },
-    {
-      title: "Universal Bank",
-      description: "Manage invoices, payments, and financial tracking natively without external gateways.",
-      icon: <Wallet className="w-8 h-8 text-indigo-500" />,
-      type: "icon"
-    },
-    {
-      title: "AI Assistant",
-      description: "Context-aware AI that helps draft messages, plan projects, and summarize information.",
-      icon: <Bot className="w-8 h-8 text-blue-500" />,
-      type: "icon"
-    }
-  ];
+  const { t } = useTranslation();
+  const items = t("features.items", { returnObjects: true }) as Array<{ title: string; description: string }>;
 
   return (
     <section id="features" className="py-24 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <motion.h2 
+          <motion.h2
             className="text-3xl md:text-4xl font-bold text-foreground mb-4"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            Powerful features for every professional
+            {t("features.title")}
           </motion.h2>
-          <motion.p 
+          <motion.p
             className="text-lg text-muted-foreground"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
           >
-            Everything you need to work, learn, and grow, beautifully integrated.
+            {t("features.subtitle")}
           </motion.p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature, i) => (
+          {items.map((feature, i) => (
             <motion.div
-              key={feature.title}
+              key={i}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -97,14 +64,14 @@ export function FeaturesSection() {
               <Card className="h-full bg-card border-border/50 shadow-sm hover:shadow-md transition-all overflow-hidden group">
                 <CardHeader className="pb-4">
                   <div className="w-14 h-14 rounded-xl bg-muted flex items-center justify-center mb-4 group-hover:bg-indigo-50 transition-colors">
-                    {feature.type === "icon" ? (
-                      feature.icon
-                    ) : (
-                      <LottieAnimation 
-                        url={feature.url!} 
+                    {FEATURE_ANIMATIONS[i] ? (
+                      <LottieAnimation
+                        url={FEATURE_ANIMATIONS[i]!}
                         fallback={<Layers className="w-8 h-8 text-indigo-500" />}
                         className="w-10 h-10"
                       />
+                    ) : (
+                      FEATURE_ICONS[i]
                     )}
                   </div>
                   <CardTitle className="text-xl font-semibold">{feature.title}</CardTitle>

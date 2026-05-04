@@ -1,0 +1,113 @@
+{
+  "header": {
+    "nav": {
+      "features": "Özellikler",
+      "howItWorks": "Nasıl Çalışır",
+      "forWhom": "Kime Göre",
+      "aiAssistant": "AI Asistan"
+    },
+    "login": "Giriş Yap",
+    "getStarted": "Başla"
+  },
+  "hero": {
+    "badge": "Hepsi Bir Arada Verimlilik Platformu",
+    "headline1": "Çalış. Öğren. Kazan.",
+    "headline2": "Hepsi tek bir yerde.",
+    "subheadline": "Universal Productivity Zone, kullanıcıların beceri öğrenmesine, iş bulmasına, ekip yönetmesine, serbest çalışan olarak büyümesine ve yapay zeka destekli araçlarla tek bir kişiselleştirilmiş çalışma alanında çalışmasına yardımcı olur.",
+    "getStarted": "Başla",
+    "exploreFeatures": "Özellikleri Keşfet"
+  },
+  "problem": {
+    "title": "Dağınık araç sorunu",
+    "subtitle": "Bugün profesyoneller, işlerini halletmek için onlarca uygulama arasında gidip gelmek zorunda.",
+    "tools": ["Öğrenme", "İş Arama", "Ekip Sohbeti", "Proje Yönetimi", "Dosya Paylaşımı", "Serbest Çalışma", "Ödemeler", "Verimlilik"],
+    "conclusion": "Tek platform. Her şey."
+  },
+  "solution": {
+    "title": "İhtiyacın olan her şey, nihayet birleşti",
+    "subtitle": "UPZ, mesleki büyüme ve günlük iş için tüm temel araçları, sürtünmeyi ortadan kaldırmak için tasarlanmış tek, tutarlı bir ortamda bir araya getiriyor.",
+    "modules": [
+      "Kişiselleştirilmiş Çalışma Alanı",
+      "Sohbet",
+      "Gösterge Paneli",
+      "Görevler ve Notlar",
+      "Öğrenme",
+      "Serbest Çalışma",
+      "AI Asistan",
+      "Topluluklar",
+      "Ödemeler"
+    ]
+  },
+  "features": {
+    "title": "Her profesyonel için güçlü özellikler",
+    "subtitle": "Çalışmak, öğrenmek ve büyümek için ihtiyacın olan her şey, güzelce entegre edilmiş.",
+    "items": [
+      { "title": "Kişiselleştirilmiş Çalışma Alanı", "description": "Geliştirici, tasarımcı veya içerik üreticisi olsan da, rolüne adapte olan bir ortam." },
+      { "title": "Sohbet Sistemi", "description": "Harici mesajlaşma uygulamalarına ihtiyaç duymadan ekipler ve müşteriler için yerleşik iletişim araçları." },
+      { "title": "Gösterge Paneli", "description": "Tüm devam eden projeler, görevler ve finansal metrikler için gerçek zamanlı analitik." },
+      { "title": "Görevler ve Notlar", "description": "Doğrudan bilgi tabanınıza bağlı güçlü proje yönetimi." },
+      { "title": "Öğrenme Sistemi", "description": "Kariyer hedeflerinize göre kişiselleştirilmiş entegre kurslar ve beceri geliştirme yolları." },
+      { "title": "Serbest Çalışma ve İşe Alım", "description": "Aynı platform içinde iş bul, yetenek işe al ve sözleşmeleri yönet." },
+      { "title": "İçerik ve Sosyal Medya Araçları", "description": "Birden fazla kanalda içerik stratejini planla, zamanla ve yönet." },
+      { "title": "Evrensel Banka", "description": "Harici ödeme ağ geçitleri olmadan faturaları, ödemeleri ve mali takibi yönet." },
+      { "title": "AI Asistan", "description": "Mesaj taslağı oluşturma, projeleri planlama ve bilgileri özetlemede yardımcı olan bağlam farkında AI." }
+    ]
+  },
+  "howItWorks": {
+    "title": "3 basit adımda başla",
+    "steps": [
+      { "title": "Kayıt Ol", "desc": "Hesabını saniyeler içinde oluştur" },
+      { "title": "Profilini Ayarla", "desc": "Mesleğini, hedefini ve deneyim seviyeni seç" },
+      { "title": "Çalışma Alanını Al", "desc": "Tamamen kişiselleştirilmiş bir verimlilik ortamı al" }
+    ]
+  },
+  "forWhom": {
+    "title": "Her profesyonel için inşa edildi",
+    "subtitle": "Ne yaparsan yap, UPZ sana uyum sağlar.",
+    "personas": [
+      { "role": "Geliştiriciler", "tags": ["GitHub entegrasyonu", "AI kodlama yardımı", "Proje panosu"] },
+      { "role": "Öğretmenler", "tags": ["Kurs yönetimi", "Öğrenci ilerlemesi", "Sınıf araçları"] },
+      { "role": "Öğrenciler", "tags": ["Öğrenme yolu", "Notlar", "Görevler"] },
+      { "role": "Serbest Çalışanlar", "tags": ["Portföy", "Müşteri iletişimi", "Gelir araçları"] },
+      { "role": "İçerik Üreticileri", "tags": ["Medya iş akışı", "İçerik planlaması", "Sosyal entegrasyonlar"] },
+      { "role": "SMM Uzmanları", "tags": ["Kampanya planlaması", "Analitik", "Sosyal medya araçları"] },
+      { "role": "Tasarımcılar", "tags": ["Proje dosyaları", "Geri bildirim", "Ekip işbirliği"] },
+      { "role": "Ekipler ve Şirketler", "tags": ["Ekip kontrolü", "Proje yönetimi", "İstatistikler"] }
+    ]
+  },
+  "ai": {
+    "title": "AI verimlilik ortağınla tanış",
+    "subtitle": "İş hayatının her bölümü için akıllı yardım. E-posta taslağından tüm proje yaşam döngülerini planlamaya kadar.",
+    "features": ["Görev önerileri", "Öğrenme desteği", "Proje planlaması", "Akıllı özetler", "Verimlilik ipuçları", "Ekip yardımı"]
+  },
+  "freelancer": {
+    "title": "Sıfırdan serbest çalışan ol",
+    "subtitle": "UPZ sadece bir serbest çalışma pazaryeri değil — yeni başlayandan kazanan profesyonele kadar eksiksiz bir yol.",
+    "steps": ["Öğren", "Pratik Yap", "Portföy Oluştur", "Ekibe Katıl", "Gerçek Projeler", "Kazan"]
+  },
+  "cta": {
+    "title": "Bugün gelecekteki çalışma alanını oluşturmaya başla.",
+    "subtitle": "Öğrenme, çalışma, iş birliği ve mesleki büyüme için tasarlanmış bir platforma katıl.",
+    "getStarted": "Başla",
+    "login": "Giriş Yap",
+    "joinCount": "{{count}}+ profesyonele katıl"
+  },
+  "footer": {
+    "tagline": "Universal Productivity Zone, dağınık araçlarının yerini alan hepsi bir arada çalışma alanı. Tek yerde çalış, öğren ve kazan.",
+    "product": "Ürün",
+    "features": "Özellikler",
+    "howItWorks": "Nasıl Çalışır",
+    "pricing": "Fiyatlandırma",
+    "roadmap": "Yol Haritası",
+    "community": "Topluluk",
+    "blog": "Blog",
+    "discord": "Discord",
+    "twitter": "Twitter",
+    "github": "GitHub",
+    "legal": "Yasal",
+    "privacy": "Gizlilik Politikası",
+    "terms": "Kullanım Koşulları",
+    "contact": "İletişim",
+    "copyright": "© {{year}} Universal Productivity Zone. Tüm hakları saklıdır."
+  }
+}

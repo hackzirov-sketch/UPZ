@@ -4,8 +4,19 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import LandingPage from "@/pages/LandingPage";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { applyDir } from "@/i18n";
 
 const queryClient = new QueryClient();
+
+function DirSync() {
+  const { i18n } = useTranslation();
+  useEffect(() => {
+    applyDir(i18n.language);
+  }, [i18n.language]);
+  return null;
+}
 
 function Router() {
   return (
@@ -20,6 +31,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
+        <DirSync />
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
           <Router />
         </WouterRouter>

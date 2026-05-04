@@ -23,7 +23,7 @@ export function SolutionSection() {
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">{t("solution.title")}</h2>
             <p className="text-lg text-muted-foreground mb-10 leading-relaxed">{t("solution.subtitle")}</p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {modules.map((name, i) => {
                 const Icon = MODULE_ICONS[i] ?? Layers;
                 return (
@@ -35,17 +35,17 @@ export function SolutionSection() {
                     viewport={{ once: true }}
                     transition={{ duration: 0.3, delay: i * 0.05 }}
                   >
-                    <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 flex-shrink-0">
-                      <Icon size={20} />
+                    <div className="w-9 h-9 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 flex-shrink-0">
+                      <Icon size={18} />
                     </div>
-                    <span className="font-medium text-foreground">{name}</span>
+                    <span className="font-medium text-foreground text-sm">{name}</span>
                   </motion.div>
                 );
               })}
             </div>
           </motion.div>
 
-          {/* Right side: Lottie animation showing the rocket/growth */}
+          {/* Right: Lottie animation — natural aspect ratio, no clipping */}
           <motion.div
             className="flex-1 w-full"
             initial={{ opacity: 0, x: 30 }}
@@ -53,19 +53,19 @@ export function SolutionSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="relative rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 shadow-xl overflow-hidden aspect-square md:aspect-[4/3] flex items-center justify-center p-4">
-              <LottieAnimation
-                url="/animations/rocket.json"
-                fallback={
-                  <div className="relative w-48 h-48 bg-white rounded-full shadow-2xl flex items-center justify-center border-4 border-indigo-50">
-                    <div className="text-center">
-                      <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-500 mx-auto flex items-center justify-center text-white font-bold text-2xl shadow-md mb-2">U</div>
+            <div className="relative rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 shadow-xl flex items-center justify-center p-6" style={{ minHeight: "380px" }}>
+              <div style={{ width: "100%", height: "320px" }}>
+                <LottieAnimation
+                  url="/animations/rocket.json"
+                  fallback={
+                    <div className="flex flex-col items-center gap-3">
+                      <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center text-white font-bold text-3xl shadow-md">U</div>
                       <span className="font-bold text-foreground">UPZ Core</span>
                     </div>
-                  </div>
-                }
-                className="w-full h-full max-w-[420px] mx-auto"
-              />
+                  }
+                  className="w-full h-full"
+                />
+              </div>
             </div>
           </motion.div>
         </div>

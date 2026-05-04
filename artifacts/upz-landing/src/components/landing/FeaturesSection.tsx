@@ -5,19 +5,19 @@ import { LottieAnimation } from "./LottieAnimation";
 import { useTranslation } from "react-i18next";
 
 type FeatureVisual =
-  | { kind: "icon"; el: React.ReactNode }
+  | { kind: "icon"; icon: React.ReactNode; bg: string }
   | { kind: "lottie"; url: string; fallbackIcon: React.ReactNode };
 
 const FEATURE_VISUALS: FeatureVisual[] = [
-  { kind: "icon", el: <Layers className="w-8 h-8 text-indigo-500" /> },
-  { kind: "lottie", url: "/animations/chat.json", fallbackIcon: <MessageSquare className="w-8 h-8 text-blue-500" /> },
-  { kind: "icon", el: <BarChart3 className="w-8 h-8 text-indigo-500" /> },
-  { kind: "lottie", url: "/animations/tasks.json", fallbackIcon: <CheckSquare className="w-8 h-8 text-indigo-500" /> },
-  { kind: "lottie", url: "/animations/learning.json", fallbackIcon: <BookOpen className="w-8 h-8 text-blue-500" /> },
-  { kind: "lottie", url: "/animations/freelance.json", fallbackIcon: <Users className="w-8 h-8 text-indigo-500" /> },
-  { kind: "icon", el: <Share2 className="w-8 h-8 text-blue-500" /> },
-  { kind: "icon", el: <Wallet className="w-8 h-8 text-indigo-500" /> },
-  { kind: "lottie", url: "/animations/ai.json", fallbackIcon: <Bot className="w-8 h-8 text-blue-500" /> },
+  { kind: "icon", icon: <Layers className="w-10 h-10 text-indigo-500" />, bg: "from-indigo-50 to-indigo-100" },
+  { kind: "lottie", url: "/animations/chat.json",     fallbackIcon: <MessageSquare className="w-10 h-10 text-blue-500" /> },
+  { kind: "icon", icon: <BarChart3 className="w-10 h-10 text-indigo-500" />, bg: "from-blue-50 to-indigo-50" },
+  { kind: "lottie", url: "/animations/tasks.json",    fallbackIcon: <CheckSquare className="w-10 h-10 text-indigo-500" /> },
+  { kind: "lottie", url: "/animations/learning.json", fallbackIcon: <BookOpen className="w-10 h-10 text-blue-500" /> },
+  { kind: "lottie", url: "/animations/freelance.json",fallbackIcon: <Users className="w-10 h-10 text-indigo-500" /> },
+  { kind: "icon", icon: <Share2 className="w-10 h-10 text-blue-500" />, bg: "from-sky-50 to-blue-100" },
+  { kind: "icon", icon: <Wallet className="w-10 h-10 text-indigo-500" />, bg: "from-violet-50 to-indigo-100" },
+  { kind: "lottie", url: "/animations/ai.json",       fallbackIcon: <Bot className="w-10 h-10 text-blue-500" /> },
 ];
 
 export function FeaturesSection() {
@@ -50,6 +50,8 @@ export function FeaturesSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {items.map((feature, i) => {
             const visual = FEATURE_VISUALS[i];
+            const isLottie = visual?.kind === "lottie";
+
             return (
               <motion.div
                 key={i}
@@ -57,31 +59,39 @@ export function FeaturesSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.05 }}
-                whileHover={{ y: -4 }}
+                whileHover={{ y: -5, transition: { duration: 0.2 } }}
               >
-                <Card className="h-full bg-card border-border/50 shadow-sm hover:shadow-md transition-all overflow-hidden group">
-                  <CardHeader className="pb-2">
-                    {/* Visual: icon or large lottie animation */}
-                    {visual?.kind === "lottie" ? (
-                      <div className="w-full h-36 mb-3 overflow-hidden rounded-lg bg-indigo-50/40">
-                        <LottieAnimation
-                          url={visual.url}
-                          fallback={
-                            <div className="w-full h-full flex items-center justify-center">
-                              {visual.fallbackIcon}
-                            </div>
-                          }
-                          className="w-full h-full"
-                        />
-                      </div>
+                <Card className="h-full bg-card border-border/50 shadow-sm hover:shadow-lg transition-all group flex flex-col">
+                  {/* Visual area — consistent height, no overflow clipping */}
+                  <div
+                    className={`w-full rounded-t-xl flex items-center justify-center ${
+                      isLottie
+                        ? "bg-gradient-to-br from-indigo-50 to-blue-50"
+                        : `bg-gradient-to-br ${(visual as { kind: "icon"; icon: React.ReactNode; bg: string }).bg}`
+                    }`}
+                    style={{ height: "200px" }}
+                  >
+                    {isLottie ? (
+                      <LottieAnimation
+                        url={(visual as { kind: "lottie"; url: string; fallbackIcon: React.ReactNode }).url}
+                        fallback={
+                          <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                            {(visual as { kind: "lottie"; url: string; fallbackIcon: React.ReactNode }).fallbackIcon}
+                          </div>
+                        }
+                        className="w-full h-full p-4"
+                      />
                     ) : (
-                      <div className="w-14 h-14 rounded-xl bg-muted flex items-center justify-center mb-4 group-hover:bg-indigo-50 transition-colors">
-                        {visual?.el}
+                      <div className="flex items-center justify-center w-20 h-20 rounded-2xl bg-white shadow-md border border-white/80 group-hover:scale-110 transition-transform">
+                        {(visual as { kind: "icon"; icon: React.ReactNode; bg: string }).icon}
                       </div>
                     )}
+                  </div>
+
+                  <CardHeader className="pb-2 pt-5">
                     <CardTitle className="text-xl font-semibold">{feature.title}</CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="flex-1">
                     <CardDescription className="text-base leading-relaxed text-muted-foreground">
                       {feature.description}
                     </CardDescription>

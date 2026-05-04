@@ -47,19 +47,28 @@ export function AIAssistantSection() {
             </div>
           </motion.div>
 
+          {/* Animation — large, no clipping, natural rendering */}
           <motion.div
-            className="flex-1 w-full flex justify-center lg:justify-end"
+            className="flex-1 w-full flex justify-center"
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="w-full max-w-lg aspect-square relative flex items-center justify-center rounded-3xl bg-indigo-950/60 border border-indigo-500/20 shadow-2xl overflow-hidden backdrop-blur-sm">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.18),transparent_70%)]" />
+            <div
+              className="w-full max-w-md rounded-3xl bg-indigo-950/60 border border-indigo-500/20 shadow-2xl backdrop-blur-sm flex items-center justify-center"
+              style={{ height: "380px" }}
+            >
+              <div className="absolute inset-0 rounded-3xl bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.18),transparent_70%)]" />
               <LottieAnimation
                 url="/animations/ai.json"
-                fallback={<Brain className="w-32 h-32 text-indigo-400 opacity-50" />}
-                className="w-full h-full p-6"
+                fallback={
+                  <div className="flex flex-col items-center gap-3 text-indigo-400">
+                    <Brain className="w-20 h-20 opacity-60" />
+                    <span className="text-sm text-indigo-300">Animation loading</span>
+                  </div>
+                }
+                className="w-full h-full p-6 relative z-10"
               />
             </div>
           </motion.div>

@@ -1,258 +1,380 @@
-import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Send, Hash, Users, User, FolderOpen, Search } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Pin, Search, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { AppLayout } from "@/components/app/AppLayout";
-import type { UserProfile, ChatRoom, ChatMessage } from "@/types";
-import { MOCK_USERS, MOCK_CHAT_ROOMS } from "@/data/mockData";
+import { Toast } from "@/components/app/DesignSystem";
+import { ChatHeader, type ChatHeaderAction } from "@/components/chat/ChatHeader";
+import { ChatSidebar } from "@/components/chat/ChatSidebar";
+import { MessageBubble } from "@/components/chat/MessageBubble";
+import { MessageInput } from "@/components/chat/MessageInput";
+import { cn, getMessageText, getReplySnippet, getRoomName } from "@/components/chat/chatShared";
+import { MOCK_CHAT_ROOMS, MOCK_USERS } from "@/data/mockData";
+import type { ChatMessage, ChatReactionEmoji, ChatRoom, UserProfile } from "@/types";
+import { storage } from "@/utils/storage";
 
-interface Props { user: UserProfile; onLogout: () => void; }
-
-const TYPE_ICONS: Record<string, React.ReactNode> = {
-  '1on1': <User className="w-3.5 h-3.5" />,
-  'group': <Users className="w-3.5 h-3.5" />,
-  'team': <Hash className="w-3.5 h-3.5" />,
-  'project': <FolderOpen className="w-3.5 h-3.5" />,
-};
-
-function formatTime(ts: number) {
-  const diff = Date.now() - ts;
-  if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
-  if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
-  return `${Math.floor(diff / 86400000)}d ago`;
+interface Props {
+  user: UserProfile;
+  onLogout: () => void;
 }
 
-function Avatar({ userId, size = 32 }: { userId: string; size?: number }) {
-  const u = MOCK_USERS.find((u) => u.id === userId);
-  if (!u) return null;
-  return (
-    <div
-      className="rounded-full flex items-center justify-center font-bold text-white flex-shrink-0"
-      style={{ width: size, height: size, background: u.color, fontSize: size * 0.35 }}
-    >
-      {u.initials}
-    </div>
-  );
+function getInitialRooms() {
+  const saved = storage.getChatRooms();
+  return saved.length > 0 ? saved : MOCK_CHAT_ROOMS;
+}
+
+function updateMessageReaction(message: ChatMessage, emoji: ChatReactionEmoji): ChatMessage {
+  const reactions = (message.reactions ?? []).map((reaction) => ({ ...reaction, userIds: [...reaction.userIds] }));
+  const existing = reactions.find((reaction) => reaction.emoji === emoji);
+
+  if (!existing) {
+    reactions.push({ emoji, userIds: ["me"] });
+  } else if (existing.userIds.includes("me")) {
+    existing.userIds = existing.userIds.filter((userId) => userId !== "me");
+  } else {
+    existing.userIds.push("me");
+  }
+
+  return { ...message, reactions: reactions.filter((reaction) => reaction.userIds.length > 0) };
 }
 
 export default function ChatPage({ user, onLogout }: Props) {
-  const [rooms, setRooms] = useState<ChatRoom[]>(MOCK_CHAT_ROOMS);
-  const [activeId, setActiveId] = useState(rooms[0].id);
-  const [input, setInput] = useState('');
+  const { t } = useTranslation();
+  const [rooms, setRooms] = useState<ChatRoom[]>(getInitialRooms);
+  const [activeId, setActiveId] = useState(MOCK_CHAT_ROOMS[0]?.id ?? "");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [draft, setDraft] = useState("");
+  const [replyTo, setReplyTo] = useState<ChatMessage | null>(null);
+  const [editingMessage, setEditingMessage] = useState<ChatMessage | null>(null);
+  const [mobilePane, setMobilePane] = useState<"list" | "chat">("list");
+  const [notice, setNotice] = useState<string | null>(null);
+  const [chatSearchOpen, setChatSearchOpen] = useState(false);
+  const [chatSearchQuery, setChatSearchQuery] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const activeRoom = rooms.find((r) => r.id === activeId)!;
+  const activeRoom = useMemo(() => rooms.find((room) => room.id === activeId) ?? rooms[0], [activeId, rooms]);
+  const pinnedMessage = activeRoom?.pinnedMessageId
+    ? activeRoom.messages.find((message) => message.id === activeRoom.pinnedMessageId)
+    : undefined;
+  const totalUnread = rooms.reduce((sum, room) => sum + (room.unread ?? 0), 0);
+  const normalizedChatSearch = chatSearchQuery.trim().toLowerCase();
+  const displayedMessages = useMemo(() => {
+    if (!activeRoom) return [];
+    if (!normalizedChatSearch) return activeRoom.messages;
+    return activeRoom.messages.filter((message) => {
+      const sender = MOCK_USERS.find((candidate) => candidate.id === message.userId)?.name ?? "";
+      return `${sender} ${getMessageText(message, t)}`.toLowerCase().includes(normalizedChatSearch);
+    });
+  }, [activeRoom, normalizedChatSearch, t]);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [activeId, rooms]);
+    storage.saveChatRooms(rooms);
+  }, [rooms]);
+
+  useEffect(() => {
+    if (activeRoom && activeRoom.id !== activeId) {
+      setActiveId(activeRoom.id);
+    }
+  }, [activeId, activeRoom]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [activeRoom?.id, activeRoom?.messages.length]);
+
+  useEffect(() => {
+    if (!notice) return;
+    const timeout = window.setTimeout(() => setNotice(null), 2400);
+    return () => window.clearTimeout(timeout);
+  }, [notice]);
+
+  const updateActiveRoom = (updater: (room: ChatRoom) => ChatRoom) => {
+    if (!activeRoom) return;
+    setRooms((currentRooms) => currentRooms.map((room) => (room.id === activeRoom.id ? updater(room) : room)));
+  };
+
+  const handleSelectRoom = (roomId: string) => {
+    setActiveId(roomId);
+    setMobilePane("chat");
+    setReplyTo(null);
+    setEditingMessage(null);
+    setChatSearchQuery("");
+    setRooms((currentRooms) => currentRooms.map((room) => (room.id === roomId ? { ...room, unread: 0 } : room)));
+  };
 
   const handleSend = () => {
-    if (!input.trim()) return;
-    const newMsg: ChatMessage = {
-      id: `m${Date.now()}`,
-      userId: 'me',
-      text: input.trim(),
+    const text = draft.trim();
+    if (!text || !activeRoom) return;
+
+    if (editingMessage) {
+      updateActiveRoom((room) => ({
+        ...room,
+        messages: room.messages.map((message) =>
+          message.id === editingMessage.id
+            ? { ...message, text, edited: true, timestamp: Date.now() }
+            : message,
+        ),
+      }));
+      setEditingMessage(null);
+      setDraft("");
+      return;
+    }
+
+    const newMessage: ChatMessage = {
+      id: `m-${Date.now()}`,
+      userId: "me",
+      text,
       timestamp: Date.now(),
+      read: true,
+      replyToId: replyTo?.id,
     };
-    setRooms((prev) =>
-      prev.map((r) =>
-        r.id === activeId
-          ? { ...r, messages: [...r.messages, newMsg], unread: 0 }
-          : r
-      )
-    );
-    setInput('');
-    setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+
+    updateActiveRoom((room) => ({
+      ...room,
+      unread: 0,
+      messages: [...room.messages, newMessage],
+    }));
+    setDraft("");
+    setReplyTo(null);
   };
 
-  const handleSelectRoom = (id: string) => {
-    setActiveId(id);
-    setRooms((prev) => prev.map((r) => r.id === id ? { ...r, unread: 0 } : r));
+  const handleDeleteMessage = (messageId: string) => {
+    updateActiveRoom((room) => ({
+      ...room,
+      pinnedMessageId: room.pinnedMessageId === messageId ? undefined : room.pinnedMessageId,
+      messages: room.messages.filter((message) => message.id !== messageId),
+    }));
+    if (replyTo?.id === messageId) setReplyTo(null);
+    if (editingMessage?.id === messageId) {
+      setEditingMessage(null);
+      setDraft("");
+    }
   };
 
-  const totalUnread = rooms.reduce((s, r) => s + (r.unread ?? 0), 0);
+  const handleReply = (message: ChatMessage) => {
+    setReplyTo(message);
+    setEditingMessage(null);
+  };
+
+  const handleEdit = (message: ChatMessage) => {
+    setEditingMessage(message);
+    setReplyTo(null);
+    setDraft(getMessageText(message, t));
+  };
+
+  const handleForward = (message: ChatMessage) => {
+    setEditingMessage(null);
+    setReplyTo(null);
+    setDraft(t("app.chat.forwarded", { text: getMessageText(message, t) }));
+    setNotice(t("app.chat.forwardComposer"));
+  };
+
+  const handlePinMessage = (messageId: string) => {
+    updateActiveRoom((room) => ({
+      ...room,
+      pinnedMessageId: room.pinnedMessageId === messageId ? undefined : messageId,
+    }));
+  };
+
+  const handleToggleReaction = (messageId: string, emoji: ChatReactionEmoji) => {
+    updateActiveRoom((room) => ({
+      ...room,
+      messages: room.messages.map((message) => (message.id === messageId ? updateMessageReaction(message, emoji) : message)),
+    }));
+  };
+
+  const handleHeaderAction = (action: ChatHeaderAction) => {
+    if (!activeRoom) return;
+
+    if (action === "profile") {
+      setNotice(t("app.chat.profilePlaceholder", { name: getRoomName(activeRoom, t) }));
+      return;
+    }
+
+    if (action === "search") {
+      setChatSearchOpen((current) => !current);
+      return;
+    }
+
+    if (action === "mute") {
+      updateActiveRoom((room) => ({ ...room, muted: !room.muted }));
+      return;
+    }
+
+    if (action === "pin") {
+      updateActiveRoom((room) => ({ ...room, pinned: !room.pinned }));
+      return;
+    }
+
+    if (action === "clear") {
+      updateActiveRoom((room) => ({ ...room, messages: [], pinnedMessageId: undefined, unread: 0 }));
+      setReplyTo(null);
+      setEditingMessage(null);
+      setDraft("");
+      return;
+    }
+
+    if (action === "delete") {
+      setRooms((currentRooms) => {
+        const remainingRooms = currentRooms.filter((room) => room.id !== activeRoom.id);
+        setActiveId(remainingRooms[0]?.id ?? "");
+        setMobilePane(remainingRooms.length > 0 ? "list" : "chat");
+        return remainingRooms;
+      });
+      setReplyTo(null);
+      setEditingMessage(null);
+      setDraft("");
+    }
+  };
 
   return (
-    <AppLayout user={user} title={`Chat ${totalUnread > 0 ? `(${totalUnread})` : ""}`} onLogout={onLogout}>
+    <AppLayout user={user} title={`${t("app.nav.chat")}${totalUnread > 0 ? ` (${totalUnread})` : ""}`} onLogout={onLogout}>
       <div
-        className="rounded-2xl overflow-hidden flex"
-        style={{
-          background: "#111827",
-          border: "1px solid rgba(255,255,255,0.07)",
-          height: "calc(100vh - 140px)",
-        }}
+        className="flex min-h-[560px] overflow-hidden rounded-[28px] border border-[#E5E7EB] bg-white shadow-sm"
+        style={{ height: "calc(100vh - 136px)" }}
       >
-        {/* Sidebar: room list */}
-        <div
-          className="w-64 flex-shrink-0 flex flex-col border-r"
-          style={{ borderColor: "rgba(255,255,255,0.07)" }}
-        >
-          <div className="p-3 border-b" style={{ borderColor: "rgba(255,255,255,0.07)" }}>
-            <div
-              className="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-500"
-              style={{ background: "rgba(255,255,255,0.05)" }}
-            >
-              <Search className="w-3.5 h-3.5" />
-              <span className="text-xs">Search chats...</span>
-            </div>
-          </div>
+        <ChatSidebar
+          rooms={rooms}
+          users={MOCK_USERS}
+          activeId={activeRoom?.id}
+          query={searchQuery}
+          onQueryChange={setSearchQuery}
+          onSelectRoom={handleSelectRoom}
+          className={cn("w-full md:flex md:w-[360px] md:flex-shrink-0", mobilePane === "chat" ? "hidden" : "flex")}
+        />
 
-          <div className="flex-1 overflow-y-auto py-2">
-            {/* Sections */}
-            {(['1on1', 'team', 'project', 'group'] as const).map((type) => {
-              const filtered = rooms.filter((r) => r.type === type);
-              if (filtered.length === 0) return null;
-              const labels: Record<string, string> = { '1on1': 'Direct', 'team': 'Teams', 'project': 'Projects', 'group': 'Groups' };
-              return (
-                <div key={type} className="mb-2">
-                  <div className="px-3 py-1.5 flex items-center gap-1.5 text-gray-600">
-                    {TYPE_ICONS[type]}
-                    <span className="text-xs font-semibold uppercase tracking-wider">{labels[type]}</span>
+        {activeRoom ? (
+          <section className={cn("min-w-0 flex-1 flex-col", mobilePane === "list" ? "hidden md:flex" : "flex")}>
+            <ChatHeader room={activeRoom} users={MOCK_USERS} onBackToList={() => setMobilePane("list")} onAction={handleHeaderAction} />
+
+            <AnimatePresence>
+              {chatSearchOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  className="border-b border-[#E5E7EB] bg-white px-4 py-3"
+                >
+                  <div className="mx-auto flex h-10 max-w-4xl items-center gap-2 rounded-2xl border border-[#E5E7EB] bg-[#F7FAFC] px-3 focus-within:border-indigo-300 focus-within:bg-white">
+                    <Search className="h-4 w-4 text-[#6B7280]" />
+                    <input
+                      value={chatSearchQuery}
+                      onChange={(event) => setChatSearchQuery(event.target.value)}
+                      placeholder={t("app.chat.searchRoom", { room: getRoomName(activeRoom, t) })}
+                      className="min-w-0 flex-1 bg-transparent text-sm text-[#111827] outline-none placeholder:text-[#6B7280]"
+                      autoFocus
+                    />
+                    {chatSearchQuery && (
+                      <span className="rounded-full bg-white px-2 py-1 text-xs font-semibold text-[#6B7280] ring-1 ring-[#E5E7EB]">
+                        {t("app.chat.results", { count: displayedMessages.length })}
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setChatSearchOpen(false);
+                        setChatSearchQuery("");
+                      }}
+                      className="rounded-xl p-1 text-[#6B7280] hover:bg-white hover:text-[#111827]"
+                      aria-label={t("app.chat.closeSearch")}
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
                   </div>
-                  {filtered.map((room) => {
-                    const lastMsg = room.messages[room.messages.length - 1];
-                    const lastSender = lastMsg ? MOCK_USERS.find((u) => u.id === lastMsg.userId) : null;
-                    return (
-                      <motion.button
-                        key={room.id}
-                        onClick={() => handleSelectRoom(room.id)}
-                        className="w-full flex items-center gap-2.5 px-3 py-2.5 text-left transition-colors"
-                        style={{
-                          background: activeId === room.id ? "rgba(99,102,241,0.12)" : "transparent",
-                          color: activeId === room.id ? "#A5B4FC" : "#9CA3AF",
-                        }}
-                        whileHover={{ background: activeId === room.id ? undefined : "rgba(255,255,255,0.04)" }}
-                      >
-                        {type === '1on1' ? (
-                          <Avatar userId={room.memberIds.find((id) => id !== 'me') ?? 'u1'} size={28} />
-                        ) : (
-                          <div
-                            className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
-                            style={{ background: "rgba(99,102,241,0.2)", color: "#818CF8" }}
-                          >
-                            {TYPE_ICONS[type]}
-                          </div>
-                        )}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs font-semibold text-white truncate">{room.name}</span>
-                            {(room.unread ?? 0) > 0 && (
-                              <span className="text-xs bg-indigo-600 text-white rounded-full px-1.5 py-0.5 flex-shrink-0 ml-1">
-                                {room.unread}
-                              </span>
-                            )}
-                          </div>
-                          {lastMsg && (
-                            <p className="text-xs text-gray-600 truncate">
-                              {lastSender?.id === 'me' ? 'You' : lastSender?.name?.split(' ')[0]}: {lastMsg.text}
-                            </p>
-                          )}
-                        </div>
-                      </motion.button>
-                    );
-                  })}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Chat area */}
-        <div className="flex-1 flex flex-col min-w-0">
-          {/* Chat header */}
-          <div
-            className="flex items-center gap-3 px-5 py-3.5 border-b flex-shrink-0"
-            style={{ borderColor: "rgba(255,255,255,0.07)" }}
-          >
-            {activeRoom.type === '1on1' ? (
-              <Avatar userId={activeRoom.memberIds.find((id) => id !== 'me') ?? 'u1'} size={32} />
-            ) : (
-              <div
-                className="w-8 h-8 rounded-lg flex items-center justify-center"
-                style={{ background: "rgba(99,102,241,0.2)", color: "#818CF8" }}
-              >
-                {TYPE_ICONS[activeRoom.type]}
-              </div>
-            )}
-            <div>
-              <div className="font-semibold text-white text-sm">{activeRoom.name}</div>
-              <div className="text-xs text-gray-500">
-                {activeRoom.type === '1on1'
-                  ? (() => { const u = MOCK_USERS.find((u) => u.id === activeRoom.memberIds.find((id) => id !== 'me')); return u?.status === 'online' ? '🟢 Online' : u?.status === 'away' ? '🟡 Away' : '⚫ Offline'; })()
-                  : `${activeRoom.memberIds.length} members`
-                }
-              </div>
-            </div>
-          </div>
-
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
-            <AnimatePresence initial={false}>
-              {activeRoom.messages.map((msg) => {
-                const sender = MOCK_USERS.find((u) => u.id === msg.userId);
-                const isMe = msg.userId === 'me';
-                return (
-                  <motion.div
-                    key={msg.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className={`flex items-end gap-2.5 ${isMe ? "flex-row-reverse" : ""}`}
-                  >
-                    {!isMe && <Avatar userId={msg.userId} size={28} />}
-                    <div className={`flex flex-col ${isMe ? "items-end" : "items-start"} max-w-xs lg:max-w-md`}>
-                      {!isMe && (
-                        <span className="text-xs text-gray-600 mb-1 ml-1">{sender?.name}</span>
-                      )}
-                      <div
-                        className="px-4 py-2.5 rounded-2xl text-sm leading-relaxed"
-                        style={{
-                          background: isMe ? "#6366F1" : "rgba(255,255,255,0.07)",
-                          color: isMe ? "white" : "#E5E7EB",
-                          borderRadius: isMe ? "18px 18px 4px 18px" : "18px 18px 18px 4px",
-                        }}
-                      >
-                        {msg.text}
-                      </div>
-                      <span className="text-xs text-gray-700 mt-1 px-1">{formatTime(msg.timestamp)}</span>
-                    </div>
-                  </motion.div>
-                );
-              })}
+                </motion.div>
+              )}
             </AnimatePresence>
-            <div ref={messagesEndRef} />
-          </div>
 
-          {/* Input */}
-          <div className="px-5 py-4 border-t" style={{ borderColor: "rgba(255,255,255,0.07)" }}>
-            <div
-              className="flex items-center gap-3 px-4 py-3 rounded-xl"
-              style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}
-            >
-              <input
-                type="text"
-                placeholder={`Message ${activeRoom.name}...`}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
-                className="flex-1 bg-transparent outline-none text-sm text-white placeholder-gray-600"
-              />
-              <motion.button
-                onClick={handleSend}
-                disabled={!input.trim()}
-                whileHover={input.trim() ? { scale: 1.1 } : {}}
-                whileTap={input.trim() ? { scale: 0.95 } : {}}
-                className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors"
-                style={{
-                  background: input.trim() ? "#6366F1" : "rgba(99,102,241,0.3)",
-                  cursor: input.trim() ? "pointer" : "not-allowed",
-                }}
+            {pinnedMessage && (
+              <button
+                type="button"
+                onClick={() => setNotice(t("app.chat.pinnedNotice"))}
+                className="flex items-center gap-3 border-b border-[#E5E7EB] bg-indigo-50 px-5 py-2.5 text-left transition-colors hover:bg-indigo-100/70"
               >
-                <Send className="w-3.5 h-3.5 text-white" />
-              </motion.button>
+                <span className="grid h-8 w-8 place-items-center rounded-full bg-indigo-100 text-indigo-600">
+                  <Pin className="h-4 w-4" />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-xs font-semibold uppercase tracking-[0.18em] text-indigo-600">{t("app.chat.pinnedMessage")}</span>
+                  <span className="block truncate text-sm text-[#111827]">{getReplySnippet(pinnedMessage, t)}</span>
+                </span>
+              </button>
+            )}
+
+            <div
+              className="min-h-0 flex-1 overflow-y-auto px-3 py-4 sm:px-5"
+              style={{
+                background:
+                  "radial-gradient(circle at 12% 0%, rgba(99, 102, 241, 0.10), transparent 28%), radial-gradient(circle at 100% 20%, rgba(59, 130, 246, 0.08), transparent 24%), linear-gradient(135deg, #F7FAFC, #FFFFFF)",
+              }}
+            >
+              <div className="mx-auto flex max-w-4xl flex-col gap-3">
+                <div className="self-center rounded-full border border-[#E5E7EB] bg-white px-3 py-1 text-[11px] font-medium text-[#6B7280] backdrop-blur">
+                  {t("app.chat.today")}
+                </div>
+
+                <AnimatePresence initial={false}>
+                  {displayedMessages.map((message) => (
+                    <MessageBubble
+                      key={message.id}
+                      room={activeRoom}
+                      message={message}
+                      users={MOCK_USERS}
+                      replyMessage={activeRoom.messages.find((candidate) => candidate.id === message.replyToId)}
+                      isPinned={activeRoom.pinnedMessageId === message.id}
+                      onReply={handleReply}
+                      onEdit={handleEdit}
+                      onDelete={handleDeleteMessage}
+                      onForward={handleForward}
+                      onPin={handlePinMessage}
+                      onToggleReaction={handleToggleReaction}
+                    />
+                  ))}
+                </AnimatePresence>
+
+                {activeRoom.messages.length === 0 && (
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mx-auto mt-16 max-w-sm rounded-3xl border border-[#E5E7EB] bg-white px-6 py-8 text-center shadow-sm">
+                    <div className="text-sm font-semibold text-[#111827]">{t("app.chat.historyCleared")}</div>
+                    <p className="mt-2 text-sm text-[#6B7280]">{t("app.chat.historyClearedDesc")}</p>
+                  </motion.div>
+                )}
+
+                {activeRoom.messages.length > 0 && displayedMessages.length === 0 && (
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mx-auto mt-16 max-w-sm rounded-3xl border border-dashed border-[#E5E7EB] bg-white px-6 py-8 text-center shadow-sm">
+                    <div className="text-sm font-semibold text-[#111827]">{t("app.chat.noMessageFound")}</div>
+                    <p className="mt-2 text-sm text-[#6B7280]">{t("app.chat.noMessageFoundDesc")}</p>
+                  </motion.div>
+                )}
+                <div ref={messagesEndRef} />
+              </div>
             </div>
-          </div>
-        </div>
+
+            <MessageInput
+              room={activeRoom}
+              users={MOCK_USERS}
+              value={draft}
+              replyTo={replyTo}
+              editingMessage={editingMessage}
+              onChange={setDraft}
+              onSend={handleSend}
+              onCancelReply={() => setReplyTo(null)}
+              onCancelEdit={() => {
+                setEditingMessage(null);
+                setDraft("");
+              }}
+            />
+          </section>
+        ) : (
+          <section className="flex min-w-0 flex-1 flex-col items-center justify-center bg-[#F7FAFC] px-6 text-center">
+            <div className="rounded-3xl border border-[#E5E7EB] bg-white px-8 py-10 shadow-sm">
+              <div className="text-base font-semibold text-[#111827]">{t("app.chat.noChatsLeft")}</div>
+              <p className="mt-2 max-w-sm text-sm text-[#6B7280]">{t("app.chat.noChatsLeftDesc")}</p>
+            </div>
+          </section>
+        )}
       </div>
+      <AnimatePresence>
+        <Toast message={notice} />
+      </AnimatePresence>
     </AppLayout>
   );
 }

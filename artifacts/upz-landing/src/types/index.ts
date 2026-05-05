@@ -4,6 +4,7 @@ export type Experience = 'beginner' | 'intermediate' | 'advanced';
 export type Priority = 'low' | 'medium' | 'high';
 export type ChatType = '1on1' | 'group' | 'team' | 'project';
 export type UserStatus = 'online' | 'offline' | 'away';
+export type ChatReactionEmoji = "\u{1F44D}" | "\u2764\uFE0F" | "\u{1F602}" | "\u{1F525}" | "\u{1F44F}" | "\u2705";
 
 export interface UserProfile {
   name: string;
@@ -43,6 +44,13 @@ export interface ChatMessage {
   userId: string;
   text: string;
   timestamp: number;
+  read?: boolean;
+  edited?: boolean;
+  replyToId?: string;
+  reactions?: {
+    emoji: ChatReactionEmoji;
+    userIds: string[];
+  }[];
 }
 
 export interface ChatRoom {
@@ -52,6 +60,12 @@ export interface ChatRoom {
   memberIds: string[];
   messages: ChatMessage[];
   unread?: number;
+  pinned?: boolean;
+  archived?: boolean;
+  muted?: boolean;
+  pinnedMessageId?: string;
+  projectBadge?: string;
+  linkedTask?: string;
 }
 
 export interface Integration {

@@ -1,18 +1,38 @@
-import { motion } from "framer-motion";
-import { CheckSquare, FolderOpen, Users, Zap, TrendingUp, BarChart3, Target } from "lucide-react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid } from "recharts";
+import {
+  ArrowUpRight,
+  BarChart3,
+  Bell,
+  Bot,
+  CalendarDays,
+  CheckSquare,
+  Clock,
+  FolderOpen,
+  MessageCircle,
+  Target,
+  TrendingUp,
+  Users,
+  WalletCards,
+  Zap,
+} from "lucide-react";
+import { Link } from "wouter";
+import { useTranslation } from "react-i18next";
+import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { AppLayout } from "@/components/app/AppLayout";
-import { StatCard } from "@/components/app/StatCard";
+import { CommandCard, MetricTile, PageHeader, PageShell, Pill, ProgressBar, SectionTitle, SurfaceCard } from "@/components/app/DesignSystem";
+import { BANK_TRANSACTIONS, ECOSYSTEM_MODULES, NOTIFICATIONS } from "@/data/ecosystemData";
 import { WEEKLY_ACTIVITY } from "@/data/mockData";
 import type { UserProfile } from "@/types";
 
-interface Props { user: UserProfile; onLogout: () => void; }
+interface Props {
+  user: UserProfile;
+  onLogout: () => void;
+}
 
 const PROJECT_PROGRESS = [
-  { name: "UPZ Landing Page", progress: 85, color: "#6366F1" },
-  { name: "Internal App MVP", progress: 62, color: "#3B82F6" },
-  { name: "API Integration", progress: 40, color: "#10B981" },
-  { name: "Mobile App", progress: 15, color: "#F59E0B" },
+  { nameKey: "productSystem", progress: 92, color: "#6366F1" },
+  { nameKey: "internalExpansion", progress: 76, color: "#3B82F6" },
+  { nameKey: "backendIntegration", progress: 40, color: "#10B981" },
+  { nameKey: "mobileUx", progress: 58, color: "#F59E0B" },
 ];
 
 const PRODUCTIVITY_DATA = [
@@ -23,154 +43,201 @@ const PRODUCTIVITY_DATA = [
   { week: "W5", score: 88 },
 ];
 
-const CUSTOM_TOOLTIP_STYLE = {
-  contentStyle: { background: "#1F2937", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, color: "#E5E7EB" },
+const TODAY_COMMANDS = [
+  {
+    titleKey: "chatTitle",
+    descriptionKey: "chatDesc",
+    meta: "Chat",
+    icon: MessageCircle,
+    accent: "#3B82F6",
+  },
+  {
+    titleKey: "projectTitle",
+    descriptionKey: "projectDesc",
+    metaKey: "todayTime",
+    icon: CalendarDays,
+    accent: "#6366F1",
+  },
+  {
+    titleKey: "walletTitle",
+    descriptionKey: "walletDesc",
+    meta: BANK_TRANSACTIONS[0].amount,
+    icon: WalletCards,
+    accent: "#10B981",
+  },
+  {
+    titleKey: "aiTitle",
+    descriptionKey: "aiDesc",
+    metaKey: "aiReady",
+    icon: Bot,
+    accent: "#F59E0B",
+  },
+];
+
+const AGENDA = [
+  { time: "09:30", titleKey: "teamReview", areaKey: "teams" },
+  { time: "11:00", titleKey: "heroQa", areaKey: "project" },
+  { time: "14:00", titleKey: "moderation", areaKey: "community" },
+  { time: "16:00", titleKey: "demo", areaKey: "workspace" },
+];
+
+const tooltipStyle = {
+  contentStyle: { background: "#FFFFFF", border: "1px solid #E5E7EB", borderRadius: 16, color: "#111827", boxShadow: "0 12px 30px rgba(17,24,39,0.12)" },
   cursor: { fill: "rgba(99,102,241,0.08)" },
 };
 
 export default function DashboardPage({ user, onLogout }: Props) {
-  return (
-    <AppLayout user={user} title="Dashboard" onLogout={onLogout}>
-      <div className="max-w-6xl mx-auto space-y-6">
+  const { t } = useTranslation();
+  const unreadNotifications = NOTIFICATIONS.filter((notification) => notification.unread).length;
 
-        {/* Stats row */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard label="Tasks Done" value="24" icon={CheckSquare} trend="8 this week" trendUp accent="#6366F1" delay={0} />
-          <StatCard label="Active Projects" value="4" icon={FolderOpen} trend="1 new" trendUp accent="#3B82F6" delay={0.05} />
-          <StatCard label="Team Members" value="7" icon={Users} trend="2 online" trendUp accent="#10B981" delay={0.1} />
-          <StatCard label="Productivity" value="88%" icon={Zap} trend="vs last week +6%" trendUp accent="#F59E0B" delay={0.15} />
+  return (
+    <AppLayout user={user} title={t("app.nav.dashboard")} onLogout={onLogout}>
+      <PageShell>
+        <PageHeader
+          eyebrow={t("app.dashboard.eyebrow")}
+          title={t("app.dashboard.welcome", { name: user.name })}
+          description={t("app.dashboard.description")}
+        >
+          <Link href="/app/assistant">
+            <span className="inline-flex items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-indigo-200 transition-all hover:bg-indigo-500 active:scale-[0.98]">
+              <Bot className="h-4 w-4" /> {t("app.dashboard.askAI")}
+            </span>
+          </Link>
+          <Link href="/app/chat">
+            <span className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[#E5E7EB] bg-white px-4 py-2 text-sm font-semibold text-[#111827] transition-all hover:bg-slate-50 active:scale-[0.98]">
+              <MessageCircle className="h-4 w-4" /> {t("app.dashboard.openChat")}
+            </span>
+          </Link>
+        </PageHeader>
+
+        <div className="grid gap-5 xl:grid-cols-[1.4fr_0.8fr]">
+          <SurfaceCard className="overflow-hidden bg-gradient-to-br from-white via-white to-indigo-50">
+            <div className="grid gap-5 lg:grid-cols-[1fr_0.8fr] lg:items-center">
+              <div>
+                <div className="mb-4 flex flex-wrap items-center gap-2">
+                  <Pill tone="indigo">{t("app.dashboard.focusScore")}</Pill>
+                  <Pill tone="blue">{t("app.dashboard.activeProjectsPill")}</Pill>
+                  <Pill tone="green">{t("app.dashboard.teammatesOnlinePill")}</Pill>
+                </div>
+                <h2 className="text-2xl font-black tracking-tight text-[#111827] md:text-4xl">
+                  {t("app.dashboard.heroTitle")}
+                </h2>
+                <p className="mt-3 max-w-2xl text-sm leading-6 text-[#6B7280]">
+                  {t("app.dashboard.heroDesc")}
+                </p>
+                <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                  <Link href="/app/projects">
+                    <span className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-indigo-200 transition-all hover:bg-indigo-500 active:scale-[0.98]">
+                      <ArrowUpRight className="h-4 w-4" /> {t("app.dashboard.continueProjects")}
+                    </span>
+                  </Link>
+                  <Link href="/app/workspace">
+                    <span className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#E5E7EB] bg-white px-4 py-2 text-sm font-semibold text-[#111827] transition-all hover:bg-slate-50 active:scale-[0.98]">
+                      <FolderOpen className="h-4 w-4" /> {t("app.dashboard.openWorkspace")}
+                    </span>
+                  </Link>
+                </div>
+              </div>
+              <div className="rounded-[24px] border border-[#E5E7EB] bg-white p-4 shadow-sm">
+                <SectionTitle icon={Target} title={t("app.dashboard.launchReadiness")} description={t("app.dashboard.trackerDesc")} />
+                <div className="space-y-4">
+                  {PROJECT_PROGRESS.slice(0, 3).map((project) => (
+                    <ProgressBar key={project.nameKey} value={project.progress} accent={project.color} label={t(`app.dashboard.progress.${project.nameKey}`)} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </SurfaceCard>
+
+          <SurfaceCard>
+            <SectionTitle icon={Clock} title={t("app.dashboard.agenda")} description={t("app.dashboard.agendaDesc")} />
+            <div className="space-y-3">
+              {AGENDA.map((item) => (
+                <div key={`${item.time}-${item.titleKey}`} className="flex gap-3 rounded-2xl bg-[#F7FAFC] p-3 ring-1 ring-[#E5E7EB]">
+                  <span className="w-12 flex-shrink-0 text-xs font-bold text-indigo-600">{item.time}</span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm font-semibold text-[#111827]">{t(`app.dashboard.agendaItems.${item.titleKey}`)}</span>
+                    <span className="text-xs text-[#6B7280]">{t(`app.dashboard.areas.${item.areaKey}`)}</span>
+                  </span>
+                </div>
+              ))}
+            </div>
+          </SurfaceCard>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-          {/* Weekly Activity Chart */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="rounded-xl p-5"
-            style={{ background: "#111827", border: "1px solid rgba(255,255,255,0.07)" }}
-          >
-            <div className="flex items-center gap-2 mb-5">
-              <BarChart3 className="w-4 h-4 text-indigo-400" />
-              <h3 className="font-semibold text-white">Weekly Activity</h3>
-            </div>
-            <ResponsiveContainer width="100%" height={200}>
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <MetricTile label={t("app.dashboard.tasksDone")} value="24" icon={CheckSquare} trend={t("app.dashboard.tasksTrend")} />
+          <MetricTile label={t("app.dashboard.activeProjects")} value="4" icon={FolderOpen} accent="#3B82F6" trend={t("app.dashboard.activeProjectsTrend")} />
+          <MetricTile label={t("app.dashboard.teamMembers")} value="7" icon={Users} accent="#10B981" trend={t("app.dashboard.teamMembersTrend")} />
+          <MetricTile label={t("app.dashboard.unreadAlerts")} value={`${unreadNotifications}`} icon={Bell} accent="#F59E0B" trend={t("app.dashboard.unreadTrend")} />
+        </div>
+
+        <SurfaceCard>
+          <SectionTitle icon={Zap} title={t("app.dashboard.nextActions")} description={t("app.dashboard.nextActionsDesc")} />
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {TODAY_COMMANDS.map((command) => (
+              <CommandCard
+                key={command.titleKey}
+                icon={command.icon}
+                title={t(`app.dashboard.commands.${command.titleKey}`)}
+                description={t(`app.dashboard.commands.${command.descriptionKey}`)}
+                meta={command.metaKey ? t(`app.dashboard.commands.${command.metaKey}`) : command.meta}
+                accent={command.accent}
+              />
+            ))}
+          </div>
+        </SurfaceCard>
+
+        <SurfaceCard>
+          <SectionTitle icon={Zap} title={t("app.dashboard.ecosystemHealth")} description={t("app.dashboard.ecosystemDesc")} />
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+            {ECOSYSTEM_MODULES.map((module) => (
+              <div key={module.name} className="rounded-2xl border border-[#E5E7EB] bg-[#F7FAFC] p-4 transition-all hover:-translate-y-0.5 hover:bg-white hover:shadow-sm">
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <div>
+                    <p className="font-semibold text-[#111827]">{t(`app.ecosystem.modules.${module.name}.name`, module.name)}</p>
+                    <p className="mt-1 text-sm text-[#6B7280]">{t(`app.ecosystem.modules.${module.name}.status`, module.status)}</p>
+                  </div>
+                  <span className="text-xl font-bold text-indigo-600">{module.score}</span>
+                </div>
+                <ProgressBar value={Number.parseInt(module.score, 10)} />
+                <div className="mt-3 flex items-center justify-between text-xs font-semibold text-[#6B7280]">
+                  <span>{t("app.dashboard.moduleUsers", { count: module.users })}</span>
+                  <span>{t("app.dashboard.backendReady")}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </SurfaceCard>
+
+        <div className="grid gap-5 lg:grid-cols-2">
+          <SurfaceCard>
+            <SectionTitle icon={BarChart3} title={t("app.dashboard.weeklyActivity")} description={t("app.dashboard.weeklyActivityDesc")} />
+            <ResponsiveContainer width="100%" height={240}>
               <BarChart data={WEEKLY_ACTIVITY} barGap={4}>
                 <XAxis dataKey="day" tick={{ fill: "#6B7280", fontSize: 11 }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fill: "#6B7280", fontSize: 11 }} axisLine={false} tickLine={false} width={30} />
-                <Tooltip {...CUSTOM_TOOLTIP_STYLE} />
-                <Bar dataKey="tasks" fill="#6366F1" radius={[4, 4, 0, 0]} name="Tasks" />
-                <Bar dataKey="messages" fill="#3B82F6" radius={[4, 4, 0, 0]} name="Messages" />
+                <Tooltip {...tooltipStyle} />
+                <Bar dataKey="tasks" fill="#6366F1" radius={[8, 8, 0, 0]} name={t("app.dashboard.chartTasks")} />
+                <Bar dataKey="messages" fill="#3B82F6" radius={[8, 8, 0, 0]} name={t("app.dashboard.chartMessages")} />
               </BarChart>
             </ResponsiveContainer>
-            <div className="flex items-center gap-4 mt-3">
-              <div className="flex items-center gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-sm bg-indigo-500" />
-                <span className="text-xs text-gray-400">Tasks</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-sm bg-blue-500" />
-                <span className="text-xs text-gray-400">Messages</span>
-              </div>
-            </div>
-          </motion.div>
+          </SurfaceCard>
 
-          {/* Productivity Trend */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25 }}
-            className="rounded-xl p-5"
-            style={{ background: "#111827", border: "1px solid rgba(255,255,255,0.07)" }}
-          >
-            <div className="flex items-center gap-2 mb-5">
-              <TrendingUp className="w-4 h-4 text-emerald-400" />
-              <h3 className="font-semibold text-white">Productivity Score</h3>
-            </div>
-            <ResponsiveContainer width="100%" height={200}>
+          <SurfaceCard>
+            <SectionTitle icon={TrendingUp} title={t("app.dashboard.productivityScore")} description={t("app.dashboard.productivityDesc")} />
+            <ResponsiveContainer width="100%" height={240}>
               <LineChart data={PRODUCTIVITY_DATA}>
-                <CartesianGrid stroke="rgba(255,255,255,0.05)" strokeDasharray="3 3" />
+                <CartesianGrid stroke="#E5E7EB" strokeDasharray="3 3" />
                 <XAxis dataKey="week" tick={{ fill: "#6B7280", fontSize: 11 }} axisLine={false} tickLine={false} />
                 <YAxis domain={[50, 100]} tick={{ fill: "#6B7280", fontSize: 11 }} axisLine={false} tickLine={false} width={30} />
-                <Tooltip {...CUSTOM_TOOLTIP_STYLE} />
-                <Line
-                  type="monotone"
-                  dataKey="score"
-                  stroke="#10B981"
-                  strokeWidth={2.5}
-                  dot={{ fill: "#10B981", strokeWidth: 0, r: 4 }}
-                  activeDot={{ r: 6, fill: "#10B981" }}
-                  name="Score"
-                />
+                <Tooltip {...tooltipStyle} />
+                <Line type="monotone" dataKey="score" stroke="#10B981" strokeWidth={3} dot={{ fill: "#10B981", strokeWidth: 0, r: 4 }} activeDot={{ r: 6, fill: "#10B981" }} name={t("app.dashboard.chartScore")} />
               </LineChart>
             </ResponsiveContainer>
-            <div className="flex items-center justify-between mt-3">
-              <span className="text-xs text-gray-500">5-week trend</span>
-              <span className="text-xs text-emerald-400 font-semibold">+26 pts overall ↑</span>
-            </div>
-          </motion.div>
+          </SurfaceCard>
         </div>
-
-        {/* Project Progress */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="rounded-xl p-5"
-          style={{ background: "#111827", border: "1px solid rgba(255,255,255,0.07)" }}
-        >
-          <div className="flex items-center gap-2 mb-5">
-            <Target className="w-4 h-4 text-blue-400" />
-            <h3 className="font-semibold text-white">Project Progress</h3>
-          </div>
-          <div className="space-y-4">
-            {PROJECT_PROGRESS.map((project, i) => (
-              <motion.div
-                key={project.name}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.35 + i * 0.05 }}
-              >
-                <div className="flex justify-between items-center mb-1.5">
-                  <span className="text-sm text-gray-300">{project.name}</span>
-                  <span className="text-sm font-semibold text-white">{project.progress}%</span>
-                </div>
-                <div className="h-2 rounded-full" style={{ background: "rgba(255,255,255,0.07)" }}>
-                  <motion.div
-                    className="h-full rounded-full"
-                    style={{ background: project.color }}
-                    initial={{ width: 0 }}
-                    animate={{ width: `${project.progress}%` }}
-                    transition={{ duration: 0.8, delay: 0.4 + i * 0.1, ease: "easeOut" }}
-                  />
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Quick stats row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[
-            { label: "Streak", value: "7 days 🔥" },
-            { label: "Messages sent", value: "143" },
-            { label: "Notes created", value: "18" },
-            { label: "Hours logged", value: "42h" },
-          ].map((s, i) => (
-            <motion.div
-              key={s.label}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 + i * 0.05 }}
-              className="rounded-xl p-4 text-center"
-              style={{ background: "#111827", border: "1px solid rgba(255,255,255,0.07)" }}
-            >
-              <div className="text-xl font-bold text-white">{s.value}</div>
-              <div className="text-xs text-gray-500 mt-1">{s.label}</div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
+      </PageShell>
     </AppLayout>
   );
 }

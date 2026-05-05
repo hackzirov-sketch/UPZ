@@ -1,32 +1,35 @@
-import { useState, useEffect } from "react";
+﻿import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { User, Bell, Plug, Github, Send, Instagram, Youtube, HardDrive, Mail, Calendar, BookOpen, CheckCircle2, XCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { AppLayout } from "@/components/app/AppLayout";
 import type { UserProfile } from "@/types";
 import { storage } from "@/utils/storage";
-import { PROFESSION_LABELS } from "@/data/mockData";
 
 interface Props { user: UserProfile; onLogout: () => void; }
 
 const INTEGRATIONS = [
-  { id: 'github', name: 'GitHub', desc: 'Connect repos and track code activity', icon: <Github className="w-5 h-5" />, iconBg: '#1F2937', iconColor: '#E5E7EB' },
-  { id: 'telegram', name: 'Telegram', desc: 'Get notifications via Telegram bot', icon: <Send className="w-5 h-5" />, iconBg: '#0F3460', iconColor: '#2AABEE' },
-  { id: 'instagram', name: 'Instagram', desc: 'Track your IG analytics and schedule posts', icon: <Instagram className="w-5 h-5" />, iconBg: '#3D1A47', iconColor: '#E91E8C' },
-  { id: 'youtube', name: 'YouTube', desc: 'Monitor channel stats and video performance', icon: <Youtube className="w-5 h-5" />, iconBg: '#3D1A1A', iconColor: '#FF0000' },
-  { id: 'gdrive', name: 'Google Drive', desc: 'Access and manage your Drive files', icon: <HardDrive className="w-5 h-5" />, iconBg: '#1A2E1A', iconColor: '#34A853' },
-  { id: 'mail', name: 'Mail', desc: 'Connect your email for notifications', icon: <Mail className="w-5 h-5" />, iconBg: '#1A1F3A', iconColor: '#4285F4' },
-  { id: 'calendar', name: 'Calendar', desc: 'Sync events and schedule reminders', icon: <Calendar className="w-5 h-5" />, iconBg: '#1A2A3A', iconColor: '#0F9D58' },
-  { id: 'class', name: 'Class', desc: 'Manage classes and student groups', icon: <BookOpen className="w-5 h-5" />, iconBg: '#2A1A0F', iconColor: '#F59E0B' },
+  { id: "github", name: "GitHub", icon: <Github className="h-5 w-5" />, iconBg: "#1F2937", iconColor: "#E5E7EB" },
+  { id: "telegram", name: "Telegram", icon: <Send className="h-5 w-5" />, iconBg: "#E0F2FE", iconColor: "#0284C7" },
+  { id: "instagram", name: "Instagram", icon: <Instagram className="h-5 w-5" />, iconBg: "#FCE7F3", iconColor: "#DB2777" },
+  { id: "youtube", name: "YouTube", icon: <Youtube className="h-5 w-5" />, iconBg: "#FEE2E2", iconColor: "#DC2626" },
+  { id: "gdrive", name: "Google Drive", icon: <HardDrive className="h-5 w-5" />, iconBg: "#DCFCE7", iconColor: "#16A34A" },
+  { id: "mail", name: "Mail", icon: <Mail className="h-5 w-5" />, iconBg: "#DBEAFE", iconColor: "#2563EB" },
+  { id: "calendar", name: "Calendar", icon: <Calendar className="h-5 w-5" />, iconBg: "#DCFCE7", iconColor: "#059669" },
+  { id: "class", name: "Class", icon: <BookOpen className="h-5 w-5" />, iconBg: "#FEF3C7", iconColor: "#D97706" },
 ];
 
 const TABS = [
-  { id: 'account', label: 'Account', icon: User },
-  { id: 'notifications', label: 'Notifications', icon: Bell },
-  { id: 'integrations', label: 'Integrations', icon: Plug },
-];
+  { id: "account", icon: User },
+  { id: "notifications", icon: Bell },
+  { id: "integrations", icon: Plug },
+] as const;
+
+const NOTIFICATION_KEYS = ["email", "push", "taskReminders", "chatMessages", "weeklyReport", "productUpdates"] as const;
 
 export default function SettingsPage({ user, onLogout }: Props) {
-  const [tab, setTab] = useState('account');
+  const { t } = useTranslation();
+  const [tab, setTab] = useState<(typeof TABS)[number]["id"]>("account");
   const [connected, setConnected] = useState<Record<string, boolean>>({});
   const [notifs, setNotifs] = useState({
     email: true,
@@ -49,109 +52,76 @@ export default function SettingsPage({ user, onLogout }: Props) {
   };
 
   return (
-    <AppLayout user={user} title="Settings" onLogout={onLogout}>
-      <div className="max-w-3xl mx-auto">
-        {/* Tabs */}
-        <div className="flex gap-1 p-1 rounded-xl mb-6" style={{ background: "#111827", width: "fit-content" }}>
-          {TABS.map((t) => (
+    <AppLayout user={user} title={t("app.nav.settings")} onLogout={onLogout}>
+      <div className="mx-auto max-w-3xl">
+        <div className="mb-6 flex gap-1 rounded-xl p-1" style={{ background: "#FFFFFF", width: "fit-content" }}>
+          {TABS.map((item) => (
             <button
-              key={t.id}
-              onClick={() => setTab(t.id)}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all"
-              style={{
-                background: tab === t.id ? "#6366F1" : "transparent",
-                color: tab === t.id ? "white" : "#9CA3AF",
-              }}
+              key={item.id}
+              onClick={() => setTab(item.id)}
+              className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all"
+              style={{ background: tab === item.id ? "#6366F1" : "transparent", color: tab === item.id ? "white" : "#6B7280" }}
             >
-              <t.icon className="w-3.5 h-3.5" />
-              {t.label}
+              <item.icon className="h-3.5 w-3.5" />
+              {t(`app.settings.tabs.${item.id}`)}
             </button>
           ))}
         </div>
 
-        {/* ACCOUNT TAB */}
-        {tab === 'account' && (
+        {tab === "account" && (
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
-            <div className="rounded-xl p-6 space-y-5" style={{ background: "#111827", border: "1px solid rgba(255,255,255,0.07)" }}>
-              <h3 className="font-semibold text-white">Account Information</h3>
+            <div className="space-y-5 rounded-xl p-6" style={{ background: "#FFFFFF", border: "1px solid #E5E7EB" }}>
+              <h3 className="font-semibold text-[#111827]">{t("app.settings.accountInfo")}</h3>
 
               {[
-                { label: "Display Name", value: user.name, type: "text" },
-                { label: "Email", value: "user@example.com", type: "email" },
-                { label: "Username", value: `@${user.name.toLowerCase().replace(/\s+/g, '_')}`, type: "text" },
+                { label: t("app.settings.displayName"), value: user.name, type: "text" },
+                { label: t("app.settings.email"), value: "user@example.com", type: "email" },
+                { label: t("app.settings.username"), value: `@${user.name.toLowerCase().replace(/\s+/g, "_")}`, type: "text" },
               ].map((field) => (
                 <div key={field.label}>
-                  <label className="block text-xs text-gray-500 mb-1.5">{field.label}</label>
-                  <input
-                    type={field.type}
-                    defaultValue={field.value}
-                    className="w-full px-4 py-2.5 rounded-xl text-sm text-white outline-none"
-                    style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.09)" }}
-                  />
+                  <label className="mb-1.5 block text-xs text-gray-500">{field.label}</label>
+                  <input type={field.type} defaultValue={field.value} className="w-full rounded-xl px-4 py-2.5 text-sm text-[#111827] outline-none" style={{ background: "#F7FAFC", border: "1px solid #E5E7EB" }} />
                 </div>
               ))}
 
               <div>
-                <label className="block text-xs text-gray-500 mb-1.5">Profession</label>
-                <div
-                  className="px-4 py-2.5 rounded-xl text-sm text-gray-300"
-                  style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.09)" }}
-                >
-                  {PROFESSION_LABELS[user.profession]}
-                  <span className="text-gray-600 text-xs ml-2">(Change in onboarding)</span>
+                <label className="mb-1.5 block text-xs text-gray-500">{t("app.settings.profession")}</label>
+                <div className="rounded-xl px-4 py-2.5 text-sm text-gray-700" style={{ background: "#F7FAFC", border: "1px solid #E5E7EB" }}>
+                  {t(`app.professions.${user.profession}`, user.profession)}
+                  <span className="ml-2 text-xs text-gray-500">{t("app.settings.changeOnboarding")}</span>
                 </div>
               </div>
 
-              <button className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors">
-                Save Changes
-              </button>
+              <button className="rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-indigo-500">{t("app.settings.saveChanges")}</button>
             </div>
 
-            <div className="rounded-xl p-6 space-y-4" style={{ background: "#111827", border: "1px solid rgba(255,255,255,0.07)" }}>
-              <h3 className="font-semibold text-white">Danger Zone</h3>
-              <div className="flex items-center justify-between p-4 rounded-xl" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
+            <div className="space-y-4 rounded-xl p-6" style={{ background: "#FFFFFF", border: "1px solid #E5E7EB" }}>
+              <h3 className="font-semibold text-[#111827]">{t("app.settings.dangerZone")}</h3>
+              <div className="flex items-center justify-between rounded-xl p-4" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
                 <div>
-                  <p className="text-sm font-medium text-red-400">Delete Account</p>
-                  <p className="text-xs text-gray-500 mt-0.5">This action cannot be undone</p>
+                  <p className="text-sm font-medium text-red-500">{t("app.settings.deleteAccount")}</p>
+                  <p className="mt-0.5 text-xs text-gray-500">{t("app.settings.deleteAccountDesc")}</p>
                 </div>
-                <button className="px-3 py-1.5 rounded-lg text-xs font-medium text-red-400" style={{ background: "rgba(239,68,68,0.15)" }}>
-                  Delete
-                </button>
+                <button className="rounded-lg px-3 py-1.5 text-xs font-medium text-red-500" style={{ background: "rgba(239,68,68,0.15)" }}>{t("app.settings.delete")}</button>
               </div>
             </div>
           </motion.div>
         )}
 
-        {/* NOTIFICATIONS TAB */}
-        {tab === 'notifications' && (
+        {tab === "notifications" && (
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="rounded-xl p-6 space-y-5" style={{ background: "#111827", border: "1px solid rgba(255,255,255,0.07)" }}>
-              <h3 className="font-semibold text-white">Notification Preferences</h3>
-              {(Object.entries(notifs) as [string, boolean][]).map(([key, val]) => {
-                const labels: Record<string, { label: string; desc: string }> = {
-                  email: { label: 'Email Notifications', desc: 'Receive updates via email' },
-                  push: { label: 'Push Notifications', desc: 'Browser push notifications' },
-                  taskReminders: { label: 'Task Reminders', desc: 'Get reminded about upcoming tasks' },
-                  chatMessages: { label: 'Chat Messages', desc: 'Alerts for new messages' },
-                  weeklyReport: { label: 'Weekly Report', desc: 'Summary email every Monday' },
-                  productUpdates: { label: 'Product Updates', desc: 'News about new UPZ features' },
-                };
-                const info = labels[key];
+            <div className="space-y-5 rounded-xl p-6" style={{ background: "#FFFFFF", border: "1px solid #E5E7EB" }}>
+              <h3 className="font-semibold text-[#111827]">{t("app.settings.notificationPrefs")}</h3>
+              {NOTIFICATION_KEYS.map((key) => {
+                const val = notifs[key];
                 return (
                   <div key={key} className="flex items-center justify-between py-2">
                     <div>
-                      <p className="text-sm font-medium text-white">{info.label}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">{info.desc}</p>
+                      <p className="text-sm font-medium text-[#111827]">{t(`app.settings.notifications.${key}.label`)}</p>
+                      <p className="mt-0.5 text-xs text-gray-500">{t(`app.settings.notifications.${key}.desc`)}</p>
                     </div>
-                    <button
-                      onClick={() => setNotifs((n) => ({ ...n, [key]: !n[key as keyof typeof n] }))}
-                      className="relative w-11 h-6 rounded-full transition-colors flex-shrink-0"
-                      style={{ background: val ? "#6366F1" : "rgba(255,255,255,0.1)" }}
-                    >
-                      <div
-                        className="absolute top-1 w-4 h-4 rounded-full bg-white transition-all"
-                        style={{ left: val ? "calc(100% - 20px)" : 4 }}
-                      />
+                    <button onClick={() => setNotifs((state) => ({ ...state, [key]: !state[key] }))} className="relative h-6 w-11 flex-shrink-0 rounded-full transition-colors" style={{ background: val ? "#6366F1" : "#CBD5E1" }}>
+                      <div className="absolute top-1 h-4 w-4 rounded-full bg-white transition-all" style={{ left: val ? "calc(100% - 20px)" : 4 }} />
                     </button>
                   </div>
                 );
@@ -160,53 +130,23 @@ export default function SettingsPage({ user, onLogout }: Props) {
           </motion.div>
         )}
 
-        {/* INTEGRATIONS TAB */}
-        {tab === 'integrations' && (
+        {tab === "integrations" && (
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
-            <p className="text-xs text-gray-500">Connect external services to enhance your workspace. No real credentials required in this demo.</p>
-            {INTEGRATIONS.map((intg, i) => {
+            <p className="text-xs text-gray-500">{t("app.settings.integrationsIntro")}</p>
+            {INTEGRATIONS.map((intg, index) => {
               const isConnected = connected[intg.id] ?? false;
               return (
-                <motion.div
-                  key={intg.id}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                  className="flex items-center gap-4 p-4 rounded-xl"
-                  style={{ background: "#111827", border: "1px solid rgba(255,255,255,0.07)" }}
-                >
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{ background: intg.iconBg, color: intg.iconColor }}
-                  >
-                    {intg.icon}
-                  </div>
-                  <div className="flex-1 min-w-0">
+                <motion.div key={intg.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }} className="flex items-center gap-4 rounded-xl p-4" style={{ background: "#FFFFFF", border: "1px solid #E5E7EB" }}>
+                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl" style={{ background: intg.iconBg, color: intg.iconColor }}>{intg.icon}</div>
+                  <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <p className="text-sm font-semibold text-white">{intg.name}</p>
-                      {isConnected && (
-                        <span className="flex items-center gap-1 text-xs text-emerald-400">
-                          <CheckCircle2 className="w-3 h-3" /> Connected
-                        </span>
-                      )}
+                      <p className="text-sm font-semibold text-[#111827]">{intg.name}</p>
+                      {isConnected && <span className="flex items-center gap-1 text-xs text-emerald-500"><CheckCircle2 className="h-3 w-3" /> {t("app.status.connected")}</span>}
                     </div>
-                    <p className="text-xs text-gray-500 mt-0.5 truncate">{intg.desc}</p>
+                    <p className="mt-0.5 truncate text-xs text-gray-500">{t(`app.settings.integrations.${intg.id}`, intg.id)}</p>
                   </div>
-                  <motion.button
-                    onClick={() => toggleIntegration(intg.id)}
-                    whileHover={{ scale: 1.04 }}
-                    whileTap={{ scale: 0.96 }}
-                    className="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
-                    style={isConnected
-                      ? { background: "rgba(239,68,68,0.12)", color: "#F87171", border: "1px solid rgba(239,68,68,0.2)" }
-                      : { background: "rgba(99,102,241,0.15)", color: "#A5B4FC", border: "1px solid rgba(99,102,241,0.25)" }
-                    }
-                  >
-                    {isConnected ? (
-                      <span className="flex items-center gap-1"><XCircle className="w-3 h-3" /> Disconnect</span>
-                    ) : (
-                      "Connect"
-                    )}
+                  <motion.button onClick={() => toggleIntegration(intg.id)} whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} className="flex-shrink-0 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all" style={isConnected ? { background: "rgba(239,68,68,0.12)", color: "#DC2626", border: "1px solid rgba(239,68,68,0.2)" } : { background: "rgba(99,102,241,0.15)", color: "#4F46E5", border: "1px solid rgba(99,102,241,0.25)" }}>
+                    {isConnected ? <span className="flex items-center gap-1"><XCircle className="h-3 w-3" /> {t("app.settings.disconnect")}</span> : t("app.settings.connect")}
                   </motion.button>
                 </motion.div>
               );

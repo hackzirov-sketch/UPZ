@@ -1,224 +1,160 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 import { Edit3, Award, Target, BookOpen, Briefcase, Star, GitBranch, Code2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { AppLayout } from "@/components/app/AppLayout";
 import type { UserProfile } from "@/types";
-import { PROFESSION_LABELS, GOAL_LABELS, EXPERIENCE_LABELS } from "@/data/mockData";
 
 interface Props { user: UserProfile; onLogout: () => void; }
 
 const SKILLS_BY_PROFESSION: Record<string, string[]> = {
-  developer: ['JavaScript', 'TypeScript', 'React', 'Node.js', 'Git', 'REST APIs'],
-  designer: ['Figma', 'UI/UX', 'Prototyping', 'Design Systems', 'Adobe XD', 'Motion Design'],
-  teacher: ['Curriculum Design', 'E-Learning', 'Mentoring', 'Public Speaking', 'LMS Tools'],
-  student: ['Research', 'Note-taking', 'Time Management', 'Critical Thinking', 'Collaboration'],
-  freelancer: ['Project Management', 'Client Communication', 'Proposals', 'Invoicing', 'Portfolio'],
-  smm: ['Content Strategy', 'SEO', 'Analytics', 'Copywriting', 'Social Platforms', 'A/B Testing'],
-  creator: ['Video Production', 'Editing', 'Scripting', 'Thumbnail Design', 'YouTube SEO', 'Instagram'],
+  developer: ["JavaScript", "TypeScript", "React", "Node.js", "Git", "REST APIs"],
+  designer: ["Figma", "UI/UX", "Prototyping", "Design Systems", "Adobe XD", "Motion Design"],
+  teacher: ["Curriculum Design", "E-Learning", "Mentoring", "Public Speaking", "LMS Tools"],
+  student: ["Research", "Note-taking", "Time Management", "Critical Thinking", "Collaboration"],
+  freelancer: ["Project Management", "Client Communication", "Proposals", "Invoicing", "Portfolio"],
+  smm: ["Content Strategy", "SEO", "Analytics", "Copywriting", "Social Platforms", "A/B Testing"],
+  creator: ["Video Production", "Editing", "Scripting", "Thumbnail Design", "YouTube SEO", "Instagram"],
 };
 
 const MOCK_CERTS = [
-  { title: 'React Developer Certification', issuer: 'Meta', date: 'Jan 2024', color: '#61DAFB' },
-  { title: 'TypeScript Professional', issuer: 'Microsoft', date: 'Mar 2024', color: '#3178C6' },
+  { title: "React Developer Certification", issuer: "Meta", date: "Jan 2024", color: "#61DAFB" },
+  { title: "TypeScript Professional", issuer: "Microsoft", date: "Mar 2024", color: "#3178C6" },
 ];
 
 const MOCK_REPOS = [
-  { name: 'upz-frontend', lang: 'TypeScript', stars: 4, updated: '2d ago', color: '#3178C6' },
-  { name: 'api-server', lang: 'Node.js', stars: 2, updated: '5d ago', color: '#68A063' },
-  { name: 'design-system', lang: 'CSS', stars: 1, updated: '1w ago', color: '#264DE4' },
+  { name: "upz-frontend", lang: "TypeScript", stars: 4, updated: "2d ago", color: "#3178C6" },
+  { name: "api-server", lang: "Node.js", stars: 2, updated: "5d ago", color: "#68A063" },
+  { name: "design-system", lang: "CSS", stars: 1, updated: "1w ago", color: "#264DE4" },
 ];
 
 export default function ProfilePage({ user, onLogout }: Props) {
+  const { t, i18n } = useTranslation();
   const daysSince = Math.floor((Date.now() - user.joinedAt) / 86400000);
-  const skills = SKILLS_BY_PROFESSION[user.profession] ?? SKILLS_BY_PROFESSION['student'];
+  const skills = SKILLS_BY_PROFESSION[user.profession] ?? SKILLS_BY_PROFESSION.student;
+  const profession = t(`app.professions.${user.profession}`, user.profession);
+  const goal = t(`app.goals.${user.goal}`, user.goal);
+  const experience = t(`app.experience.${user.experience}`, user.experience);
+  const joinedLabel = daysSince === 0 ? t("app.profile.joinedToday") : t("app.profile.joinedDays", { count: daysSince });
 
   return (
-    <AppLayout user={user} title="Profile" onLogout={onLogout}>
-      <div className="max-w-3xl mx-auto space-y-5">
-
-        {/* Profile header card */}
+    <AppLayout user={user} title={t("app.nav.profile")} onLogout={onLogout}>
+      <div className="mx-auto max-w-3xl space-y-5">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-2xl p-6 relative overflow-hidden"
-          style={{
-            background: "linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%)",
-            border: "1px solid rgba(99,102,241,0.25)",
-          }}
+          className="relative overflow-hidden rounded-2xl p-6 shadow-sm"
+          style={{ background: "linear-gradient(135deg, #FFFFFF 0%, #EEF2FF 100%)", border: "1px solid #E5E7EB" }}
         >
-          <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-indigo-600/10 blur-3xl -translate-y-1/2 translate-x-1/2" />
-          <div className="flex items-start gap-5 relative z-10">
-            {/* Avatar */}
-            <div
-              className="w-20 h-20 rounded-2xl flex items-center justify-center text-3xl font-bold text-white flex-shrink-0"
-              style={{ background: "linear-gradient(135deg, #6366F1, #3B82F6)" }}
-            >
+          <div className="absolute right-0 top-0 h-64 w-64 -translate-y-1/2 translate-x-1/2 rounded-full bg-indigo-200/40 blur-3xl" />
+          <div className="relative z-10 flex items-start gap-5">
+            <div className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-2xl text-3xl font-bold text-white" style={{ background: "linear-gradient(135deg, #6366F1, #3B82F6)" }}>
               {user.name.slice(0, 2).toUpperCase()}
             </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-start justify-between">
+            <div className="min-w-0 flex-1">
+              <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h2 className="text-xl font-bold text-white">{user.name}</h2>
-                  <p className="text-indigo-300 text-sm mt-0.5">{PROFESSION_LABELS[user.profession]}</p>
+                  <h2 className="text-xl font-bold text-[#111827]">{user.name}</h2>
+                  <p className="mt-0.5 text-sm text-indigo-600">{profession}</p>
                 </div>
-                <button
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white transition-colors"
-                  style={{ background: "rgba(255,255,255,0.08)" }}
-                >
-                  <Edit3 className="w-3.5 h-3.5" /> Edit
+                <button className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-gray-700 transition-colors hover:bg-white hover:text-indigo-600">
+                  <Edit3 className="h-3.5 w-3.5" /> {t("app.profile.edit")}
                 </button>
               </div>
-              <div className="flex flex-wrap gap-2 mt-3">
-                <span className="text-xs px-2.5 py-1 rounded-full font-medium" style={{ background: "rgba(99,102,241,0.2)", color: "#A5B4FC" }}>
-                  <Target className="w-3 h-3 inline mr-1" />{GOAL_LABELS[user.goal]}
+              <div className="mt-3 flex flex-wrap gap-2">
+                <span className="rounded-full px-2.5 py-1 text-xs font-medium" style={{ background: "rgba(99,102,241,0.12)", color: "#4F46E5" }}>
+                  <Target className="mr-1 inline h-3 w-3" />{goal}
                 </span>
-                <span className="text-xs px-2.5 py-1 rounded-full font-medium" style={{ background: "rgba(16,185,129,0.15)", color: "#6EE7B7" }}>
-                  <BookOpen className="w-3 h-3 inline mr-1" />{EXPERIENCE_LABELS[user.experience]}
+                <span className="rounded-full px-2.5 py-1 text-xs font-medium" style={{ background: "rgba(16,185,129,0.12)", color: "#047857" }}>
+                  <BookOpen className="mr-1 inline h-3 w-3" />{experience}
                 </span>
-                <span className="text-xs px-2.5 py-1 rounded-full font-medium" style={{ background: "rgba(255,255,255,0.07)", color: "#9CA3AF" }}>
-                  Joined {daysSince === 0 ? "today" : `${daysSince}d ago`}
+                <span className="rounded-full px-2.5 py-1 text-xs font-medium text-[#6B7280]" style={{ background: "#FFFFFF" }}>
+                  {joinedLabel}
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Quick stats */}
-          <div className="grid grid-cols-3 gap-4 mt-5 pt-5 border-t relative z-10" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
+          <div className="relative z-10 mt-5 grid grid-cols-3 gap-4 border-t pt-5" style={{ borderColor: "#E5E7EB" }}>
             {[
-              { label: "Tasks Done", value: "24" },
-              { label: "Projects", value: "4" },
-              { label: "Streak", value: "7 🔥" },
-            ].map((s) => (
-              <div key={s.label} className="text-center">
-                <div className="text-xl font-bold text-white">{s.value}</div>
-                <div className="text-xs text-gray-400 mt-0.5">{s.label}</div>
+              { label: t("app.profile.stats.tasksDone"), value: "24" },
+              { label: t("app.profile.stats.projects"), value: "4" },
+              { label: t("app.profile.stats.streak"), value: "7" },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <div className="text-xl font-bold text-[#111827]">{stat.value}</div>
+                <div className="mt-0.5 text-xs text-gray-500">{stat.label}</div>
               </div>
             ))}
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {/* Skills */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="rounded-xl p-5"
-            style={{ background: "#111827", border: "1px solid rgba(255,255,255,0.07)" }}
-          >
-            <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
-              <Star className="w-4 h-4 text-yellow-400" /> Skills
-            </h3>
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="rounded-xl p-5" style={{ background: "#FFFFFF", border: "1px solid #E5E7EB" }}>
+            <h3 className="mb-4 flex items-center gap-2 font-semibold text-[#111827]"><Star className="h-4 w-4 text-yellow-400" /> {t("app.profile.skills")}</h3>
             <div className="flex flex-wrap gap-2">
               {skills.map((skill) => (
-                <span
-                  key={skill}
-                  className="text-xs px-3 py-1.5 rounded-full font-medium"
-                  style={{ background: "rgba(99,102,241,0.12)", color: "#A5B4FC", border: "1px solid rgba(99,102,241,0.2)" }}
-                >
-                  {skill}
-                </span>
+                <span key={skill} className="rounded-full px-3 py-1.5 text-xs font-medium" style={{ background: "rgba(99,102,241,0.12)", color: "#4F46E5", border: "1px solid rgba(99,102,241,0.2)" }}>{skill}</span>
               ))}
             </div>
           </motion.div>
 
-          {/* Goals & Info */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-            className="rounded-xl p-5"
-            style={{ background: "#111827", border: "1px solid rgba(255,255,255,0.07)" }}
-          >
-            <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
-              <Briefcase className="w-4 h-4 text-blue-400" /> About
-            </h3>
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="rounded-xl p-5" style={{ background: "#FFFFFF", border: "1px solid #E5E7EB" }}>
+            <h3 className="mb-4 flex items-center gap-2 font-semibold text-[#111827]"><Briefcase className="h-4 w-4 text-blue-500" /> {t("app.profile.about")}</h3>
             <div className="space-y-3">
               {[
-                { label: "Profession", value: PROFESSION_LABELS[user.profession] },
-                { label: "Main Goal", value: GOAL_LABELS[user.goal] },
-                { label: "Experience", value: EXPERIENCE_LABELS[user.experience] },
-                { label: "Member Since", value: new Date(user.joinedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) },
+                { label: t("app.profile.profession"), value: profession },
+                { label: t("app.profile.mainGoal"), value: goal },
+                { label: t("app.profile.experience"), value: experience },
+                { label: t("app.profile.memberSince"), value: new Date(user.joinedAt).toLocaleDateString(i18n.language, { month: "long", day: "numeric", year: "numeric" }) },
               ].map((row) => (
-                <div key={row.label} className="flex justify-between items-center">
+                <div key={row.label} className="flex items-center justify-between gap-3">
                   <span className="text-xs text-gray-500">{row.label}</span>
-                  <span className="text-sm text-gray-200 font-medium">{row.value}</span>
+                  <span className="text-sm font-medium text-[#111827]">{row.value}</span>
                 </div>
               ))}
             </div>
           </motion.div>
         </div>
 
-        {/* Certificates */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="rounded-xl p-5"
-          style={{ background: "#111827", border: "1px solid rgba(255,255,255,0.07)" }}
-        >
-          <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
-            <Award className="w-4 h-4 text-yellow-400" /> Certificates
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="rounded-xl p-5" style={{ background: "#FFFFFF", border: "1px solid #E5E7EB" }}>
+          <h3 className="mb-4 flex items-center gap-2 font-semibold text-[#111827]"><Award className="h-4 w-4 text-yellow-400" /> {t("app.profile.certificates")}</h3>
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             {MOCK_CERTS.map((cert) => (
-              <div
-                key={cert.title}
-                className="flex items-center gap-3 p-3 rounded-lg"
-                style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}
-              >
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: `${cert.color}22` }}>
-                  <Award className="w-5 h-5" style={{ color: cert.color }} />
+              <div key={cert.title} className="flex items-center gap-3 rounded-lg p-3" style={{ background: "#F7FAFC", border: "1px solid #E5E7EB" }}>
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg" style={{ background: `${cert.color}22` }}>
+                  <Award className="h-5 w-5" style={{ color: cert.color }} />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-white">{cert.title}</p>
-                  <p className="text-xs text-gray-500">{cert.issuer} · {cert.date}</p>
+                  <p className="text-sm font-medium text-[#111827]">{cert.title}</p>
+                  <p className="text-xs text-gray-500">{cert.issuer} - {cert.date}</p>
                 </div>
               </div>
             ))}
-            <div
-              className="flex items-center justify-center gap-2 p-3 rounded-lg cursor-pointer border-dashed"
-              style={{ border: "1px dashed rgba(255,255,255,0.1)", color: "#6B7280" }}
-            >
-              <span className="text-xs">+ Add certificate</span>
+            <div className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border-dashed p-3" style={{ border: "1px dashed #CBD5E1", color: "#6B7280" }}>
+              <span className="text-xs">+ {t("app.profile.addCertificate")}</span>
             </div>
           </div>
         </motion.div>
 
-        {/* GitHub repos (shown for developers) */}
-        {user.profession === 'developer' && (
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25 }}
-            className="rounded-xl p-5"
-            style={{ background: "#111827", border: "1px solid rgba(255,255,255,0.07)" }}
-          >
-            <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
-              <GitBranch className="w-4 h-4 text-gray-400" /> GitHub Repositories
-            </h3>
+        {user.profession === "developer" && (
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="rounded-xl p-5" style={{ background: "#FFFFFF", border: "1px solid #E5E7EB" }}>
+            <h3 className="mb-4 flex items-center gap-2 font-semibold text-[#111827]"><GitBranch className="h-4 w-4 text-gray-500" /> {t("app.profile.githubRepos")}</h3>
             <div className="space-y-3">
               {MOCK_REPOS.map((repo) => (
-                <div
-                  key={repo.name}
-                  className="flex items-center justify-between p-3 rounded-lg"
-                  style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}
-                >
+                <div key={repo.name} className="flex items-center justify-between rounded-lg p-3" style={{ background: "#F7FAFC", border: "1px solid #E5E7EB" }}>
                   <div className="flex items-center gap-3">
-                    <Code2 className="w-4 h-4 text-gray-500" />
+                    <Code2 className="h-4 w-4 text-gray-500" />
                     <div>
-                      <p className="text-sm font-medium text-indigo-400">{repo.name}</p>
-                      <p className="text-xs text-gray-600">Updated {repo.updated}</p>
+                      <p className="text-sm font-medium text-indigo-600">{repo.name}</p>
+                      <p className="text-xs text-gray-500">{t("app.profile.updated", { time: repo.updated })}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1">
-                      <div className="w-2 h-2 rounded-full" style={{ background: repo.color }} />
+                      <div className="h-2 w-2 rounded-full" style={{ background: repo.color }} />
                       <span className="text-xs text-gray-500">{repo.lang}</span>
                     </div>
-                    <div className="flex items-center gap-1 text-gray-500">
-                      <Star className="w-3 h-3" />
-                      <span className="text-xs">{repo.stars}</span>
-                    </div>
+                    <div className="flex items-center gap-1 text-gray-500"><Star className="h-3 w-3" /><span className="text-xs">{repo.stars}</span></div>
                   </div>
                 </div>
               ))}

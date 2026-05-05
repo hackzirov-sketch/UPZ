@@ -11,9 +11,9 @@ import tr from "./locales/tr.json";
 export const LANGUAGES = [
   { code: "en", label: "English", dir: "ltr" },
   { code: "uz", label: "O'zbek", dir: "ltr" },
-  { code: "ru", label: "Русский", dir: "ltr" },
-  { code: "ar", label: "العربية", dir: "rtl" },
-  { code: "tr", label: "Türkçe", dir: "ltr" },
+  { code: "ru", label: "\u0420\u0443\u0441\u0441\u043a\u0438\u0439", dir: "ltr" },
+  { code: "ar", label: "\u0627\u0644\u0639\u0631\u0628\u064a\u0629", dir: "rtl" },
+  { code: "tr", label: "T\u00fcrk\u00e7e", dir: "ltr" },
 ] as const;
 
 export type LangCode = (typeof LANGUAGES)[number]["code"];

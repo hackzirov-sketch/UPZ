@@ -10,14 +10,14 @@ type FeatureVisual =
 
 const FEATURE_VISUALS: FeatureVisual[] = [
   { kind: "icon", icon: <Layers className="w-10 h-10 text-indigo-500" />, bg: "from-indigo-50 to-indigo-100" },
-  { kind: "lottie", url: "/animations/chat.json",     fallbackIcon: <MessageSquare className="w-10 h-10 text-blue-500" /> },
+  { kind: "lottie", url: "/animations/chat.json", fallbackIcon: <MessageSquare className="w-10 h-10 text-blue-500" /> },
   { kind: "icon", icon: <BarChart3 className="w-10 h-10 text-indigo-500" />, bg: "from-blue-50 to-indigo-50" },
-  { kind: "lottie", url: "/animations/tasks.json",    fallbackIcon: <CheckSquare className="w-10 h-10 text-indigo-500" /> },
-  { kind: "lottie", url: "/animations/ai.json",       fallbackIcon: <BookOpen className="w-10 h-10 text-blue-500" /> },
-  { kind: "lottie", url: "/animations/freelance.json",fallbackIcon: <Users className="w-10 h-10 text-indigo-500" /> },
+  { kind: "lottie", url: "/animations/tasks.json", fallbackIcon: <CheckSquare className="w-10 h-10 text-indigo-500" /> },
+  { kind: "lottie", url: "/animations/ai.json", fallbackIcon: <BookOpen className="w-10 h-10 text-blue-500" /> },
+  { kind: "lottie", url: "/animations/freelance.json", fallbackIcon: <Users className="w-10 h-10 text-indigo-500" /> },
   { kind: "icon", icon: <Share2 className="w-10 h-10 text-blue-500" />, bg: "from-sky-50 to-blue-100" },
   { kind: "icon", icon: <Wallet className="w-10 h-10 text-indigo-500" />, bg: "from-violet-50 to-indigo-100" },
-  { kind: "lottie", url: "/animations/ai2.json",      fallbackIcon: <Bot className="w-10 h-10 text-blue-500" /> },
+  { kind: "lottie", url: "/animations/ai2.json", fallbackIcon: <Bot className="w-10 h-10 text-blue-500" /> },
 ];
 
 export function FeaturesSection() {
@@ -62,7 +62,7 @@ export function FeaturesSection() {
                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
               >
                 <Card className="h-full bg-card border-border/50 shadow-sm hover:shadow-lg transition-all group flex flex-col">
-                  {/* Visual area — consistent height, no overflow clipping */}
+                  {/* Visual area - consistent height, no overflow clipping */}
                   <div
                     className={`w-full rounded-t-xl flex items-center justify-center ${
                       isLottie

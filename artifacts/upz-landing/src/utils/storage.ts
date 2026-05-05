@@ -1,4 +1,4 @@
-import type { UserProfile, Task, Note, Integration } from '@/types';
+import type { UserProfile, Task, Note, Integration, ChatRoom } from '@/types';
 
 const K = {
   USER: 'upz_user',
@@ -38,4 +38,7 @@ export const storage = {
 
   getIntegrations: (): Record<string, boolean> | null => get(K.INTEGRATIONS),
   saveIntegrations: (data: Record<string, boolean>) => set(K.INTEGRATIONS, data),
+
+  getChatRooms: (): ChatRoom[] => get<ChatRoom[]>(K.CHAT_ROOMS) ?? [],
+  saveChatRooms: (rooms: ChatRoom[]) => set(K.CHAT_ROOMS, rooms),
 };

@@ -16,11 +16,13 @@ export const MOCK_CHAT_ROOMS: ChatRoom[] = [
     name: 'Alex Kim',
     memberIds: ['me', 'u1'],
     unread: 2,
+    pinned: true,
+    pinnedMessageId: 'm4',
     messages: [
-      { id: 'm1', userId: 'u1', text: 'Hey! Have you seen the new project specs?', timestamp: Date.now() - 3600000 },
-      { id: 'm2', userId: 'me', text: 'Yes just checked them out, looks solid!', timestamp: Date.now() - 3500000 },
-      { id: 'm3', userId: 'u1', text: 'Great, let\'s sync tomorrow morning.', timestamp: Date.now() - 3400000 },
-      { id: 'm4', userId: 'u1', text: 'Can you review the PR before then?', timestamp: Date.now() - 1800000 },
+      { id: 'm1', userId: 'u1', text: 'Hey! Have you seen the new project specs?', timestamp: Date.now() - 3600000, read: true },
+      { id: 'm2', userId: 'me', text: 'Yes, just checked them out. The scope feels tight enough for MVP.', timestamp: Date.now() - 3500000, read: true, reactions: [{ emoji: '\u2705', userIds: ['u1'] }] },
+      { id: 'm3', userId: 'u1', text: 'Great, let\'s sync tomorrow morning.', timestamp: Date.now() - 3400000, read: true },
+      { id: 'm4', userId: 'u1', text: 'Can you review the PR before then?', timestamp: Date.now() - 1800000, read: true, replyToId: 'm2', reactions: [{ emoji: '\u{1F44D}', userIds: ['me'] }] },
     ],
   },
   {
@@ -30,8 +32,8 @@ export const MOCK_CHAT_ROOMS: ChatRoom[] = [
     memberIds: ['me', 'u2'],
     unread: 0,
     messages: [
-      { id: 'm5', userId: 'u2', text: 'I updated the design mockups 🎨', timestamp: Date.now() - 7200000 },
-      { id: 'm6', userId: 'me', text: 'They look amazing! Love the color palette.', timestamp: Date.now() - 7000000 },
+      { id: 'm5', userId: 'u2', text: 'I updated the design mockups \u{1F3A8}', timestamp: Date.now() - 7200000, read: true },
+      { id: 'm6', userId: 'me', text: 'They look amazing! Love the color palette.', timestamp: Date.now() - 7000000, read: true, edited: true, reactions: [{ emoji: '\u2764\uFE0F', userIds: ['u2'] }] },
     ],
   },
   {
@@ -40,12 +42,13 @@ export const MOCK_CHAT_ROOMS: ChatRoom[] = [
     name: 'UPZ Core Team',
     memberIds: ['me', 'u1', 'u2', 'u3', 'u5'],
     unread: 5,
+    pinned: true,
     messages: [
-      { id: 'm7', userId: 'u3', text: 'Sprint review is tomorrow at 10AM', timestamp: Date.now() - 14400000 },
-      { id: 'm8', userId: 'u1', text: 'I\'ll prepare the demo', timestamp: Date.now() - 14000000 },
-      { id: 'm9', userId: 'u2', text: 'Design assets are ready ✅', timestamp: Date.now() - 13000000 },
-      { id: 'm10', userId: 'u5', text: 'Marketing brief sent to all stakeholders', timestamp: Date.now() - 3600000 },
-      { id: 'm11', userId: 'u3', text: 'Thanks everyone, great work this sprint! 🚀', timestamp: Date.now() - 1800000 },
+      { id: 'm7', userId: 'u3', text: 'Sprint review is tomorrow at 10 AM.', timestamp: Date.now() - 14400000, read: true },
+      { id: 'm8', userId: 'u1', text: 'I\'ll prepare the demo flow and keep it under seven minutes.', timestamp: Date.now() - 14000000, read: true },
+      { id: 'm9', userId: 'u2', text: 'Design assets are ready \u2705', timestamp: Date.now() - 13000000, read: true, reactions: [{ emoji: '\u{1F44F}', userIds: ['me', 'u3'] }] },
+      { id: 'm10', userId: 'u5', text: 'Marketing brief sent to all stakeholders.', timestamp: Date.now() - 3600000, read: true },
+      { id: 'm11', userId: 'u3', text: 'Thanks everyone, great work this sprint! \u{1F680}', timestamp: Date.now() - 1800000, read: true, replyToId: 'm9' },
     ],
   },
   {
@@ -54,9 +57,12 @@ export const MOCK_CHAT_ROOMS: ChatRoom[] = [
     name: 'Landing Page Redesign',
     memberIds: ['me', 'u2', 'u5'],
     unread: 0,
+    projectBadge: 'UPZ-142',
+    linkedTask: 'Landing hero QA',
+    pinnedMessageId: 'm12',
     messages: [
-      { id: 'm12', userId: 'u2', text: 'Wireframes attached in Figma', timestamp: Date.now() - 86400000 },
-      { id: 'm13', userId: 'me', text: 'Got it, will review today.', timestamp: Date.now() - 82800000 },
+      { id: 'm12', userId: 'u2', text: 'Wireframes attached in Figma. The hero CTA variant is the one to test.', timestamp: Date.now() - 86400000, read: true },
+      { id: 'm13', userId: 'me', text: 'Got it, will review today.', timestamp: Date.now() - 82800000, read: true, reactions: [{ emoji: '\u{1F525}', userIds: ['u5'] }] },
     ],
   },
   {
@@ -66,13 +72,12 @@ export const MOCK_CHAT_ROOMS: ChatRoom[] = [
     memberIds: ['me', 'u1', 'u4', 'u5'],
     unread: 1,
     messages: [
-      { id: 'm14', userId: 'u4', text: 'Anyone interested in a collab for this month?', timestamp: Date.now() - 172800000 },
-      { id: 'm15', userId: 'u1', text: 'I\'m in! What\'s the project?', timestamp: Date.now() - 170000000 },
-      { id: 'm16', userId: 'u4', text: 'UX audit for a SaaS startup', timestamp: Date.now() - 7200000 },
+      { id: 'm14', userId: 'u4', text: 'Anyone interested in a collab for this month?', timestamp: Date.now() - 172800000, read: true },
+      { id: 'm15', userId: 'u1', text: 'I\'m in! What\'s the project?', timestamp: Date.now() - 170000000, read: true, reactions: [{ emoji: '\u{1F602}', userIds: ['u5'] }] },
+      { id: 'm16', userId: 'u4', text: 'UX audit for a SaaS startup.', timestamp: Date.now() - 7200000, read: true },
     ],
   },
 ];
-
 export const INITIAL_TASKS: Task[] = [
   { id: 't1', text: 'Review project requirements', done: true, createdAt: Date.now() - 86400000, priority: 'high' },
   { id: 't2', text: 'Design onboarding flow', done: true, createdAt: Date.now() - 72000000, priority: 'high' },
@@ -92,7 +97,7 @@ export const INITIAL_NOTES: Note[] = [
   {
     id: 'n2',
     title: 'Design System Colors',
-    content: 'Primary: #6366F1\nAccent: #3B82F6\nBg: #0B0F14\nCards: #111827\nSidebar: #0F172A',
+    content: 'Background: #F7FAFC\nCards: #FFFFFF\nBorder: #E5E7EB\nText: #111827\nAccent: #6366F1 and #3B82F6',
     createdAt: Date.now() - 43200000,
     updatedAt: Date.now() - 10000000,
   },

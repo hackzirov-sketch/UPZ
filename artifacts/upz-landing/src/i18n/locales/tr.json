@@ -724,7 +724,79 @@
       "modalDesc": "Demo modal from the expanded component system.",
       "teamName": "Ekip ad?",
       "inviteEmail": "Email ile davet",
-      "createDemoTeam": "Demo ekip olu?tur"
+      "createDemoTeam": "Demo ekip olu?tur",
+      "invite": "?ye davet et",
+      "moreMemberActions": "?ye i?lemleri",
+      "workload": "?? y?k?",
+      "onlineNow": "{{count}} ?evrimi?i",
+      "localDemo": "Yerel MVP demo",
+      "searchPlaceholder": "?sim, handle, odak veya email ara",
+      "filters": {
+        "all": "T?m?",
+        "online": "Online",
+        "away": "Uzakta",
+        "admin": "Admin"
+      },
+      "card": {
+        "tasks": "G?rev",
+        "projects": "Proje",
+        "load": "Y?k"
+      },
+      "emptyTitle": "Ekip arkada?? bulunamad?",
+      "emptyDesc": "Farkl? arama deneyin veya filtreleri temizleyin.",
+      "clearFilters": "Filtreleri temizle",
+      "memberProfile": "?ye profili",
+      "memberProfileDesc": "K???k profil detaylar? ekip katman?n? ger?ek hissettirir.",
+      "details": {
+        "location": "Konum",
+        "availability": "Uygunluk",
+        "lastActive": "Son aktiflik"
+      },
+      "skills": "Yetenekler",
+      "message": "Mesaj",
+      "assign": "Ata",
+      "permissions": "Rol izinleri",
+      "permissionsDesc": "Gelecek backend izinleri i?in yerel togglelar.",
+      "permissionLabels": {
+        "inviteMembers": "?ye davet et",
+        "manageProjects": "Projeleri y?net",
+        "viewBank": "Ekip c?zdan?n? g?r",
+        "moderateCommunity": "Community moderasyonu"
+      },
+      "enabled": "A??k",
+      "disabled": "Kapal?",
+      "chatPreview": "{{count}} ekip arkada?? online, proje sohbetine ba?l?.",
+      "copyInvite": "Invite link kopyala",
+      "openThread": "Thread a?",
+      "pulse": "Ekip ritmi",
+      "pulseDesc": "?? birli?ini canl? hissettiren activity ve rit?eller.",
+      "activity": {
+        "sharedDesign": "design notlar?n? payla?t?:",
+        "connectedSearch": "search verisini ba?lad?:",
+        "createdBrief": "brief olu?turdu:",
+        "approvedBuild": "onaylad?:"
+      },
+      "rituals": {
+        "dailyStandup": "Daily standup",
+        "designReview": "Design review",
+        "launchSync": "Launch sync"
+      },
+      "actions": {
+        "message": "Mesaj yaz",
+        "assignTask": "G?rev ata",
+        "makeAdmin": "Admin yap",
+        "copyEmail": "Email kopyala"
+      },
+      "toasts": {
+        "message": "{{name}} i?in mesaj demosu a??ld?.",
+        "assign": "{{name}} i?in g?rev atama demosu haz?r.",
+        "admin": "{{name}} admin i?lemi ?imdilik yerel.",
+        "emailCopied": "Email demo durumunda kopyaland?.",
+        "inviteCopied": "Invite link demo durumunda kopyaland?.",
+        "inviteSent": "Demo invite haz?r."
+      },
+      "invitePreview": "Invite preview",
+      "invitePreviewDesc": "Bu MVP davetleri yerel tutar; UI email, rol ve permission i?in haz?r."
     },
     "projects": {
       "eyebrow": "Proje y?netimi",

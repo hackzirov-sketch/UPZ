@@ -724,7 +724,79 @@
       "modalDesc": "Demo modal from the expanded component system.",
       "teamName": "Team name",
       "inviteEmail": "Invite by email",
-      "createDemoTeam": "Create demo team"
+      "createDemoTeam": "Create demo team",
+      "invite": "Invite member",
+      "moreMemberActions": "More member actions",
+      "workload": "Workload",
+      "onlineNow": "{{count}} online now",
+      "localDemo": "Local MVP demo",
+      "searchPlaceholder": "Search name, handle, focus, or email",
+      "filters": {
+        "all": "All",
+        "online": "Online",
+        "away": "Away",
+        "admin": "Admin"
+      },
+      "card": {
+        "tasks": "Tasks",
+        "projects": "Projects",
+        "load": "Load"
+      },
+      "emptyTitle": "No teammates found",
+      "emptyDesc": "Try another search or clear filters to see the full team again.",
+      "clearFilters": "Clear filters",
+      "memberProfile": "Member profile",
+      "memberProfileDesc": "Small profile details that make the team layer feel real.",
+      "details": {
+        "location": "Location",
+        "availability": "Availability",
+        "lastActive": "Last active"
+      },
+      "skills": "Skills",
+      "message": "Message",
+      "assign": "Assign",
+      "permissions": "Role permissions",
+      "permissionsDesc": "Local toggles for future backend permission rules.",
+      "permissionLabels": {
+        "inviteMembers": "Invite members",
+        "manageProjects": "Manage projects",
+        "viewBank": "View team wallet",
+        "moderateCommunity": "Moderate community"
+      },
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "chatPreview": "{{count}} teammates online, linked with project chat.",
+      "copyInvite": "Copy invite link",
+      "openThread": "Open thread",
+      "pulse": "Team pulse",
+      "pulseDesc": "Activity and rituals that make collaboration feel alive.",
+      "activity": {
+        "sharedDesign": "shared design notes on",
+        "connectedSearch": "connected search data for",
+        "createdBrief": "created a brief for",
+        "approvedBuild": "approved"
+      },
+      "rituals": {
+        "dailyStandup": "Daily standup",
+        "designReview": "Design review",
+        "launchSync": "Launch sync"
+      },
+      "actions": {
+        "message": "Message",
+        "assignTask": "Assign task",
+        "makeAdmin": "Make admin",
+        "copyEmail": "Copy email"
+      },
+      "toasts": {
+        "message": "Message demo opened for {{name}}.",
+        "assign": "Task assignment demo prepared for {{name}}.",
+        "admin": "{{name}} admin action is local-only.",
+        "emailCopied": "Email copied in demo state.",
+        "inviteCopied": "Invite link copied in demo state.",
+        "inviteSent": "Demo invite is ready."
+      },
+      "invitePreview": "Invite preview",
+      "invitePreviewDesc": "This MVP keeps invites local, but the UI is ready for email, roles, and permissions."
     },
     "projects": {
       "eyebrow": "Project management",

@@ -48,12 +48,32 @@ export const BANK_TRANSACTIONS = [
 ];
 
 export const TEAM_MEMBERS = [
-  { id: "tm1", name: "Alex Kim", role: "Admin", focus: "Frontend", status: "Online" },
-  { id: "tm2", name: "Sara Chen", role: "Member", focus: "Design", status: "Online" },
-  { id: "tm3", name: "James Wright", role: "Member", focus: "Delivery", status: "Away" },
-  { id: "tm4", name: "Luca Rossi", role: "Member", focus: "Marketing", status: "Offline" },
-  { id: "tm5", name: "Mira Johnson", role: "Member", focus: "Product", status: "Online" },
-  { id: "tm6", name: "Otabek Karimov", role: "Member", focus: "Backend", status: "Away" },
+  { id: "tm1", name: "Alex Kim", handle: "@alex", email: "alex@upz.demo", role: "Admin", focus: "Frontend", status: "Online", workload: 82, tasks: 6, projects: 3, location: "Seoul", lastActive: "Now", skills: ["React", "Systems", "QA"], availability: "Deep work until 15:00" },
+  { id: "tm2", name: "Sara Chen", handle: "@sara", email: "sara@upz.demo", role: "Member", focus: "Design", status: "Online", workload: 68, tasks: 4, projects: 2, location: "Taipei", lastActive: "2m", skills: ["UI", "Motion", "Research"], availability: "Open for review" },
+  { id: "tm3", name: "James Wright", handle: "@james", email: "james@upz.demo", role: "Member", focus: "Delivery", status: "Away", workload: 54, tasks: 3, projects: 2, location: "London", lastActive: "18m", skills: ["Planning", "Docs", "Ops"], availability: "Back after standup" },
+  { id: "tm4", name: "Luca Rossi", handle: "@luca", email: "luca@upz.demo", role: "Member", focus: "Marketing", status: "Offline", workload: 39, tasks: 2, projects: 1, location: "Milan", lastActive: "1h", skills: ["SMM", "Launch", "Analytics"], availability: "Async today" },
+  { id: "tm5", name: "Mira Johnson", handle: "@mira", email: "mira@upz.demo", role: "Member", focus: "Product", status: "Online", workload: 75, tasks: 5, projects: 3, location: "New York", lastActive: "Now", skills: ["Strategy", "AI", "Roadmap"], availability: "Idea sprint" },
+  { id: "tm6", name: "Otabek Karimov", handle: "@otabek", email: "otabek@upz.demo", role: "Member", focus: "Backend", status: "Away", workload: 61, tasks: 4, projects: 2, location: "Tashkent", lastActive: "24m", skills: ["API", "Storage", "Search"], availability: "Reviewing integrations" },
+];
+
+export const TEAM_ACTIVITY = [
+  { id: "ta1", actor: "Sara Chen", actionKey: "sharedDesign", target: "Chat mobile polish", time: "4m" },
+  { id: "ta2", actor: "Otabek Karimov", actionKey: "connectedSearch", target: "Global search demo", time: "18m" },
+  { id: "ta3", actor: "Mira Johnson", actionKey: "createdBrief", target: "AI assistant launch ideas", time: "42m" },
+  { id: "ta4", actor: "Alex Kim", actionKey: "approvedBuild", target: "Dark mode release", time: "1h" },
+];
+
+export const TEAM_RITUALS = [
+  { id: "tr1", titleKey: "dailyStandup", time: "10:00", meta: "6 members" },
+  { id: "tr2", titleKey: "designReview", time: "14:30", meta: "3 files" },
+  { id: "tr3", titleKey: "launchSync", time: "17:00", meta: "UPZ v1" },
+];
+
+export const TEAM_PERMISSIONS = [
+  { id: "invite", labelKey: "inviteMembers", enabled: true },
+  { id: "projects", labelKey: "manageProjects", enabled: true },
+  { id: "bank", labelKey: "viewBank", enabled: false },
+  { id: "moderation", labelKey: "moderateCommunity", enabled: true },
 ];
 
 export const PROJECT_COLUMNS = [

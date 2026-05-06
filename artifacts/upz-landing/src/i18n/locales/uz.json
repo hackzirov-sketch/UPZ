@@ -1130,6 +1130,12 @@
         "m15": "Men bor! Project nima?",
         "m16": "SaaS startup uchun UX audit."
       }
+    },
+    "theme": {
+      "light": "Light",
+      "dark": "Dark",
+      "switchToLight": "Light modega o'tish",
+      "switchToDark": "Dark modega o'tish"
     }
   }
 }

@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import type { UserProfile } from "@/types";
 import { GLOBAL_SEARCH_ITEMS, NOTIFICATIONS } from "@/data/ecosystemData";
 import { LanguageSwitcher } from "@/components/landing/LanguageSwitcher";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { cn } from "./DesignSystem";
 
 interface TopbarProps {
@@ -169,6 +170,7 @@ export function Topbar({ user, title, onToggleSidebar }: TopbarProps) {
             <p className="text-[11px] text-[#6B7280]">{t("app.topbar.online")}</p>
           </div>
         </div>
+        <ThemeToggle compact />
         <LanguageSwitcher />
       </div>
 

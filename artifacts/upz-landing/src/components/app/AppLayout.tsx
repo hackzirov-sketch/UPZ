@@ -63,7 +63,7 @@ export function AppLayout({ user, title, children, onLogout }: AppLayoutProps) {
           className="flex-1 overflow-y-auto p-4 md:p-6"
           style={{
             background:
-              "radial-gradient(circle at 12% 0%, rgba(99, 102, 241, 0.08), transparent 28%), radial-gradient(circle at 92% 8%, rgba(59, 130, 246, 0.07), transparent 24%), #F7FAFC",
+              "radial-gradient(circle at 12% 0%, var(--upz-shell-glow-a), transparent 28%), radial-gradient(circle at 92% 8%, var(--upz-shell-glow-b), transparent 24%), var(--upz-bg)",
           }}
         >
           {children}

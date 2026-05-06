@@ -927,6 +927,12 @@
         "m15": "I'm in! What's the project?",
         "m16": "UX audit for a SaaS startup."
       }
+    },
+    "theme": {
+      "light": "A??k",
+      "dark": "Koyu",
+      "switchToLight": "A??k moda ge?",
+      "switchToDark": "Koyu moda ge?"
     }
   }
 }

@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function Header() {
   const { t } = useTranslation();
@@ -56,6 +57,7 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
+          <ThemeToggle compact />
           <LanguageSwitcher />
           <Button
             variant="outline"
@@ -75,6 +77,7 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-1 md:hidden">
+          <ThemeToggle compact />
           <LanguageSwitcher />
           <button
             className="grid h-10 w-10 place-items-center rounded-2xl text-[#111827] transition-colors hover:bg-[#F7FAFC]"

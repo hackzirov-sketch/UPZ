@@ -254,7 +254,7 @@ export default function ChatPage({ user, onLogout }: Props) {
   return (
     <AppLayout user={user} title={`${t("app.nav.chat")}${totalUnread > 0 ? ` (${totalUnread})` : ""}`} onLogout={onLogout}>
       <div
-        className="flex min-h-[560px] overflow-hidden rounded-[28px] border border-[#E5E7EB] bg-white shadow-sm"
+        className="flex min-h-[560px] overflow-hidden rounded-[28px] border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900"
         style={{ height: "calc(100vh - 136px)" }}
       >
         <ChatSidebar

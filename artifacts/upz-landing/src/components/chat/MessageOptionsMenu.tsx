@@ -34,7 +34,7 @@ export function MessageOptionsMenu({ isOwn, onAction, className, style }: Messag
       exit={{ opacity: 0, scale: 0.96, y: 4 }}
       transition={{ duration: 0.13, ease: "easeOut" }}
       className={cn(
-        "z-50 min-w-48 overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white p-1.5 text-sm text-[#111827] shadow-2xl backdrop-blur-xl",
+        "z-50 min-w-48 overflow-hidden rounded-2xl border border-gray-200 bg-white p-1.5 text-sm text-gray-900 shadow-2xl backdrop-blur-xl dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100",
         className,
       )}
       style={style}
@@ -45,22 +45,22 @@ export function MessageOptionsMenu({ isOwn, onAction, className, style }: Messag
           key={action}
           type="button"
           onClick={() => onAction(action)}
-          className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left transition-colors hover:bg-[#F7FAFC]"
+          className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left transition-colors hover:bg-gray-50 dark:hover:bg-gray-700"
         >
-          <Icon className="h-4 w-4 text-[#6B7280]" />
+          <Icon className="h-4 w-4 text-gray-400 dark:text-gray-500" />
           <span>{t(`app.chat.menu.${labelKey}`)}</span>
         </button>
       ))}
-      <div className="my-1 h-px bg-[#F7FAFC]" />
+      <div className="my-1 h-px bg-gray-100 dark:bg-gray-700" />
       <button
         type="button"
         onClick={() => onAction("delete")}
-        className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-rose-600 transition-colors hover:bg-rose-50"
+        className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-rose-600 transition-colors hover:bg-rose-50 dark:hover:bg-rose-950/30"
       >
         <Trash className="h-4 w-4" />
         <span>{t("app.chat.menu.delete")}</span>
       </button>
-      <div className="mt-1 flex items-center gap-2 rounded-xl bg-[#F7FAFC] px-3 py-2 text-[11px] text-[#6B7280]">
+      <div className="mt-1 flex items-center gap-2 rounded-xl bg-gray-50 px-3 py-2 text-[11px] text-gray-400 dark:bg-gray-700/50 dark:text-gray-500">
         <BellOff className="h-3.5 w-3.5" />
         {t("app.chat.menu.localActions")}
       </div>

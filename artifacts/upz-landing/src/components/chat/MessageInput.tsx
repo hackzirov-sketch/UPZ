@@ -66,17 +66,17 @@ export function MessageInput({
   };
 
   return (
-    <div className="flex-shrink-0 border-t border-[#E5E7EB] bg-white px-3 py-3 backdrop-blur-xl sm:px-5 sm:py-4">
+    <div className="flex-shrink-0 border-t border-gray-200 bg-white px-3 py-3 backdrop-blur-xl dark:border-gray-700 dark:bg-gray-900 sm:px-5 sm:py-4">
       <AnimatePresence>
         {typingUser && !editingMessage && (
           <motion.div
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 4 }}
-            className="mb-2 flex items-center gap-2 px-2 text-xs text-[#6B7280]"
+            className="mb-2 flex items-center gap-2 px-2 text-xs text-gray-400 dark:text-gray-500"
           >
             <img src="/emojis/laptop.svg" alt="Typing status" className="h-5 w-5" loading="lazy" decoding="async" />
-            <span className="font-medium text-indigo-600">{typingUser.name.split(" ")[0]}</span>
+            <span className="font-medium text-indigo-600 dark:text-indigo-400">{typingUser.name.split(" ")[0]}</span>
             <span>{t("app.chat.isTyping")}</span>
             <span className="flex gap-0.5">
               <span className="h-1 w-1 animate-bounce rounded-full bg-slate-500 [animation-delay:-0.2s]" />
@@ -93,14 +93,14 @@ export function MessageInput({
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 6 }}
-            className="mb-2 flex items-start gap-3 rounded-2xl border border-indigo-100 bg-gradient-to-r from-indigo-50 via-white to-blue-50 px-4 py-3 text-sm shadow-sm"
+            className="mb-2 flex items-start gap-3 rounded-2xl border border-indigo-100 bg-gradient-to-r from-indigo-50 via-white to-blue-50 px-4 py-3 text-sm shadow-sm dark:border-indigo-900/50 dark:from-indigo-950/40 dark:via-gray-800 dark:to-blue-950/40"
           >
-            <Reply className="mt-0.5 h-4 w-4 flex-shrink-0 text-indigo-600" />
+            <Reply className="mt-0.5 h-4 w-4 flex-shrink-0 text-indigo-600 dark:text-indigo-400" />
             <div className="min-w-0 flex-1">
-              <div className="font-semibold text-indigo-700">{t("app.chat.replyingTo", { name: getUser(replyTo.userId, users)?.name ?? t("app.chat.messageFallback") })}</div>
-              <div className="truncate text-xs text-[#6B7280]">{getReplySnippet(replyTo, t)}</div>
+              <div className="font-semibold text-indigo-700 dark:text-indigo-300">{t("app.chat.replyingTo", { name: getUser(replyTo.userId, users)?.name ?? t("app.chat.messageFallback") })}</div>
+              <div className="truncate text-xs text-gray-400 dark:text-gray-500">{getReplySnippet(replyTo, t)}</div>
             </div>
-            <button type="button" onClick={onCancelReply} className="text-lg leading-none text-[#6B7280] transition-colors hover:text-[#111827]" aria-label={t("app.chat.closeSearch")}>
+            <button type="button" onClick={onCancelReply} className="text-lg leading-none text-gray-400 transition-colors hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-200" aria-label={t("app.chat.closeSearch")}>
               x
             </button>
           </motion.div>
@@ -110,21 +110,21 @@ export function MessageInput({
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 6 }}
-            className="mb-2 flex items-start gap-3 rounded-2xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm"
+            className="mb-2 flex items-start gap-3 rounded-2xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm dark:border-amber-900/40 dark:bg-amber-950/30"
           >
-            <Edit className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600" />
+            <Edit className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600 dark:text-amber-400" />
             <div className="min-w-0 flex-1">
-              <div className="font-semibold text-amber-700">{t("app.chat.editingMessage")}</div>
-              <div className="truncate text-xs text-[#6B7280]">{t("app.chat.pressEnterSave")}</div>
+              <div className="font-semibold text-amber-700 dark:text-amber-300">{t("app.chat.editingMessage")}</div>
+              <div className="truncate text-xs text-gray-400 dark:text-gray-500">{t("app.chat.pressEnterSave")}</div>
             </div>
-            <button type="button" onClick={onCancelEdit} className="text-lg leading-none text-[#6B7280] transition-colors hover:text-[#111827]" aria-label={t("app.chat.editingMessage")}>
+            <button type="button" onClick={onCancelEdit} className="text-lg leading-none text-gray-400 transition-colors hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-200" aria-label={t("app.chat.editingMessage")}>
               x
             </button>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <div className="relative flex items-end gap-2 rounded-[26px] border border-[#E5E7EB] bg-[#F7FAFC] p-2 shadow-sm transition-colors focus-within:border-indigo-300 focus-within:bg-white">
+      <div className="relative flex items-end gap-2 rounded-[26px] border border-gray-200 bg-gray-50 p-2 shadow-sm transition-colors focus-within:border-indigo-300 focus-within:bg-white dark:border-gray-600 dark:bg-gray-800 dark:focus-within:border-indigo-500 dark:focus-within:bg-gray-700">
         <button
           type="button"
           onClick={() => {
@@ -132,8 +132,8 @@ export function MessageInput({
             setEmojiOpen(false);
           }}
           className={cn(
-            "grid h-10 w-10 flex-shrink-0 place-items-center rounded-full transition-colors hover:bg-white hover:text-[#111827]",
-            stickerOpen ? "bg-white text-[#111827]" : "text-[#6B7280]",
+            "grid h-10 w-10 flex-shrink-0 place-items-center rounded-full transition-colors hover:bg-white hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-100",
+            stickerOpen ? "bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-100" : "text-gray-400 dark:text-gray-500",
           )}
           aria-label={t("app.chat.attachFile")}
         >
@@ -146,8 +146,8 @@ export function MessageInput({
             setStickerOpen(false);
           }}
           className={cn(
-            "grid h-10 w-10 flex-shrink-0 place-items-center rounded-full transition-colors hover:bg-white hover:text-[#111827]",
-            emojiOpen ? "bg-white text-[#111827]" : "text-[#6B7280]",
+            "grid h-10 w-10 flex-shrink-0 place-items-center rounded-full transition-colors hover:bg-white hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-gray-100",
+            emojiOpen ? "bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-100" : "text-gray-400 dark:text-gray-500",
           )}
           aria-label={t("app.chat.emojiPicker")}
         >
@@ -166,10 +166,10 @@ export function MessageInput({
           }}
           rows={1}
           placeholder={canMention ? t("app.chat.mentionPlaceholder", { room: roomName }) : t("app.chat.messagePlaceholder", { room: roomName })}
-          className="max-h-[120px] min-h-10 flex-1 resize-none bg-transparent py-2.5 text-sm leading-5 text-[#111827] outline-none placeholder:text-[#6B7280]"
+          className="max-h-[120px] min-h-10 flex-1 resize-none bg-transparent py-2.5 text-sm leading-5 text-gray-900 outline-none placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-500"
         />
 
-        <button type="button" className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-full text-[#6B7280] transition-colors hover:bg-white hover:text-[#111827]" aria-label={t("app.chat.voicePlaceholder")}>
+        <button type="button" className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-full text-gray-400 transition-colors hover:bg-white hover:text-gray-900 dark:text-gray-500 dark:hover:bg-gray-700 dark:hover:text-gray-100" aria-label={t("app.chat.voicePlaceholder")}>
           <Mic className="h-5 w-5" />
         </button>
         <motion.button
@@ -182,7 +182,7 @@ export function MessageInput({
             "grid h-11 w-11 flex-shrink-0 place-items-center rounded-full shadow-lg transition-all",
             value.trim()
               ? "bg-gradient-to-br from-indigo-500 to-blue-500 text-white shadow-indigo-950/30"
-              : "cursor-not-allowed bg-white text-[#6B7280] shadow-none",
+              : "cursor-not-allowed bg-white text-gray-400 shadow-none dark:bg-gray-700 dark:text-gray-500",
           )}
           aria-label={t("app.chat.sendMessage")}
         >
@@ -225,7 +225,7 @@ export function MessageInput({
                     key={member.id}
                     type="button"
                     onClick={() => onChange(value.replace(/@\w*$/, `@${member.name.split(" ")[0]} `))}
-                    className="rounded-full border border-[#E5E7EB] bg-white px-3 py-1 text-xs text-[#6B7280] transition-colors hover:bg-indigo-50 hover:text-indigo-700"
+                    className="rounded-full border border-gray-200 bg-white px-3 py-1 text-xs text-gray-500 transition-colors hover:bg-indigo-50 hover:text-indigo-700 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-indigo-950/40 dark:hover:text-indigo-300"
                   >
                     @{member.name.split(" ")[0]}
                   </button>

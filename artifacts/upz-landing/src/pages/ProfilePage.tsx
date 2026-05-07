@@ -44,8 +44,7 @@ export default function ProfilePage({ user, onLogout }: Props) {
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative overflow-hidden rounded-2xl p-6 shadow-sm"
-          style={{ background: "linear-gradient(135deg, #FFFFFF 0%, #EEF2FF 100%)", border: "1px solid #E5E7EB" }}
+          className="relative overflow-hidden rounded-2xl p-6 shadow-sm bg-gradient-to-br from-white to-indigo-50 border border-gray-200 dark:from-gray-800 dark:to-gray-900 dark:border-gray-700"
         >
           <div className="absolute right-0 top-0 h-64 w-64 -translate-y-1/2 translate-x-1/2 rounded-full bg-indigo-200/40 blur-3xl" />
           <div className="relative z-10 flex items-start gap-5">

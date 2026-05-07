@@ -100,7 +100,7 @@ export default function ProfilePage({ user, onLogout }: Props) {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
-          className="overflow-hidden rounded-2xl border border-indigo-100 bg-gradient-to-r from-indigo-50 via-white to-blue-50 p-5 shadow-sm"
+          className="overflow-hidden rounded-2xl border border-indigo-100 bg-gradient-to-r from-indigo-50 via-white to-blue-50 p-5 shadow-sm dark:border-indigo-900 dark:from-indigo-950/50 dark:via-gray-800 dark:to-blue-950/50"
         >
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-3">
@@ -108,8 +108,8 @@ export default function ProfilePage({ user, onLogout }: Props) {
                 <Crown className="h-5 w-5" />
               </span>
               <div>
-                <p className="text-sm font-black text-[#111827]">{t("app.premium.currentPlan")}</p>
-                <p className="mt-1 max-w-lg text-sm leading-6 text-[#6B7280]">{t("app.premium.heroDesc")}</p>
+                <p className="text-sm font-black text-gray-900 dark:text-gray-100">{t("app.premium.currentPlan")}</p>
+                <p className="mt-1 max-w-lg text-sm leading-6 text-gray-500 dark:text-gray-400">{t("app.premium.heroDesc")}</p>
               </div>
             </div>
             <Link href="/app/premium" className="inline-flex items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-4 py-2.5 text-sm font-black text-white shadow-sm shadow-indigo-200 transition-colors hover:bg-indigo-500">
@@ -120,17 +120,17 @@ export default function ProfilePage({ user, onLogout }: Props) {
         </motion.div>
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="rounded-xl p-5" style={{ background: "#FFFFFF", border: "1px solid #E5E7EB" }}>
-            <h3 className="mb-4 flex items-center gap-2 font-semibold text-[#111827]"><Star className="h-4 w-4 text-yellow-400" /> {t("app.profile.skills")}</h3>
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="rounded-xl p-5 bg-white border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+            <h3 className="mb-4 flex items-center gap-2 font-semibold text-gray-900 dark:text-gray-100"><Star className="h-4 w-4 text-yellow-400" /> {t("app.profile.skills")}</h3>
             <div className="flex flex-wrap gap-2">
               {skills.map((skill) => (
-                <span key={skill} className="rounded-full px-3 py-1.5 text-xs font-medium" style={{ background: "rgba(99,102,241,0.12)", color: "#4F46E5", border: "1px solid rgba(99,102,241,0.2)" }}>{skill}</span>
+                <span key={skill} className="rounded-full px-3 py-1.5 text-xs font-medium bg-indigo-100/80 text-indigo-700 border border-indigo-200/60 dark:bg-indigo-900/40 dark:text-indigo-300 dark:border-indigo-700/50">{skill}</span>
               ))}
             </div>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="rounded-xl p-5" style={{ background: "#FFFFFF", border: "1px solid #E5E7EB" }}>
-            <h3 className="mb-4 flex items-center gap-2 font-semibold text-[#111827]"><Briefcase className="h-4 w-4 text-blue-500" /> {t("app.profile.about")}</h3>
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="rounded-xl p-5 bg-white border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+            <h3 className="mb-4 flex items-center gap-2 font-semibold text-gray-900 dark:text-gray-100"><Briefcase className="h-4 w-4 text-blue-500" /> {t("app.profile.about")}</h3>
             <div className="space-y-3">
               {[
                 { label: t("app.profile.profession"), value: profession },
@@ -139,53 +139,53 @@ export default function ProfilePage({ user, onLogout }: Props) {
                 { label: t("app.profile.memberSince"), value: new Date(user.joinedAt).toLocaleDateString(i18n.language, { month: "long", day: "numeric", year: "numeric" }) },
               ].map((row) => (
                 <div key={row.label} className="flex items-center justify-between gap-3">
-                  <span className="text-xs text-gray-500">{row.label}</span>
-                  <span className="text-sm font-medium text-[#111827]">{row.value}</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">{row.label}</span>
+                  <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{row.value}</span>
                 </div>
               ))}
             </div>
           </motion.div>
         </div>
 
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="rounded-xl p-5" style={{ background: "#FFFFFF", border: "1px solid #E5E7EB" }}>
-          <h3 className="mb-4 flex items-center gap-2 font-semibold text-[#111827]"><Award className="h-4 w-4 text-yellow-400" /> {t("app.profile.certificates")}</h3>
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="rounded-xl p-5 bg-white border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+          <h3 className="mb-4 flex items-center gap-2 font-semibold text-gray-900 dark:text-gray-100"><Award className="h-4 w-4 text-yellow-400" /> {t("app.profile.certificates")}</h3>
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             {MOCK_CERTS.map((cert) => (
-              <div key={cert.title} className="flex items-center gap-3 rounded-lg p-3" style={{ background: "#F7FAFC", border: "1px solid #E5E7EB" }}>
+              <div key={cert.title} className="flex items-center gap-3 rounded-lg p-3 bg-gray-50 border border-gray-200 dark:bg-gray-700/50 dark:border-gray-600">
                 <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg" style={{ background: `${cert.color}22` }}>
                   <Award className="h-5 w-5" style={{ color: cert.color }} />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-[#111827]">{cert.title}</p>
-                  <p className="text-xs text-gray-500">{cert.issuer} - {cert.date}</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{cert.title}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{cert.issuer} - {cert.date}</p>
                 </div>
               </div>
             ))}
-            <div className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border-dashed p-3" style={{ border: "1px dashed #CBD5E1", color: "#6B7280" }}>
+            <div className="flex cursor-pointer items-center justify-center gap-2 rounded-lg p-3 border border-dashed border-gray-300 text-gray-500 dark:border-gray-600 dark:text-gray-400">
               <span className="text-xs">+ {t("app.profile.addCertificate")}</span>
             </div>
           </div>
         </motion.div>
 
         {user.profession === "developer" && (
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="rounded-xl p-5" style={{ background: "#FFFFFF", border: "1px solid #E5E7EB" }}>
-            <h3 className="mb-4 flex items-center gap-2 font-semibold text-[#111827]"><GitBranch className="h-4 w-4 text-gray-500" /> {t("app.profile.githubRepos")}</h3>
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="rounded-xl p-5 bg-white border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+            <h3 className="mb-4 flex items-center gap-2 font-semibold text-gray-900 dark:text-gray-100"><GitBranch className="h-4 w-4 text-gray-500 dark:text-gray-400" /> {t("app.profile.githubRepos")}</h3>
             <div className="space-y-3">
               {MOCK_REPOS.map((repo) => (
-                <div key={repo.name} className="flex items-center justify-between rounded-lg p-3" style={{ background: "#F7FAFC", border: "1px solid #E5E7EB" }}>
+                <div key={repo.name} className="flex items-center justify-between rounded-lg p-3 bg-gray-50 border border-gray-200 dark:bg-gray-700/50 dark:border-gray-600">
                   <div className="flex items-center gap-3">
-                    <Code2 className="h-4 w-4 text-gray-500" />
+                    <Code2 className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                     <div>
-                      <p className="text-sm font-medium text-indigo-600">{repo.name}</p>
-                      <p className="text-xs text-gray-500">{t("app.profile.updated", { time: repo.updated })}</p>
+                      <p className="text-sm font-medium text-indigo-600 dark:text-indigo-400">{repo.name}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{t("app.profile.updated", { time: repo.updated })}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1">
                       <div className="h-2 w-2 rounded-full" style={{ background: repo.color }} />
-                      <span className="text-xs text-gray-500">{repo.lang}</span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">{repo.lang}</span>
                     </div>
-                    <div className="flex items-center gap-1 text-gray-500"><Star className="h-3 w-3" /><span className="text-xs">{repo.stars}</span></div>
+                    <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400"><Star className="h-3 w-3" /><span className="text-xs">{repo.stars}</span></div>
                   </div>
                 </div>
               ))}

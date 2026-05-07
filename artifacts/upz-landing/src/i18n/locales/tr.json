@@ -235,6 +235,7 @@
       "dashboard": "Panel",
       "workspace": "?al??ma alan?",
       "chat": "Sohbet",
+      "meetings": "Toplantilar",
       "projects": "Projeler",
       "teams": "Ekipler",
       "tasks": "G?revler ve notlar",
@@ -419,7 +420,111 @@
       "unknown": "Bilinmiyor",
       "pinnedLabel": "Sabit",
       "edited": "d?zenlendi",
-      "forwarded": "?letildi: {{text}}"
+      "forwarded": "?letildi: {{text}}",
+      "call": {
+        "voice": "Sesli arama",
+        "video": "Video arama",
+        "groupVoice": "Grup sesli arama",
+        "groupVideo": "Grup video arama",
+        "live": "Canli",
+        "encryptedDemo": "UPZ secure demo",
+        "minimize": "Aramayi kucult",
+        "expand": "Aramayi buyut",
+        "end": "Aramayi bitir",
+        "secureLayer": "Secure demo katmani",
+        "participants": "katilimci",
+        "directVoiceDesc": "Telegram benzeri temiz call surface: UPZ kontrolleri, local state ve backend gerekmez.",
+        "groupVoiceDesc": "Grup voice calllari sakin sahne, participant stack ve ekip sohbetleri icin hizli kontrollerle gelir.",
+        "telegramInspired": "Taninmis call UX, UPZ stiline uyarlandi",
+        "people": "Kisiler",
+        "peopleDesc": "Lokal katilimci durumlari",
+        "invite": "Kisi davet et",
+        "teammate": "Takim arkadasi",
+        "muteMic": "Mikrofonu kapat",
+        "unmuteMic": "Mikrofonu ac",
+        "speakerOn": "Hoparlor acik",
+        "speakerOff": "Hoparlor kapali",
+        "stopVideo": "Videoyu durdur",
+        "startVideo": "Videoyu baslat",
+        "switchToVideo": "Videoya gec",
+        "shareScreen": "Ekrani paylas",
+        "backToChat": "Sohbete don",
+        "participantStatus": {
+          "speaking": "Konusuyor",
+          "online": "Online",
+          "muted": "Sessiz",
+          "listening": "Dinliyor",
+          "cameraOff": "Kamera kapali",
+          "joining": "Katiliyor"
+        }
+      }
+    },
+    "meetings": {
+      "eyebrow": "Toplantilar",
+      "title": "Ekipler ve musteri gorusmeleri icin lux video toplantilar",
+      "description": "Anlik arama, planli oturum, ekip sync, ekran paylasimi ve gelecek takvim entegrasyonu icin premium UPZ meeting room.",
+      "newMeeting": "Yeni toplanti",
+      "schedule": "Planla",
+      "liveRoom": "Canli meeting room",
+      "readyRoom": "Hazir oda",
+      "roomDesc": "UPZ icin uyarlanmis tanidik video-call layout: sakin kontroller, katilimci kartlari, agenda, linkler ve demo guvenlik durumlari.",
+      "copyLink": "Linki kopyala",
+      "inCall": "Gorusmede",
+      "preview": "Preview",
+      "secureDemo": "Lokal MVP video demo. Kamera veya backend gerekmez.",
+      "muteMic": "Mikrofonu kapat",
+      "unmuteMic": "Mikrofonu ac",
+      "stopCamera": "Kamerayi kapat",
+      "startCamera": "Kamerayi ac",
+      "shareScreen": "Ekrani paylas",
+      "raiseHand": "El kaldir",
+      "leave": "Toplantidan ayril",
+      "joinTitle": "Kod ile katil",
+      "joinDesc": "Toplanti kodunu girin veya demo odayi kullanin.",
+      "codePlaceholder": "Toplanti kodunu girin",
+      "join": "Katil",
+      "useDemoCode": "Demo kod",
+      "upcoming": "Yaklasan aramalar",
+      "upcomingDesc": "Team sync, project review ve 1:1 client calllar.",
+      "hostedBy": "{{name}} tarafindan",
+      "peopleCount": "{{count}} kisi",
+      "trustTitle": "Meeting guven katmani",
+      "trustDesc": "Profesyonel call controls icin MVP placeholderlar.",
+      "trust": {
+        "privateRooms": {
+          "title": "Private rooms",
+          "desc": "Meeting kodlari lokal demo tokenlardir."
+        },
+        "waitingRoom": {
+          "title": "Waiting room",
+          "desc": "Gelecekte host onayi ile giris."
+        },
+        "hostControls": {
+          "title": "Host controls",
+          "desc": "Mute, remove, pin ve record placeholderlari."
+        }
+      },
+      "agendaTitle": "Meeting agenda",
+      "agendaDesc": "Gorunur talking pointler aramayi odakta tutar.",
+      "agendaMeta": "Notes ve follow-up tasklar icin hazir.",
+      "modalTitle": "Toplanti planla",
+      "modalDesc": "Gelecek calendar integration icin demo meeting shell olusturun.",
+      "meetingName": "Toplanti adi",
+      "meetingDate": "Tarih",
+      "meetingTime": "Saat",
+      "meetingAgenda": "Agenda",
+      "createDemoMeeting": "Demo meeting olustur",
+      "status": {
+        "live": "Canli",
+        "upcoming": "Yakinda",
+        "scheduled": "Planli"
+      },
+      "toasts": {
+        "joined": "Instant meeting acildi.",
+        "joinedCode": "Demo meeting kod ile acildi.",
+        "linkCopied": "Meeting link demo state icinde kopyalandi.",
+        "scheduled": "Demo meeting planlandi."
+      }
     },
     "common": {
       "cancel": "Iptal"
@@ -455,6 +560,7 @@
       "types": {
         "User": "User",
         "Chat": "Chat",
+        "Meeting": "Toplanti",
         "Task": "Task",
         "Project": "Project",
         "Article": "Article",

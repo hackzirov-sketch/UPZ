@@ -56,6 +56,54 @@ export const TEAM_MEMBERS = [
   { id: "tm6", name: "Otabek Karimov", role: "Member", focus: "Backend", status: "Away" },
 ];
 
+export const MEETING_ROOMS = [
+  {
+    id: "m-call-1",
+    title: "UPZ Core Team Sync",
+    type: "Team",
+    status: "Live",
+    time: "Now",
+    duration: "32 min",
+    host: "Alex Kim",
+    participants: ["Alex Kim", "Sara Chen", "Mira Johnson", "Otabek Karimov"],
+    agenda: ["Chat polish review", "Dark mode QA", "Render deploy notes"],
+    code: "upz-core-418",
+  },
+  {
+    id: "m-call-2",
+    title: "Landing Page Design Review",
+    type: "Project",
+    status: "Upcoming",
+    time: "14:30",
+    duration: "45 min",
+    host: "Sara Chen",
+    participants: ["Sara Chen", "Ahmad", "James Wright"],
+    agenda: ["Hero copy", "Animation placement", "Mobile CTA spacing"],
+    code: "landing-review-52",
+  },
+  {
+    id: "m-call-3",
+    title: "Freelancer Client Call",
+    type: "1:1",
+    status: "Scheduled",
+    time: "16:00",
+    duration: "25 min",
+    host: "Ahmad",
+    participants: ["Ahmad", "Luca Rossi"],
+    agenda: ["Scope alignment", "Invoice milestone", "Next delivery"],
+    code: "client-call-09",
+  },
+];
+
+export const MEETING_PARTICIPANTS = [
+  { id: "mp1", name: "Ahmad", role: "Host", status: "Speaking", color: "#6366F1" },
+  { id: "mp2", name: "Alex Kim", role: "Frontend", status: "Online", color: "#3B82F6" },
+  { id: "mp3", name: "Sara Chen", role: "Design", status: "Muted", color: "#8B5CF6" },
+  { id: "mp4", name: "Mira Johnson", role: "Product", status: "Online", color: "#10B981" },
+  { id: "mp5", name: "Otabek Karimov", role: "Backend", status: "Camera off", color: "#F59E0B" },
+  { id: "mp6", name: "James Wright", role: "Delivery", status: "Joining", color: "#EF4444" },
+];
+
 export const PROJECT_COLUMNS = [
   { id: "todo", title: "To do", tasks: ["Set up project brief", "Invite beta testers", "Confirm payment copy", "Document first-version animation usage"] },
   { id: "doing", title: "In progress", tasks: ["Build community moderation UI", "Wire wallet history", "Draft AI assistant prompts", "Expand news category model"] },
@@ -76,6 +124,7 @@ export const ACTIVITY_LOG = [
 export const GLOBAL_SEARCH_ITEMS = [
   { type: "User", title: "Alex Kim", detail: "Lead Developer" },
   { type: "Chat", title: "UPZ Core Team", detail: "5 members, 3 online" },
+  { type: "Meeting", title: "UPZ Core Team Sync", detail: "Live meeting room" },
   { type: "Task", title: "Build community moderation UI", detail: "Project: UPZ Platform" },
   { type: "Project", title: "Landing Page Redesign", detail: "UPZ-142" },
   { type: "Article", title: "AI copilots are becoming project teammates", detail: "News" },

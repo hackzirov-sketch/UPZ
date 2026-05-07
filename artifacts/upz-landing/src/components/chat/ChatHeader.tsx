@@ -6,12 +6,14 @@ import type { ChatRoom, ChatUser } from "@/types";
 import { Avatar, RoomGlyph, cn, getLinkedTask, getRoomName, getRoomPeer, getUser } from "./chatShared";
 
 export type ChatHeaderAction = "profile" | "search" | "mute" | "pin" | "clear" | "delete";
+export type ChatCallMode = "voice" | "video";
 
 interface ChatHeaderProps {
   room: ChatRoom;
   users: ChatUser[];
   onBackToList: () => void;
   onAction: (action: ChatHeaderAction) => void;
+  onStartCall: (mode: ChatCallMode) => void;
 }
 
 function roomStatus(room: ChatRoom, users: ChatUser[], t: (key: string, options?: Record<string, unknown>) => string) {
@@ -26,7 +28,7 @@ function roomStatus(room: ChatRoom, users: ChatUser[], t: (key: string, options?
   return { label: t("app.chat.memberStatus", { members: room.memberIds.length, online: onlineCount }), tone: "bg-indigo-400" };
 }
 
-export function ChatHeader({ room, users, onBackToList, onAction }: ChatHeaderProps) {
+export function ChatHeader({ room, users, onBackToList, onAction, onStartCall }: ChatHeaderProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const peer = getRoomPeer(room, users);
@@ -48,7 +50,7 @@ export function ChatHeader({ room, users, onBackToList, onAction }: ChatHeaderPr
   };
 
   return (
-    <header className="relative flex h-[72px] flex-shrink-0 items-center gap-3 border-b border-[#E5E7EB] bg-white px-3 backdrop-blur-xl sm:px-5">
+    <header className="relative z-40 flex h-[72px] flex-shrink-0 items-center gap-3 border-b border-[#E5E7EB] bg-white px-3 backdrop-blur-xl sm:px-5">
       <button
         type="button"
         onClick={onBackToList}
@@ -85,10 +87,20 @@ export function ChatHeader({ room, users, onBackToList, onAction }: ChatHeaderPr
       )}
 
       <div className="flex items-center gap-1 text-[#6B7280]">
-        <button type="button" className="grid h-10 w-10 place-items-center rounded-full transition-colors hover:bg-[#F7FAFC] hover:text-[#111827]" aria-label={t("app.chat.startVoice")}>
+        <button
+          type="button"
+          onClick={() => onStartCall("voice")}
+          className="grid h-10 w-10 place-items-center rounded-full transition-colors hover:bg-[#F7FAFC] hover:text-[#111827]"
+          aria-label={t("app.chat.startVoice")}
+        >
           <Phone className="h-4 w-4" />
         </button>
-        <button type="button" className="hidden h-10 w-10 place-items-center rounded-full transition-colors hover:bg-[#F7FAFC] hover:text-[#111827] sm:grid" aria-label={t("app.chat.startVideo")}>
+        <button
+          type="button"
+          onClick={() => onStartCall("video")}
+          className="grid h-10 w-10 place-items-center rounded-full transition-colors hover:bg-[#F7FAFC] hover:text-[#111827]"
+          aria-label={t("app.chat.startVideo")}
+        >
           <Video className="h-4 w-4" />
         </button>
         <button
@@ -119,7 +131,7 @@ export function ChatHeader({ room, users, onBackToList, onAction }: ChatHeaderPr
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.97, y: 4 }}
             transition={{ duration: 0.14, ease: "easeOut" }}
-            className="absolute right-3 top-[62px] z-50 w-56 rounded-2xl border border-[#E5E7EB] bg-white p-1.5 text-sm text-[#111827] shadow-2xl shadow-black/45 backdrop-blur-xl"
+            className="absolute right-3 top-[62px] z-[120] w-56 rounded-2xl border border-[#E5E7EB] bg-white p-1.5 text-sm text-[#111827] shadow-2xl shadow-black/45 backdrop-blur-xl"
             onClick={(event) => event.stopPropagation()}
           >
             <button type="button" onClick={() => runAction("profile")} className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left transition-colors hover:bg-[#F7FAFC]">

@@ -4,7 +4,8 @@ import { Pin, Search, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { AppLayout } from "@/components/app/AppLayout";
 import { Toast } from "@/components/app/DesignSystem";
-import { ChatHeader, type ChatHeaderAction } from "@/components/chat/ChatHeader";
+import { ChatCallOverlay } from "@/components/chat/ChatCallOverlay";
+import { ChatHeader, type ChatCallMode, type ChatHeaderAction } from "@/components/chat/ChatHeader";
 import { ChatSidebar } from "@/components/chat/ChatSidebar";
 import { MessageBubble } from "@/components/chat/MessageBubble";
 import { MessageInput } from "@/components/chat/MessageInput";
@@ -16,6 +17,12 @@ import { storage } from "@/utils/storage";
 interface Props {
   user: UserProfile;
   onLogout: () => void;
+}
+
+interface ActiveCall {
+  roomId: string;
+  mode: ChatCallMode;
+  startedAt: number;
 }
 
 function getInitialRooms() {
@@ -50,9 +57,14 @@ export default function ChatPage({ user, onLogout }: Props) {
   const [notice, setNotice] = useState<string | null>(null);
   const [chatSearchOpen, setChatSearchOpen] = useState(false);
   const [chatSearchQuery, setChatSearchQuery] = useState("");
+  const [activeCall, setActiveCall] = useState<ActiveCall | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const activeRoom = useMemo(() => rooms.find((room) => room.id === activeId) ?? rooms[0], [activeId, rooms]);
+  const callRoom = useMemo(
+    () => (activeCall ? rooms.find((room) => room.id === activeCall.roomId) : undefined),
+    [activeCall, rooms],
+  );
   const pinnedMessage = activeRoom?.pinnedMessageId
     ? activeRoom.messages.find((message) => message.id === activeRoom.pinnedMessageId)
     : undefined;
@@ -182,6 +194,12 @@ export default function ChatPage({ user, onLogout }: Props) {
     }));
   };
 
+  const handleStartCall = (mode: ChatCallMode) => {
+    if (!activeRoom) return;
+    setActiveCall({ roomId: activeRoom.id, mode, startedAt: Date.now() });
+    setMobilePane("chat");
+  };
+
   const handleHeaderAction = (action: ChatHeaderAction) => {
     if (!activeRoom) return;
 
@@ -220,6 +238,7 @@ export default function ChatPage({ user, onLogout }: Props) {
         setMobilePane(remainingRooms.length > 0 ? "list" : "chat");
         return remainingRooms;
       });
+      setActiveCall((currentCall) => (currentCall?.roomId === activeRoom.id ? null : currentCall));
       setReplyTo(null);
       setEditingMessage(null);
       setDraft("");
@@ -243,8 +262,28 @@ export default function ChatPage({ user, onLogout }: Props) {
         />
 
         {activeRoom ? (
-          <section className={cn("min-w-0 flex-1 flex-col", mobilePane === "list" ? "hidden md:flex" : "flex")}>
-            <ChatHeader room={activeRoom} users={MOCK_USERS} onBackToList={() => setMobilePane("list")} onAction={handleHeaderAction} />
+          <section className={cn("relative min-w-0 flex-1 flex-col", mobilePane === "list" ? "hidden md:flex" : "flex")}>
+            <ChatHeader
+              room={activeRoom}
+              users={MOCK_USERS}
+              onBackToList={() => setMobilePane("list")}
+              onAction={handleHeaderAction}
+              onStartCall={handleStartCall}
+            />
+
+            <AnimatePresence>
+              {activeCall && callRoom && (
+                <ChatCallOverlay
+                  key={activeCall.roomId}
+                  room={callRoom}
+                  users={MOCK_USERS}
+                  mode={activeCall.mode}
+                  startedAt={activeCall.startedAt}
+                  onClose={() => setActiveCall(null)}
+                  onSwitchMode={(mode) => setActiveCall((currentCall) => (currentCall ? { ...currentCall, mode } : currentCall))}
+                />
+              )}
+            </AnimatePresence>
 
             <AnimatePresence>
               {chatSearchOpen && (
@@ -252,7 +291,7 @@ export default function ChatPage({ user, onLogout }: Props) {
                   initial={{ opacity: 0, y: -8 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
-                  className="border-b border-[#E5E7EB] bg-white px-4 py-3"
+                  className="relative z-30 border-b border-[#E5E7EB] bg-white px-4 py-3"
                 >
                   <div className="mx-auto flex h-10 max-w-4xl items-center gap-2 rounded-2xl border border-[#E5E7EB] bg-[#F7FAFC] px-3 focus-within:border-indigo-300 focus-within:bg-white">
                     <Search className="h-4 w-4 text-[#6B7280]" />
@@ -288,7 +327,7 @@ export default function ChatPage({ user, onLogout }: Props) {
               <button
                 type="button"
                 onClick={() => setNotice(t("app.chat.pinnedNotice"))}
-                className="flex items-center gap-3 border-b border-[#E5E7EB] bg-indigo-50 px-5 py-2.5 text-left transition-colors hover:bg-indigo-100/70"
+                className="relative z-20 flex items-center gap-3 border-b border-[#E5E7EB] bg-indigo-50 px-5 py-2.5 text-left transition-colors hover:bg-indigo-100/70"
               >
                 <span className="grid h-8 w-8 place-items-center rounded-full bg-indigo-100 text-indigo-600">
                   <Pin className="h-4 w-4" />
@@ -301,10 +340,10 @@ export default function ChatPage({ user, onLogout }: Props) {
             )}
 
             <div
-              className="min-h-0 flex-1 overflow-y-auto px-3 py-4 sm:px-5"
+              className="relative z-0 min-h-0 flex-1 overflow-y-auto px-3 py-4 sm:px-5"
               style={{
                 background:
-                  "radial-gradient(circle at 12% 0%, rgba(99, 102, 241, 0.10), transparent 28%), radial-gradient(circle at 100% 20%, rgba(59, 130, 246, 0.08), transparent 24%), linear-gradient(135deg, #F7FAFC, #FFFFFF)",
+                  "radial-gradient(circle at 12% 0%, var(--upz-chat-glow-a), transparent 28%), radial-gradient(circle at 100% 20%, var(--upz-chat-glow-b), transparent 24%), linear-gradient(135deg, var(--upz-chat-bg-a), var(--upz-chat-bg-b))",
               }}
             >
               <div className="mx-auto flex max-w-4xl flex-col gap-3">

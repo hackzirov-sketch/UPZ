@@ -14,6 +14,7 @@ import HomePage from "@/pages/HomePage";
 import DashboardPage from "@/pages/DashboardPage";
 import WorkspacePage from "@/pages/WorkspacePage";
 import ChatPage from "@/pages/ChatPage";
+import MeetingsPage from "@/pages/MeetingsPage";
 import CommunityPage from "@/pages/CommunityPage";
 import NewsPage from "@/pages/NewsPage";
 import BankPage from "@/pages/BankPage";
@@ -56,6 +57,7 @@ function Router() {
       <Route path="/app/dashboard">{() => renderProtected(DashboardPage)}</Route>
       <Route path="/app/workspace">{() => renderProtected(WorkspacePage)}</Route>
       <Route path="/app/chat">{() => renderProtected(ChatPage)}</Route>
+      <Route path="/app/meetings">{() => renderProtected(MeetingsPage)}</Route>
       <Route path="/app/projects">{() => renderProtected(ProjectsPage)}</Route>
       <Route path="/app/community">{() => renderProtected(CommunityPage)}</Route>
       <Route path="/app/news">{() => renderProtected(NewsPage)}</Route>

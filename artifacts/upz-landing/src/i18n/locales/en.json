@@ -235,6 +235,7 @@
       "dashboard": "Dashboard",
       "workspace": "Workspace",
       "chat": "Chat",
+      "meetings": "Meetings",
       "projects": "Projects",
       "teams": "Teams",
       "tasks": "Tasks & Notes",
@@ -419,7 +420,111 @@
       "unknown": "Unknown",
       "pinnedLabel": "Pinned",
       "edited": "edited",
-      "forwarded": "Forwarded: {{text}}"
+      "forwarded": "Forwarded: {{text}}",
+      "call": {
+        "voice": "Voice call",
+        "video": "Video call",
+        "groupVoice": "Group voice call",
+        "groupVideo": "Group video call",
+        "live": "Live",
+        "encryptedDemo": "UPZ secure demo",
+        "minimize": "Minimize call",
+        "expand": "Expand call",
+        "end": "End call",
+        "secureLayer": "Secure demo layer",
+        "participants": "participants",
+        "directVoiceDesc": "A clean Telegram-like call surface with UPZ controls, local state, and no backend requirement.",
+        "groupVoiceDesc": "Group voice calls use a calm stage, participant stack, and quick controls for team conversations.",
+        "telegramInspired": "Familiar call UX, adapted to UPZ style",
+        "people": "People",
+        "peopleDesc": "Local participant states",
+        "invite": "Invite people",
+        "teammate": "Teammate",
+        "muteMic": "Mute microphone",
+        "unmuteMic": "Unmute microphone",
+        "speakerOn": "Speaker on",
+        "speakerOff": "Speaker off",
+        "stopVideo": "Stop video",
+        "startVideo": "Start video",
+        "switchToVideo": "Switch to video",
+        "shareScreen": "Share screen",
+        "backToChat": "Back to chat",
+        "participantStatus": {
+          "speaking": "Speaking",
+          "online": "Online",
+          "muted": "Muted",
+          "listening": "Listening",
+          "cameraOff": "Camera off",
+          "joining": "Joining"
+        }
+      }
+    },
+    "meetings": {
+      "eyebrow": "Meetings",
+      "title": "Lux video meetings for teams and client calls",
+      "description": "A premium UPZ meeting room for instant calls, scheduled sessions, team syncs, screen sharing, and future calendar integration.",
+      "newMeeting": "New meeting",
+      "schedule": "Schedule",
+      "liveRoom": "Live meeting room",
+      "readyRoom": "Ready room",
+      "roomDesc": "A familiar video-call layout adapted for UPZ: calm controls, participant tiles, agenda, links, and mock security states.",
+      "copyLink": "Copy link",
+      "inCall": "In call",
+      "preview": "Preview",
+      "secureDemo": "Local MVP video demo. No camera or backend required.",
+      "muteMic": "Mute microphone",
+      "unmuteMic": "Unmute microphone",
+      "stopCamera": "Stop camera",
+      "startCamera": "Start camera",
+      "shareScreen": "Share screen",
+      "raiseHand": "Raise hand",
+      "leave": "Leave meeting",
+      "joinTitle": "Join by code",
+      "joinDesc": "Paste a meeting code or use a demo room.",
+      "codePlaceholder": "Enter meeting code",
+      "join": "Join",
+      "useDemoCode": "Use demo code",
+      "upcoming": "Upcoming calls",
+      "upcomingDesc": "Team syncs, project reviews, and 1:1 client calls.",
+      "hostedBy": "Hosted by {{name}}",
+      "peopleCount": "{{count}} people",
+      "trustTitle": "Meeting trust layer",
+      "trustDesc": "MVP placeholders for professional call controls.",
+      "trust": {
+        "privateRooms": {
+          "title": "Private rooms",
+          "desc": "Meeting codes are local demo tokens."
+        },
+        "waitingRoom": {
+          "title": "Waiting room",
+          "desc": "Future host approval before joining."
+        },
+        "hostControls": {
+          "title": "Host controls",
+          "desc": "Mute, remove, pin, and record placeholders."
+        }
+      },
+      "agendaTitle": "Meeting agenda",
+      "agendaDesc": "Keep calls focused with visible talking points.",
+      "agendaMeta": "Ready for notes and follow-up tasks.",
+      "modalTitle": "Schedule meeting",
+      "modalDesc": "Create a demo meeting shell for future calendar integration.",
+      "meetingName": "Meeting name",
+      "meetingDate": "Date",
+      "meetingTime": "Time",
+      "meetingAgenda": "Agenda",
+      "createDemoMeeting": "Create demo meeting",
+      "status": {
+        "live": "Live",
+        "upcoming": "Upcoming",
+        "scheduled": "Scheduled"
+      },
+      "toasts": {
+        "joined": "Instant meeting opened.",
+        "joinedCode": "Joined demo meeting by code.",
+        "linkCopied": "Meeting link copied in demo state.",
+        "scheduled": "Demo meeting scheduled."
+      }
     },
     "common": {
       "cancel": "Cancel"
@@ -455,6 +560,7 @@
       "types": {
         "User": "User",
         "Chat": "Chat",
+        "Meeting": "Meeting",
         "Task": "Task",
         "Project": "Project",
         "Article": "Article",

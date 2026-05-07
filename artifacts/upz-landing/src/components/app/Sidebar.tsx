@@ -14,6 +14,7 @@ import {
   Settings,
   User,
   Users,
+  Video,
   Zap,
 } from "lucide-react";
 import { Link, useLocation } from "wouter";
@@ -30,6 +31,7 @@ const NAV_GROUPS = [
       { path: "/app/dashboard", labelKey: "dashboard", icon: LayoutDashboard },
       { path: "/app/workspace", labelKey: "workspace", icon: Layers },
       { path: "/app/chat", labelKey: "chat", icon: MessageCircle, badgeKey: "live" },
+      { path: "/app/meetings", labelKey: "meetings", icon: Video },
     ],
   },
   {

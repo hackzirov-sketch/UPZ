@@ -19,6 +19,7 @@ const TITLE_KEY_BY_LABEL: Record<string, string> = {
   Dashboard: "dashboard",
   Workspace: "workspace",
   Chat: "chat",
+  Meetings: "meetings",
   Projects: "projects",
   Community: "community",
   News: "news",

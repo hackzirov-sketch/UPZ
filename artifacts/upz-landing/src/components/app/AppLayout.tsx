@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Bot } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Sidebar } from "./Sidebar";
@@ -16,8 +16,10 @@ interface AppLayoutProps {
 
 export function AppLayout({ user, title, children, onLogout }: AppLayoutProps) {
   const { t } = useTranslation();
+  const [location] = useLocation();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const hideAssistantButton = location === "/app/chat" || location === "/app/assistant" || location === "/app/meetings";
 
   const handleToggleSidebar = () => {
     if (typeof window !== "undefined" && window.innerWidth < 768) {
@@ -68,14 +70,16 @@ export function AppLayout({ user, title, children, onLogout }: AppLayoutProps) {
         >
           {children}
         </main>
-        <Link
-          href="/app/assistant"
-          className="fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-2xl bg-gradient-to-br from-indigo-600 to-blue-500 px-4 py-3 text-sm font-semibold text-white shadow-xl shadow-indigo-200 transition-transform hover:-translate-y-0.5 active:scale-[0.98]"
-          aria-label="Open AI assistant"
-        >
-          <Bot className="h-5 w-5" />
-          <span className="hidden sm:inline">{t("app.dashboard.askAI")}</span>
-        </Link>
+        {!hideAssistantButton && (
+          <Link
+            href="/app/assistant"
+            className="fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-2xl bg-gradient-to-br from-indigo-600 to-blue-500 px-4 py-3 text-sm font-semibold text-white shadow-xl shadow-indigo-200 transition-transform hover:-translate-y-0.5 active:scale-[0.98]"
+            aria-label="Open AI assistant"
+          >
+            <Bot className="h-5 w-5" />
+            <span className="hidden sm:inline">{t("app.dashboard.askAI")}</span>
+          </Link>
+        )}
       </div>
     </div>
   );

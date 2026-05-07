@@ -37,6 +37,11 @@ export function applyDir(lang: string) {
   const dir = found?.dir ?? "ltr";
   document.documentElement.setAttribute("dir", dir);
   document.documentElement.setAttribute("lang", lang);
+  if (lang === "ar") {
+    document.documentElement.style.setProperty("--app-font-sans", "'Noto Sans Arabic', sans-serif");
+  } else {
+    document.documentElement.style.setProperty("--app-font-sans", "'Inter', 'Noto Sans Arabic', sans-serif");
+  }
 }
 
 export default i18n;

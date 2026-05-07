@@ -27,6 +27,8 @@ type FloatingState = {
   fixed: boolean;
   x: number;
   y: number;
+  above?: boolean;
+  alignRight?: boolean;
 };
 
 function PremiumMessageText({ text, isOwn }: { text: string; isOwn: boolean }) {
@@ -101,22 +103,34 @@ export function MessageBubble({
     return () => window.removeEventListener("click", close);
   }, [menu, picker]);
 
+  const calcFixedPos = (event: ReactMouseEvent, menuW = 208, menuH = 260) => {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const x = event.clientX;
+    const y = event.clientY;
+    const above = y + menuH + 12 > vh;
+    const alignRight = x + menuW + 8 > vw;
+    const clampedX = alignRight ? Math.max(8, x - menuW) : Math.min(x, vw - menuW - 8);
+    const clampedY = above ? Math.max(8, y - menuH - 8) : y + 12;
+    return { fixed: true, x: clampedX, y: clampedY, above, alignRight };
+  };
+
   const openMenuFromClick = (event: ReactMouseEvent) => {
     event.stopPropagation();
     setPicker(null);
-    setMenu((current) => (current && !current.fixed ? null : { fixed: false, x: 0, y: 0 }));
+    setMenu((current) => (current ? null : calcFixedPos(event)));
   };
 
   const openMenuFromContext = (event: ReactMouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
     setPicker(null);
-    setMenu({ fixed: true, x: event.clientX, y: event.clientY });
+    setMenu(calcFixedPos(event));
   };
 
   const handleAction = (action: MessageOptionAction) => {
     if (action === "react") {
-      setPicker(menu ?? { fixed: false, x: 0, y: 0 });
+      setPicker(menu ?? null);
       setMenu(null);
       return;
     }
@@ -137,13 +151,13 @@ export function MessageBubble({
     setPicker(null);
   };
 
-  const menuStyle: CSSProperties = menu?.fixed
-    ? { position: "fixed", left: menu.x, top: menu.y }
-    : { position: "absolute", top: "calc(100% + 8px)", right: isOwn ? 0 : undefined, left: isOwn ? undefined : 0 };
+  const menuStyle: CSSProperties = menu
+    ? { position: "fixed", left: menu.x, top: menu.y, zIndex: 9999 }
+    : {};
 
-  const pickerStyle: CSSProperties = picker?.fixed
-    ? { position: "fixed", left: picker.x, top: picker.y }
-    : { position: "absolute", top: "calc(100% + 8px)", right: isOwn ? 0 : undefined, left: isOwn ? undefined : 0 };
+  const pickerStyle: CSSProperties = picker
+    ? { position: "fixed", left: picker.x, top: picker.y, zIndex: 9999 }
+    : {};
 
   return (
     <motion.div
@@ -223,7 +237,7 @@ export function MessageBubble({
         <AnimatePresence>
           {menu && <MessageOptionsMenu isOwn={isOwn} onAction={handleAction} style={menuStyle} />}
           {picker && (
-            <div key="reaction-picker" style={pickerStyle} className="z-50">
+            <div key="reaction-picker" style={pickerStyle}>
               <ReactionPicker activeEmojis={activeReactionEmojis} onSelect={handleReaction} />
             </div>
           )}

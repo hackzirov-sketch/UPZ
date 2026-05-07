@@ -10,6 +10,7 @@ import { ChatSidebar } from "@/components/chat/ChatSidebar";
 import { MessageBubble } from "@/components/chat/MessageBubble";
 import { MessageInput } from "@/components/chat/MessageInput";
 import { cn, getMessageText, getReplySnippet, getRoomName } from "@/components/chat/chatShared";
+import { PremiumGradientBadge, normalizeReactionId } from "@/components/premium/PremiumAssets";
 import { MOCK_CHAT_ROOMS, MOCK_USERS } from "@/data/mockData";
 import type { ChatMessage, ChatReactionEmoji, ChatRoom, UserProfile } from "@/types";
 import { storage } from "@/utils/storage";
@@ -31,11 +32,16 @@ function getInitialRooms() {
 }
 
 function updateMessageReaction(message: ChatMessage, emoji: ChatReactionEmoji): ChatMessage {
-  const reactions = (message.reactions ?? []).map((reaction) => ({ ...reaction, userIds: [...reaction.userIds] }));
-  const existing = reactions.find((reaction) => reaction.emoji === emoji);
+  const targetEmoji = normalizeReactionId(emoji);
+  const reactions = (message.reactions ?? []).map((reaction) => ({
+    ...reaction,
+    emoji: normalizeReactionId(reaction.emoji),
+    userIds: [...reaction.userIds],
+  }));
+  const existing = reactions.find((reaction) => reaction.emoji === targetEmoji);
 
   if (!existing) {
-    reactions.push({ emoji, userIds: ["me"] });
+    reactions.push({ emoji: targetEmoji, userIds: ["me"] });
   } else if (existing.userIds.includes("me")) {
     existing.userIds = existing.userIds.filter((userId) => userId !== "me");
   } else {
@@ -327,15 +333,16 @@ export default function ChatPage({ user, onLogout }: Props) {
               <button
                 type="button"
                 onClick={() => setNotice(t("app.chat.pinnedNotice"))}
-                className="relative z-20 flex items-center gap-3 border-b border-[#E5E7EB] bg-indigo-50 px-5 py-2.5 text-left transition-colors hover:bg-indigo-100/70"
+                className="relative z-20 flex items-center gap-3 border-b border-indigo-100 bg-gradient-to-r from-indigo-50 via-white to-blue-50 px-5 py-2.5 text-left shadow-sm transition-colors hover:from-indigo-100 hover:to-blue-50"
               >
-                <span className="grid h-8 w-8 place-items-center rounded-full bg-indigo-100 text-indigo-600">
+                <span className="grid h-9 w-9 place-items-center rounded-2xl bg-white text-indigo-600 shadow-sm ring-1 ring-indigo-100">
                   <Pin className="h-4 w-4" />
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block text-xs font-semibold uppercase tracking-[0.18em] text-indigo-600">{t("app.chat.pinnedMessage")}</span>
                   <span className="block truncate text-sm text-[#111827]">{getReplySnippet(pinnedMessage, t)}</span>
                 </span>
+                <PremiumGradientBadge label="Pinned" icon="/emojis/sparkle.svg" className="hidden sm:inline-flex" />
               </button>
             )}
 

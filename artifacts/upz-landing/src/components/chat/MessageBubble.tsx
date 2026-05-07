@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Pin } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { ChatMessage, ChatReactionEmoji, ChatRoom, ChatUser } from "@/types";
+import { EmojiRenderer, ReactionButton, findEmojiAsset, getReactionAsset, normalizeReactionId } from "@/components/premium/PremiumAssets";
 import { Avatar, cn, formatMessageTime, getMessageText, getReplySnippet, getUser } from "./chatShared";
 import { MessageOptionsMenu, type MessageOptionAction } from "./MessageOptionsMenu";
 import { ReactionPicker } from "./ReactionPicker";
@@ -28,6 +29,46 @@ type FloatingState = {
   y: number;
 };
 
+function PremiumMessageText({ text, isOwn }: { text: string; isOwn: boolean }) {
+  const parts: Array<string | { token: string; key: string }> = [];
+  const pattern = /:([a-z0-9-]+):/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = pattern.exec(text)) !== null) {
+    const [raw, token] = match;
+    const asset = findEmojiAsset(token);
+    if (!asset) continue;
+
+    if (match.index > lastIndex) parts.push(text.slice(lastIndex, match.index));
+    parts.push({ token, key: `${token}-${match.index}` });
+    lastIndex = match.index + raw.length;
+  }
+
+  if (lastIndex < text.length) parts.push(text.slice(lastIndex));
+  if (parts.length === 0) return <>{text}</>;
+
+  return (
+    <>
+      {parts.map((part, index) =>
+        typeof part === "string" ? (
+          <span key={`text-${index}`}>{part}</span>
+        ) : (
+          <span
+            key={part.key}
+            className={cn(
+              "mx-0.5 inline-flex translate-y-1 items-center rounded-full p-0.5 align-middle shadow-sm",
+              isOwn ? "bg-white/20" : "bg-[#F7FAFC] ring-1 ring-[#E5E7EB]",
+            )}
+          >
+            <EmojiRenderer assetId={part.token} size={22} />
+          </span>
+        ),
+      )}
+    </>
+  );
+}
+
 export function MessageBubble({
   room,
   message,
@@ -47,7 +88,7 @@ export function MessageBubble({
   const isOwn = message.userId === "me";
   const sender = getUser(message.userId, users);
   const showSender = !isOwn && room.type !== "1on1";
-  const activeReactionEmojis = message.reactions?.filter((reaction) => reaction.userIds.includes("me")).map((reaction) => reaction.emoji) ?? [];
+  const activeReactionEmojis = message.reactions?.filter((reaction) => reaction.userIds.includes("me")).map((reaction) => normalizeReactionId(reaction.emoji)) ?? [];
   const text = getMessageText(message, t);
 
   useEffect(() => {
@@ -123,17 +164,23 @@ export function MessageBubble({
           className={cn(
             "group/bubble relative rounded-[22px] px-4 py-2.5 text-left text-sm leading-relaxed shadow-sm transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-400/30",
             isOwn
-              ? "rounded-br-md bg-gradient-to-br from-indigo-500 to-blue-500 text-white shadow-indigo-950/25"
-              : "rounded-bl-md border border-[#E5E7EB] bg-white text-[#111827] hover:bg-[#F7FAFC]",
+              ? "rounded-br-md bg-gradient-to-br from-indigo-500 to-blue-500 text-white shadow-indigo-950/25 hover:shadow-indigo-500/25"
+              : "rounded-bl-md border border-[#E5E7EB] bg-white text-[#111827] hover:bg-white hover:shadow-indigo-100",
           )}
         >
           {replyMessage && (
             <div
               className={cn(
-                "mb-2 rounded-xl border-l-2 px-3 py-2 text-xs",
+                "relative mb-2 overflow-hidden rounded-xl border-l-2 px-3 py-2 text-xs",
                 isOwn ? "border-white/70 bg-white/20 text-white" : "border-indigo-300 bg-indigo-50 text-[#111827]",
               )}
             >
+              <motion.span
+                aria-hidden="true"
+                animate={{ opacity: [0.35, 0.9, 0.35] }}
+                transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+                className={cn("absolute inset-y-2 left-0 w-0.5 rounded-full", isOwn ? "bg-white" : "bg-indigo-500")}
+              />
               <div className="font-semibold">{getUser(replyMessage.userId, users)?.name ?? t("app.chat.unknown")}</div>
               <div className="mt-0.5 line-clamp-2 opacity-80">{getReplySnippet(replyMessage, t)}</div>
             </div>
@@ -144,7 +191,9 @@ export function MessageBubble({
               {t("app.chat.pinnedLabel")}
             </div>
           )}
-          <div className="whitespace-pre-wrap break-words">{text}</div>
+          <div className="whitespace-pre-wrap break-words">
+            <PremiumMessageText text={text} isOwn={isOwn} />
+          </div>
           <div className={cn("mt-1.5 flex items-center justify-end gap-1 text-[11px]", isOwn ? "text-white/70" : "text-[#6B7280]")}>
             {message.edited && <span>{t("app.chat.edited")}</span>}
             <span>{formatMessageTime(message.timestamp)}</span>
@@ -153,28 +202,19 @@ export function MessageBubble({
         </button>
 
         {!!message.reactions?.length && (
-          <div className={cn("mt-1 flex flex-wrap gap-1", isOwn ? "justify-end pr-2" : "justify-start pl-2")}>
+          <div className={cn("mt-1 flex max-w-full gap-1 overflow-x-auto", isOwn ? "justify-end pr-2" : "justify-start pl-2")}>
             {message.reactions.map((reaction) => {
+              const reactionId = normalizeReactionId(reaction.emoji);
               const active = reaction.userIds.includes("me");
               return (
-                <motion.button
-                  key={reaction.emoji}
-                  type="button"
-                  whileTap={{ scale: 0.94 }}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    onToggleReaction(message.id, reaction.emoji);
-                  }}
-                  className={cn(
-                    "rounded-full border px-2 py-0.5 text-xs shadow-sm transition-colors",
-                    active
-                      ? "border-indigo-200 bg-indigo-50 text-indigo-700"
-                      : "border-[#E5E7EB] bg-white text-[#111827] hover:bg-[#F7FAFC]",
-                  )}
-                >
-                  <span>{reaction.emoji}</span>
-                  <span className="ml-1 text-[10px] opacity-70">{reaction.userIds.length}</span>
-                </motion.button>
+                <ReactionButton
+                  key={reactionId}
+                  asset={getReactionAsset(reactionId)}
+                  active={active}
+                  count={reaction.userIds.length}
+                  compact
+                  onClick={() => onToggleReaction(message.id, reactionId)}
+                />
               );
             })}
           </div>

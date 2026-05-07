@@ -243,6 +243,8 @@
       "community": "Topluluk",
       "news": "Haberler",
       "bank": "Universal Bank",
+      "premium": "Premium",
+      "pro": "Pro",
       "profile": "Profil",
       "settings": "Ayarlar",
       "live": "Canl?",
@@ -565,9 +567,124 @@
         "Project": "Project",
         "Article": "Article",
         "Wallet": "Wallet",
+        "Premium": "Premium",
         "Animation": "Animation",
         "Learning": "Learning",
         "Team": "Team"
+      }
+    },
+    "premium": {
+      "eyebrow": "Premium hesaplar",
+      "title": "Ciddi UPZ kullanicilari icin premium avantajlar",
+      "description": "Daha fazla AI, daha iyi meetings, workspace controls, verified community status ve Universal Bank perks.",
+      "upgrade": "Hesabi upgrade et",
+      "comparePlans": "Planlari karsilastir",
+      "currentPlan": "Premium preview",
+      "heroTitle": "{{name}}, daha guclu UPZ sistemini ac.",
+      "heroDesc": "Premium UPZ icinde her gun calisan, ogrenip kazanan ve ekiplerle is yapan kullanicilar icin.",
+      "selectedPlan": "Secili plan",
+      "whyTitle": "Premium neden onemli",
+      "whyDesc": "Free MVP bozulmadan upgrade icin net nedenler olusturur.",
+      "stats": {
+        "ai": "AI boost",
+        "team": "Projects & layouts",
+        "support": "Support response"
+      },
+      "checkoutTitle": "Upgrade akisi",
+      "checkoutDesc": "Gelecek payment integration icin frontend-only checkout preview.",
+      "localOnly": "Lokal MVP preview. Odeme alinmaz.",
+      "mockCheckout": "Mock checkout ac",
+      "comparisonTitle": "Plan karsilastirma",
+      "comparisonDesc": "Gelecek billing ve backend limitleri icin product-ready yapi.",
+      "table": {
+        "feature": "Feature",
+        "free": "Free",
+        "pro": "Pro",
+        "team": "Team"
+      },
+      "checkoutNotes": {
+        "secure": "Stripe, local cards ve Universal Bank icin hazir.",
+        "demo": "Bu buton sadece local demo toast gosterir."
+      },
+      "toasts": {
+        "checkout": "Premium checkout local MVP preview.",
+        "compare": "Comparison table backend limits icin hazir."
+      },
+      "benefits": {
+        "ai": {
+          "title": "AI Power Mode",
+          "description": "Planning, learning, writing, project ideas ve team summaries icin yuksek AI limitleri.",
+          "metric": "10x AI usage"
+        },
+        "workspace": {
+          "title": "Advanced Workspace",
+          "description": "Custom layouts, premium project views, templates ve integrations.",
+          "metric": "Custom layouts"
+        },
+        "meetings": {
+          "title": "Premium Meetings",
+          "description": "Daha uzun video calls, recording placeholders, agenda notes ve team rooms.",
+          "metric": "180 min rooms"
+        },
+        "bank": {
+          "title": "Universal Bank Plus",
+          "description": "Lower payout fee placeholders, analytics, invoices ve payment priority.",
+          "metric": "Lower fees"
+        },
+        "community": {
+          "title": "Verified Community",
+          "description": "Premium badge, private channels, mentor rooms ve priority moderation.",
+          "metric": "Verified badge"
+        },
+        "support": {
+          "title": "Priority Support",
+          "description": "Fast support lane, onboarding help ve roadmap access.",
+          "metric": "Priority lane"
+        }
+      },
+      "plans": {
+        "free": {
+          "name": "Free",
+          "period": "forever",
+          "badge": "Current MVP",
+          "description": "UPZ denemek icin.",
+          "cta": "Current plan",
+          "features": [
+            "Basic workspace",
+            "3 active projects",
+            "20 AI actions/day",
+            "30 min demo meetings",
+            "Community read access"
+          ]
+        },
+        "pro": {
+          "name": "Pro",
+          "period": "aylik",
+          "badge": "Creators icin en iyi",
+          "description": "Freelancers, students, creators ve solo builders icin.",
+          "cta": "Upgrade to Pro",
+          "features": [
+            "Unlimited projects",
+            "10x AI assistant usage",
+            "Premium meetings",
+            "Universal Bank Plus",
+            "Verified profile badge"
+          ]
+        },
+        "team": {
+          "name": "Team",
+          "period": "seat basina",
+          "badge": "Teams",
+          "description": "Roles, shared workspaces ve analytics gereken ekipler icin.",
+          "cta": "Start team plan",
+          "features": [
+            "Everything in Pro",
+            "Team roles",
+            "Shared project rooms",
+            "Admin controls",
+            "Priority support"
+          ]
+        }
       }
     },
     "home": {

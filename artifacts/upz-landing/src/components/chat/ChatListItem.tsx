@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Pin } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { ChatRoom, ChatUser } from "@/types";
+import { PremiumStatusBadge, getPremiumStatusForUser } from "@/components/premium/PremiumAssets";
 import {
   Avatar,
   RoomGlyph,
@@ -27,6 +28,13 @@ export function ChatListItem({ room, users, active, onSelect }: ChatListItemProp
   const unread = room.unread ?? 0;
   const isDirect = room.type === "1on1";
   const roomName = getRoomName(room, t);
+  const roomStatus = isDirect
+    ? getPremiumStatusForUser(peer)
+    : room.type === "project"
+      ? "building"
+      : room.type === "team"
+        ? "meeting"
+        : "learning";
 
   return (
     <motion.button
@@ -44,7 +52,10 @@ export function ChatListItem({ room, users, active, onSelect }: ChatListItemProp
       {isDirect ? (
         <Avatar user={peer} size={46} showOnline />
       ) : (
-        <RoomGlyph room={room} className="h-[46px] w-[46px]" />
+        <div className="relative h-[46px] w-[46px] flex-shrink-0">
+          <RoomGlyph room={room} className="h-full w-full" />
+          <PremiumStatusBadge status={roomStatus} size={16} className="absolute -bottom-1 -right-1 border-[#E5E7EB]" />
+        </div>
       )}
 
       <div className="min-w-0 flex-1">

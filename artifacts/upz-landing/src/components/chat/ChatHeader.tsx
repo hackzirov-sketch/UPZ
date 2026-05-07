@@ -3,7 +3,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { BellOff, Menu, MoreVertical, Phone, Pin, Search, Trash, User, Video } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { ChatRoom, ChatUser } from "@/types";
-import { Avatar, RoomGlyph, cn, getLinkedTask, getRoomName, getRoomPeer, getUser } from "./chatShared";
+import { PremiumGradientBadge, PremiumStatusBadge, getPremiumStatusForUser } from "@/components/premium/PremiumAssets";
+import { Avatar, RoomGlyph, getLinkedTask, getRoomName, getRoomPeer, getUser } from "./chatShared";
 
 export type ChatHeaderAction = "profile" | "search" | "mute" | "pin" | "clear" | "delete";
 export type ChatCallMode = "voice" | "video";
@@ -19,13 +20,13 @@ interface ChatHeaderProps {
 function roomStatus(room: ChatRoom, users: ChatUser[], t: (key: string, options?: Record<string, unknown>) => string) {
   const peer = getRoomPeer(room, users);
   if (room.type === "1on1") {
-    if (peer?.status === "online") return { label: t("app.chat.online"), tone: "bg-emerald-400" };
-    if (peer?.status === "away") return { label: t("app.chat.away"), tone: "bg-amber-400" };
-    return { label: t("app.chat.lastSeen"), tone: "bg-slate-500" };
+    if (peer?.status === "online") return { label: t("app.chat.online") };
+    if (peer?.status === "away") return { label: t("app.chat.away") };
+    return { label: t("app.chat.lastSeen") };
   }
 
   const onlineCount = room.memberIds.filter((id) => getUser(id, users)?.status === "online").length;
-  return { label: t("app.chat.memberStatus", { members: room.memberIds.length, online: onlineCount }), tone: "bg-indigo-400" };
+  return { label: t("app.chat.memberStatus", { members: room.memberIds.length, online: onlineCount }) };
 }
 
 export function ChatHeader({ room, users, onBackToList, onAction, onStartCall }: ChatHeaderProps) {
@@ -36,6 +37,7 @@ export function ChatHeader({ room, users, onBackToList, onAction, onStartCall }:
   const memberPreview = room.memberIds.filter((id) => id !== "me").slice(0, 4);
   const roomName = getRoomName(room, t);
   const linkedTask = getLinkedTask(room, t);
+  const headerStatus = room.type === "1on1" ? getPremiumStatusForUser(peer) : room.type === "project" ? "building" : "meeting";
 
   useEffect(() => {
     if (!open) return;
@@ -65,15 +67,11 @@ export function ChatHeader({ room, users, onBackToList, onAction, onStartCall }:
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           <h2 className="truncate text-sm font-semibold text-[#111827] sm:text-base">{roomName}</h2>
-          {room.projectBadge && (
-            <span className="hidden rounded-full border border-blue-100 bg-blue-50 px-2 py-0.5 text-[11px] font-semibold text-blue-700 sm:inline-flex">
-              {room.projectBadge}
-            </span>
-          )}
+          {room.projectBadge && <PremiumGradientBadge label={room.projectBadge} icon="/emojis/rocket.svg" className="hidden sm:inline-flex" />}
           {room.muted && <span className="rounded-full bg-[#F7FAFC] px-2 py-0.5 text-[11px] text-[#6B7280]">{t("app.chat.muted")}</span>}
         </div>
         <div className="mt-0.5 flex items-center gap-2 text-xs text-[#6B7280]">
-          <span className={cn("h-2 w-2 rounded-full", status.tone)} />
+          <PremiumStatusBadge status={headerStatus} size={18} className="border-[#E5E7EB]" />
           <span className="truncate">{linkedTask ? `${status.label} - ${linkedTask}` : status.label}</span>
         </div>
       </div>
@@ -81,7 +79,7 @@ export function ChatHeader({ room, users, onBackToList, onAction, onStartCall }:
       {room.type !== "1on1" && (
         <div className="hidden items-center -space-x-2 lg:flex">
           {memberPreview.map((memberId) => (
-            <Avatar key={memberId} userId={memberId} size={28} className="rounded-full ring-2 ring-white" />
+            <Avatar key={memberId} userId={memberId} size={28} showOnline className="rounded-full ring-2 ring-white" />
           ))}
         </div>
       )}

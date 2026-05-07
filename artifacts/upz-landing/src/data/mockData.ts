@@ -20,9 +20,9 @@ export const MOCK_CHAT_ROOMS: ChatRoom[] = [
     pinnedMessageId: 'm4',
     messages: [
       { id: 'm1', userId: 'u1', text: 'Hey! Have you seen the new project specs?', timestamp: Date.now() - 3600000, read: true },
-      { id: 'm2', userId: 'me', text: 'Yes, just checked them out. The scope feels tight enough for MVP.', timestamp: Date.now() - 3500000, read: true, reactions: [{ emoji: '\u2705', userIds: ['u1'] }] },
+      { id: 'm2', userId: 'me', text: 'Yes, just checked them out. The scope feels tight enough for MVP.', timestamp: Date.now() - 3500000, read: true, reactions: [{ emoji: 'done', userIds: ['u1'] }] },
       { id: 'm3', userId: 'u1', text: 'Great, let\'s sync tomorrow morning.', timestamp: Date.now() - 3400000, read: true },
-      { id: 'm4', userId: 'u1', text: 'Can you review the PR before then?', timestamp: Date.now() - 1800000, read: true, replyToId: 'm2', reactions: [{ emoji: '\u{1F44D}', userIds: ['me'] }] },
+      { id: 'm4', userId: 'u1', text: 'Can you review the PR before then?', timestamp: Date.now() - 1800000, read: true, replyToId: 'm2', reactions: [{ emoji: 'like', userIds: ['me'] }] },
     ],
   },
   {
@@ -32,8 +32,8 @@ export const MOCK_CHAT_ROOMS: ChatRoom[] = [
     memberIds: ['me', 'u2'],
     unread: 0,
     messages: [
-      { id: 'm5', userId: 'u2', text: 'I updated the design mockups \u{1F3A8}', timestamp: Date.now() - 7200000, read: true },
-      { id: 'm6', userId: 'me', text: 'They look amazing! Love the color palette.', timestamp: Date.now() - 7000000, read: true, edited: true, reactions: [{ emoji: '\u2764\uFE0F', userIds: ['u2'] }] },
+      { id: 'm5', userId: 'u2', text: 'I updated the design mockups and premium assets', timestamp: Date.now() - 7200000, read: true },
+      { id: 'm6', userId: 'me', text: 'They look amazing! Love the color palette.', timestamp: Date.now() - 7000000, read: true, edited: true, reactions: [{ emoji: 'heart', userIds: ['u2'] }] },
     ],
   },
   {
@@ -46,9 +46,9 @@ export const MOCK_CHAT_ROOMS: ChatRoom[] = [
     messages: [
       { id: 'm7', userId: 'u3', text: 'Sprint review is tomorrow at 10 AM.', timestamp: Date.now() - 14400000, read: true },
       { id: 'm8', userId: 'u1', text: 'I\'ll prepare the demo flow and keep it under seven minutes.', timestamp: Date.now() - 14000000, read: true },
-      { id: 'm9', userId: 'u2', text: 'Design assets are ready \u2705', timestamp: Date.now() - 13000000, read: true, reactions: [{ emoji: '\u{1F44F}', userIds: ['me', 'u3'] }] },
+      { id: 'm9', userId: 'u2', text: 'Design assets are ready for review', timestamp: Date.now() - 13000000, read: true, reactions: [{ emoji: 'clap', userIds: ['me', 'u3'] }] },
       { id: 'm10', userId: 'u5', text: 'Marketing brief sent to all stakeholders.', timestamp: Date.now() - 3600000, read: true },
-      { id: 'm11', userId: 'u3', text: 'Thanks everyone, great work this sprint! \u{1F680}', timestamp: Date.now() - 1800000, read: true, replyToId: 'm9' },
+      { id: 'm11', userId: 'u3', text: 'Thanks everyone, great work this sprint! Shipping mode is on.', timestamp: Date.now() - 1800000, read: true, replyToId: 'm9' },
     ],
   },
   {
@@ -62,7 +62,7 @@ export const MOCK_CHAT_ROOMS: ChatRoom[] = [
     pinnedMessageId: 'm12',
     messages: [
       { id: 'm12', userId: 'u2', text: 'Wireframes attached in Figma. The hero CTA variant is the one to test.', timestamp: Date.now() - 86400000, read: true },
-      { id: 'm13', userId: 'me', text: 'Got it, will review today.', timestamp: Date.now() - 82800000, read: true, reactions: [{ emoji: '\u{1F525}', userIds: ['u5'] }] },
+      { id: 'm13', userId: 'me', text: 'Got it, will review today.', timestamp: Date.now() - 82800000, read: true, reactions: [{ emoji: 'fire', userIds: ['u5'] }] },
     ],
   },
   {
@@ -73,7 +73,7 @@ export const MOCK_CHAT_ROOMS: ChatRoom[] = [
     unread: 1,
     messages: [
       { id: 'm14', userId: 'u4', text: 'Anyone interested in a collab for this month?', timestamp: Date.now() - 172800000, read: true },
-      { id: 'm15', userId: 'u1', text: 'I\'m in! What\'s the project?', timestamp: Date.now() - 170000000, read: true, reactions: [{ emoji: '\u{1F602}', userIds: ['u5'] }] },
+      { id: 'm15', userId: 'u1', text: 'I\'m in! What\'s the project?', timestamp: Date.now() - 170000000, read: true, reactions: [{ emoji: 'laugh', userIds: ['u5'] }] },
       { id: 'm16', userId: 'u4', text: 'UX audit for a SaaS startup.', timestamp: Date.now() - 7200000, read: true },
     ],
   },

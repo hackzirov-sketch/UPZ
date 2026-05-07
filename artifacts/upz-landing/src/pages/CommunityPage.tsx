@@ -3,6 +3,7 @@ import { MessageSquare, Plus, ShieldCheck, Users } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { AppLayout } from "@/components/app/AppLayout";
 import { ActionButton, PageHeader, PageShell, Pill, SectionTitle, SurfaceCard } from "@/components/app/DesignSystem";
+import { CommunityRoleIcon, PremiumGradientBadge } from "@/components/premium/PremiumAssets";
 import { COMMUNITY_CHANNELS, COMMUNITY_GROUPS, COMMUNITY_THREADS, FEATURED_CREATORS, PROFESSIONAL_COMMUNITIES } from "@/data/ecosystemData";
 import type { UserProfile } from "@/types";
 
@@ -12,6 +13,7 @@ interface Props {
 }
 
 const INITIAL_COMMENT_KEYS = ["onboarding", "rituals"];
+const COMMUNITY_ASSETS = ["/emojis/laptop.svg", "/emojis/book.svg", "/emojis/rocket.svg", "/emojis/gem.svg", "/emojis/trophy.svg"];
 
 export default function CommunityPage({ user, onLogout }: Props) {
   const { t } = useTranslation();
@@ -45,14 +47,19 @@ export default function CommunityPage({ user, onLogout }: Props) {
           <SurfaceCard>
             <SectionTitle icon={Users} title={t("app.community.publicGroups")} description={t("app.community.publicGroupsDesc")} />
             <div className="grid gap-3 md:grid-cols-2">
-              {COMMUNITY_GROUPS.map((group) => {
+              {COMMUNITY_GROUPS.map((group, index) => {
                 const joined = joinedGroups.includes(group.id);
                 return (
                   <div key={group.id} className="rounded-2xl border border-[#E5E7EB] bg-[#F7FAFC] p-4 transition-all hover:-translate-y-0.5 hover:bg-white hover:shadow-sm">
                     <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <h3 className="font-semibold text-[#111827]">{t(`app.community.groups.${group.id}.name`, group.name)}</h3>
-                        <p className="mt-1 text-xs font-semibold uppercase tracking-[0.14em] text-[#6B7280]">{t(`app.community.groups.${group.id}.profession`, group.profession)}</p>
+                      <div className="flex min-w-0 items-start gap-3">
+                        <span className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-2xl bg-white shadow-sm ring-1 ring-[#E5E7EB]">
+                          <img src={COMMUNITY_ASSETS[index % COMMUNITY_ASSETS.length]} alt={`${group.profession} icon`} className="h-7 w-7" loading="lazy" decoding="async" />
+                        </span>
+                        <div className="min-w-0">
+                          <h3 className="font-semibold text-[#111827]">{t(`app.community.groups.${group.id}.name`, group.name)}</h3>
+                          <p className="mt-1 text-xs font-semibold uppercase tracking-[0.14em] text-[#6B7280]">{t(`app.community.groups.${group.id}.profession`, group.profession)}</p>
+                        </div>
                       </div>
                       <Pill tone={joined ? "green" : "slate"}>{joined ? t("app.community.joined") : t("app.community.public")}</Pill>
                     </div>
@@ -124,7 +131,10 @@ export default function CommunityPage({ user, onLogout }: Props) {
             <div className="grid gap-3 sm:grid-cols-2">
               {PROFESSIONAL_COMMUNITIES.map((community, index) => (
                 <div key={community.profession} className="rounded-2xl border border-[#E5E7EB] bg-[#F7FAFC] p-4">
-                  <h3 className="font-semibold text-[#111827]">{t(`app.community.professional.${index}.profession`, community.profession)}</h3>
+                  <div className="flex items-center gap-2">
+                    <img src={COMMUNITY_ASSETS[index % COMMUNITY_ASSETS.length]} alt={`${community.profession} profession icon`} className="h-7 w-7" loading="lazy" decoding="async" />
+                    <h3 className="font-semibold text-[#111827]">{t(`app.community.professional.${index}.profession`, community.profession)}</h3>
+                  </div>
                   <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-[#6B7280]">
                     <span>{t("app.community.groupsMetric", { count: community.groups })}</span>
                     <span>{t("app.community.channelsMetric", { count: community.channels })}</span>
@@ -141,12 +151,17 @@ export default function CommunityPage({ user, onLogout }: Props) {
             <div className="space-y-3">
               {FEATURED_CREATORS.map((creator, index) => (
                 <div key={creator.name} className="flex items-center justify-between gap-3 rounded-2xl border border-[#E5E7EB] bg-white p-4 shadow-sm">
-                  <div>
+                  <div className="flex min-w-0 items-center gap-3">
+                    <span className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50 ring-1 ring-indigo-100">
+                      <CommunityRoleIcon role={creator.role} className="h-7 w-7" />
+                    </span>
+                    <div className="min-w-0">
                     <p className="font-semibold text-[#111827]">{creator.name}</p>
                     <p className="text-sm text-[#6B7280]">{t(`app.community.creators.${index}.role`, creator.role)} - {t(`app.community.creators.${index}.contribution`, creator.contribution)}</p>
+                    </div>
                   </div>
                   <div className="text-right">
-                    <Pill tone="indigo">{t(`app.community.creators.${index}.badge`, creator.badge)}</Pill>
+                    <PremiumGradientBadge label={t(`app.community.creators.${index}.badge`, creator.badge)} icon="/emojis/trophy.svg" />
                     <p className="mt-2 text-xs font-semibold text-[#6B7280]">{creator.followers}</p>
                   </div>
                 </div>

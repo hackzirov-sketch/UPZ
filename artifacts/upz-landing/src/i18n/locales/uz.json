@@ -243,6 +243,8 @@
       "community": "Hamjamiyat",
       "news": "Yangiliklar",
       "bank": "Universal Bank",
+      "premium": "Premium",
+      "pro": "Pro",
       "profile": "Profil",
       "settings": "Sozlamalar",
       "live": "Jonli",
@@ -565,9 +567,124 @@
         "Project": "Project",
         "Article": "Maqola",
         "Wallet": "Hamyon",
+        "Premium": "Premium",
         "Animation": "Animatsiya",
         "Learning": "Learning",
         "Team": "Team"
+      }
+    },
+    "premium": {
+      "eyebrow": "Premium hisoblar",
+      "title": "Jiddiy UPZ foydalanuvchilari uchun premium ustunliklar",
+      "description": "Ko'proq AI, yaxshiroq meetinglar, chuqur workspace control, verified community status va Universal Bank bonuslari bilan MVP pullik productga tayyor ko'rinadi.",
+      "upgrade": "Hisobni upgrade qilish",
+      "comparePlans": "Planlarni solishtirish",
+      "currentPlan": "Premium preview",
+      "heroTitle": "{{name}}, kuchliroq UPZ operating systemni oching.",
+      "heroDesc": "Premium UPZ ichida har kuni ishlaydigan, o'rganadigan, daromad qiladigan va hamkorlik qiladigan userlar uchun.",
+      "selectedPlan": "Tanlangan plan",
+      "whyTitle": "Premium nima uchun kerak",
+      "whyDesc": "Bu ustunliklar free MVP'ni sindirmasdan upgrade qilish uchun aniq sabab yaratadi.",
+      "stats": {
+        "ai": "AI usage boost",
+        "team": "Project va layoutlar",
+        "support": "Support javobi"
+      },
+      "checkoutTitle": "Upgrade oqimi",
+      "checkoutDesc": "Kelajak payment integratsiyasi uchun frontend-only checkout preview.",
+      "localOnly": "Lokal MVP preview. Hech qanday to'lov olinmaydi.",
+      "mockCheckout": "Mock checkout ochish",
+      "comparisonTitle": "Plan comparison",
+      "comparisonDesc": "Kelajak billing va backend limitlar uchun sodda product-ready struktura.",
+      "table": {
+        "feature": "Feature",
+        "free": "Free",
+        "pro": "Pro",
+        "team": "Team"
+      },
+      "checkoutNotes": {
+        "secure": "Stripe, local cardlar va Universal Bank uchun future-ready.",
+        "demo": "Bu tugma faqat lokal demo toast ko?rsatadi."
+      },
+      "toasts": {
+        "checkout": "Premium checkout lokal MVP preview.",
+        "compare": "Comparison table backend limitlar uchun tayyor."
+      },
+      "benefits": {
+        "ai": {
+          "title": "AI Power Mode",
+          "description": "Planning, learning, writing, project idea va team summary uchun yuqoriroq AI limitlar.",
+          "metric": "10x AI usage"
+        },
+        "workspace": {
+          "title": "Advanced Workspace",
+          "description": "Custom layoutlar, premium project viewlar, workspace template va chuqur integratsiyalar.",
+          "metric": "Custom layoutlar"
+        },
+        "meetings": {
+          "title": "Premium Meetings",
+          "description": "Uzunroq video calllar, recording placeholder, agenda notes va team meeting roomlar.",
+          "metric": "180 min roomlar"
+        },
+        "bank": {
+          "title": "Universal Bank Plus",
+          "description": "Past payout fee placeholder, freelance earning analytics, invoice va local payment priority.",
+          "metric": "Past fee"
+        },
+        "community": {
+          "title": "Verified Community",
+          "description": "Premium badge, private channel, mentor room, boosted post va priority moderation.",
+          "metric": "Verified badge"
+        },
+        "support": {
+          "title": "Priority Support",
+          "description": "Tez support lane, onboarding yordam, product guidance va premium roadmap access.",
+          "metric": "Priority lane"
+        }
+      },
+      "plans": {
+        "free": {
+          "name": "Free",
+          "period": "forever",
+          "badge": "Current MVP",
+          "description": "UPZni sinash va yengil personal workspace uchun.",
+          "cta": "Current plan",
+          "features": [
+            "Basic workspace",
+            "3 active project",
+            "Kuniga 20 AI action",
+            "30 min demo meeting",
+            "Community read access"
+          ]
+        },
+        "pro": {
+          "name": "Pro",
+          "period": "oyiga",
+          "badge": "Creatorlar uchun eng yaxshi",
+          "description": "Freelancer, student, creator va solo builderlar uchun kuchliroq plan.",
+          "cta": "Proga upgrade",
+          "features": [
+            "Unlimited projectlar",
+            "10x AI assistant usage",
+            "Premium meetinglar",
+            "Universal Bank Plus",
+            "Verified profile badge"
+          ]
+        },
+        "team": {
+          "name": "Team",
+          "period": "seat uchun",
+          "badge": "Teams",
+          "description": "Role, shared workspace, analytics va priority workflow kerak bo?lgan jamoalar uchun.",
+          "cta": "Team planni boshlash",
+          "features": [
+            "Pro ichidagi hammasi",
+            "Team rolelar",
+            "Shared project roomlar",
+            "Admin control",
+            "Priority support"
+          ]
+        }
       }
     },
     "home": {

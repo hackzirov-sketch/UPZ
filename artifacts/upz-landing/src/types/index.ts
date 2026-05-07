@@ -4,7 +4,7 @@ export type Experience = 'beginner' | 'intermediate' | 'advanced';
 export type Priority = 'low' | 'medium' | 'high';
 export type ChatType = '1on1' | 'group' | 'team' | 'project';
 export type UserStatus = 'online' | 'offline' | 'away';
-export type ChatReactionEmoji = "\u{1F44D}" | "\u2764\uFE0F" | "\u{1F602}" | "\u{1F525}" | "\u{1F44F}" | "\u2705";
+export type ChatReactionEmoji = 'like' | 'heart' | 'laugh' | 'fire' | 'clap' | 'done';
 
 export interface UserProfile {
   name: string;
@@ -12,6 +12,10 @@ export interface UserProfile {
   goal: Goal;
   experience: Experience;
   joinedAt: number;
+  email?: string;
+  phone?: string;
+  username?: string;
+  authProvider?: string;
 }
 
 export interface Task {

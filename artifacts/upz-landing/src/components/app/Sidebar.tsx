@@ -4,6 +4,7 @@ import {
   BriefcaseBusiness,
   Building2,
   CreditCard,
+  Crown,
   Home,
   LayoutDashboard,
   Layers,
@@ -49,6 +50,7 @@ const NAV_GROUPS = [
       { path: "/app/community", labelKey: "community", icon: Users },
       { path: "/app/news", labelKey: "news", icon: Newspaper },
       { path: "/app/bank", labelKey: "bank", icon: CreditCard },
+      { path: "/app/premium", labelKey: "premium", icon: Crown, badgeKey: "pro" },
     ],
   },
   {
@@ -150,8 +152,11 @@ export function Sidebar({ user, onLogout, collapsed = false, onNavigate }: Sideb
       <div className="border-t border-[#E5E7EB] px-3 py-4">
         {!collapsed && (
           <div className="mb-3 rounded-2xl bg-[#F7FAFC] p-3 ring-1 ring-[#E5E7EB]">
-            <p className="truncate text-sm font-semibold text-[#111827]">{user.name}</p>
-            <p className="truncate text-xs text-[#6B7280]">{t(`app.professions.${user.profession}`, PROFESSION_LABELS[user.profession])}</p>
+            <div className="flex items-center justify-between gap-2">
+              <p className="truncate text-sm font-semibold text-[#111827]">{user.name}</p>
+              <span className="rounded-full bg-gradient-to-r from-indigo-500 to-blue-500 px-2 py-0.5 text-[10px] font-black text-white">{t("app.nav.pro")}</span>
+            </div>
+            <p className="mt-0.5 truncate text-xs text-[#6B7280]">{t(`app.professions.${user.profession}`, PROFESSION_LABELS[user.profession])}</p>
           </div>
         )}
         <motion.button

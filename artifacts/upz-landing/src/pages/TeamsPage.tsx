@@ -3,6 +3,7 @@ import { MessageCircle, Plus, Shield, Users } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { AppLayout } from "@/components/app/AppLayout";
 import { ActionButton, Modal, PageHeader, PageShell, Pill, SectionTitle, SurfaceCard } from "@/components/app/DesignSystem";
+import { PremiumAvatarRing, PremiumGradientBadge, PremiumStatusBadge, type PremiumStatusId } from "@/components/premium/PremiumAssets";
 import { TEAM_MEMBERS } from "@/data/ecosystemData";
 import type { UserProfile } from "@/types";
 
@@ -17,6 +18,21 @@ const TEAM_METRICS = [
   { labelKey: "teamChats", value: "3" },
   { labelKey: "thisWeek", value: "84%" },
 ];
+
+const TEAM_STATUS: Record<string, PremiumStatusId> = {
+  Online: "available",
+  Away: "busy",
+  Offline: "offline",
+};
+
+const TEAM_FOCUS_ASSETS = {
+  Frontend: "/emojis/laptop.svg",
+  Design: "/emojis/gem.svg",
+  Delivery: "/emojis/rocket.svg",
+  Marketing: "/emojis/trophy.svg",
+  Product: "/emojis/book.svg",
+  Backend: "/status/coding.svg",
+} as const;
 
 export default function TeamsPage({ user, onLogout }: Props) {
   const { t } = useTranslation();
@@ -39,7 +55,7 @@ export default function TeamsPage({ user, onLogout }: Props) {
             <SectionTitle icon={Users} title={t("app.teams.dashboard")} description={t("app.teams.dashboardDesc")} />
             <div className="grid gap-3 sm:grid-cols-2">
               {TEAM_METRICS.map((metric) => (
-                <div key={metric.labelKey} className="rounded-2xl bg-[#F7FAFC] p-4">
+                <div key={metric.labelKey} className="rounded-2xl bg-[#F7FAFC] p-4 transition-all hover:-translate-y-0.5 hover:bg-white hover:shadow-sm">
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#6B7280]">{t(`app.teams.metrics.${metric.labelKey}`)}</p>
                   <p className="mt-2 text-2xl font-bold text-[#111827]">{metric.value}</p>
                 </div>
@@ -57,12 +73,21 @@ export default function TeamsPage({ user, onLogout }: Props) {
               {TEAM_MEMBERS.map((member) => (
                 <div key={member.id} className="flex items-center justify-between gap-3 rounded-2xl border border-[#E5E7EB] bg-white p-4 shadow-sm">
                   <div className="flex items-center gap-3">
-                    <div className="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-500 text-sm font-bold text-white">
-                      {member.name.split(" ").map((part) => part[0]).join("")}
-                    </div>
+                    <PremiumAvatarRing active={member.status === "Online"} className="h-11 w-11 rounded-2xl">
+                      <div className="relative grid h-full w-full place-items-center rounded-[14px] bg-gradient-to-br from-indigo-500 to-blue-500 text-sm font-bold text-white">
+                        {member.name.split(" ").map((part) => part[0]).join("")}
+                        <PremiumStatusBadge status={TEAM_STATUS[member.status] ?? "offline"} size={16} className="absolute -bottom-1 -right-1 border-[#E5E7EB]" />
+                      </div>
+                    </PremiumAvatarRing>
                     <div>
-                      <p className="font-semibold text-[#111827]">{member.name}</p>
-                      <p className="text-sm text-[#6B7280]">{t(`app.teams.focus.${member.focus.toLowerCase()}`, member.focus)}</p>
+                      <p className="flex items-center gap-2 font-semibold text-[#111827]">
+                        {member.name}
+                        {member.role === "Admin" && <PremiumGradientBadge label="Creator" icon="/emojis/trophy.svg" />}
+                      </p>
+                      <p className="mt-1 inline-flex items-center gap-1.5 text-sm text-[#6B7280]">
+                        <img src={TEAM_FOCUS_ASSETS[member.focus as keyof typeof TEAM_FOCUS_ASSETS] ?? "/emojis/gem.svg"} alt={`${member.focus} skill icon`} className="h-4 w-4" loading="lazy" decoding="async" />
+                        {t(`app.teams.focus.${member.focus.toLowerCase()}`, member.focus)}
+                      </p>
                     </div>
                   </div>
                   <div className="flex flex-wrap justify-end gap-2">

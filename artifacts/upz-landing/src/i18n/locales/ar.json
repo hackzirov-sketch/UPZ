@@ -243,6 +243,8 @@
       "community": "???????",
       "news": "???????",
       "bank": "Universal Bank",
+      "premium": "Premium",
+      "pro": "Pro",
       "profile": "????? ??????",
       "settings": "?????????",
       "live": "?????",
@@ -565,9 +567,124 @@
         "Project": "Project",
         "Article": "Article",
         "Wallet": "Wallet",
+        "Premium": "Premium",
         "Animation": "Animation",
         "Learning": "Learning",
         "Team": "Team"
+      }
+    },
+    "premium": {
+      "eyebrow": "?????? Premium",
+      "title": "????? Premium ???????? UPZ ???????",
+      "description": "AI ????? meetings ????? workspace controls? verified community status ?????? Universal Bank.",
+      "upgrade": "????? ??????",
+      "comparePlans": "?????? ?????",
+      "currentPlan": "Premium preview",
+      "heroTitle": "{{name}}? ???? ???? UPZ ??????.",
+      "heroDesc": "Premium ?????????? ????? ?????? ???????? ??????? ????????? ????? ???? UPZ.",
+      "selectedPlan": "????? ????????",
+      "whyTitle": "????? Premium ???",
+      "whyDesc": "????? ????? ??????? ??? ??? ????? Free MVP.",
+      "stats": {
+        "ai": "AI boost",
+        "team": "Projects & layouts",
+        "support": "Support response"
+      },
+      "checkoutTitle": "???? ???????",
+      "checkoutDesc": "Frontend-only checkout preview ?????? ????? ???????.",
+      "localOnly": "Local MVP preview. ?? ??? ?? ????? ???.",
+      "mockCheckout": "??? mock checkout",
+      "comparisonTitle": "?????? ?????",
+      "comparisonDesc": "???? ????? ??? billing ? backend limits ???????.",
+      "table": {
+        "feature": "Feature",
+        "free": "Free",
+        "pro": "Pro",
+        "team": "Team"
+      },
+      "checkoutNotes": {
+        "secure": "???? ?? Stripe? local cards ? Universal Bank.",
+        "demo": "??? ???? ???? local demo toast ???."
+      },
+      "toasts": {
+        "checkout": "Premium checkout ?? local MVP preview.",
+        "compare": "Comparison table ???? ????? backend."
+      },
+      "benefits": {
+        "ai": {
+          "title": "AI Power Mode",
+          "description": "???? AI ???? ??????? ??????? ???????? ?????? ???????? ?team summaries.",
+          "metric": "10x AI usage"
+        },
+        "workspace": {
+          "title": "Advanced Workspace",
+          "description": "Custom layouts? premium project views? templates ? integrations.",
+          "metric": "Custom layouts"
+        },
+        "meetings": {
+          "title": "Premium Meetings",
+          "description": "Video calls ????? recording placeholders? agenda notes ? team rooms.",
+          "metric": "180 min rooms"
+        },
+        "bank": {
+          "title": "Universal Bank Plus",
+          "description": "Lower payout fee placeholders? analytics? invoices ? payment priority.",
+          "metric": "Lower fees"
+        },
+        "community": {
+          "title": "Verified Community",
+          "description": "Premium badge? private channels? mentor rooms ? priority moderation.",
+          "metric": "Verified badge"
+        },
+        "support": {
+          "title": "Priority Support",
+          "description": "Fast support lane? onboarding help ? premium roadmap access.",
+          "metric": "Priority lane"
+        }
+      },
+      "plans": {
+        "free": {
+          "name": "Free",
+          "period": "forever",
+          "badge": "Current MVP",
+          "description": "?????? UPZ.",
+          "cta": "Current plan",
+          "features": [
+            "Basic workspace",
+            "3 active projects",
+            "20 AI actions/day",
+            "30 min demo meetings",
+            "Community read access"
+          ]
+        },
+        "pro": {
+          "name": "Pro",
+          "period": "?????",
+          "badge": "Best for creators",
+          "description": "?? freelancers, students, creators ? solo builders.",
+          "cta": "Upgrade to Pro",
+          "features": [
+            "Unlimited projects",
+            "10x AI assistant usage",
+            "Premium meetings",
+            "Universal Bank Plus",
+            "Verified profile badge"
+          ]
+        },
+        "team": {
+          "name": "Team",
+          "period": "per seat",
+          "badge": "Teams",
+          "description": "????? ???? ????? roles, shared workspaces ? analytics.",
+          "cta": "Start team plan",
+          "features": [
+            "Everything in Pro",
+            "Team roles",
+            "Shared project rooms",
+            "Admin controls",
+            "Priority support"
+          ]
+        }
       }
     },
     "home": {

@@ -129,6 +129,7 @@ export const GLOBAL_SEARCH_ITEMS = [
   { type: "Project", title: "Landing Page Redesign", detail: "UPZ-142" },
   { type: "Article", title: "AI copilots are becoming project teammates", detail: "News" },
   { type: "Wallet", title: "Invoice #UPZ-142", detail: "Universal Bank" },
+  { type: "Premium", title: "UPZ Pro", detail: "Premium account benefits and upgrade plans" },
   { type: "Animation", title: "Original hero animation", detail: "First-version asset library" },
   { type: "Learning", title: "AI-powered productivity", detail: "64% complete" },
   { type: "Team", title: "UPZ Launch Squad", detail: "6 members" },
@@ -191,6 +192,60 @@ export const PAYMENT_METHODS = [
   { name: "Visa / Mastercard", region: "Global", status: "Ready UI", fee: "2.4%" },
   { name: "USDT wallet", region: "Crypto", status: "Demo", fee: "Network" },
   { name: "Bank transfer", region: "Local", status: "Planned", fee: "Fixed" },
+];
+
+export const PREMIUM_BENEFITS = [
+  { id: "ai", title: "AI Power Mode", description: "Higher AI limits for planning, learning, writing, project ideas, and team summaries.", metric: "10x AI usage", accent: "#6366F1" },
+  { id: "workspace", title: "Advanced Workspace", description: "Save custom layouts, premium project views, workspace templates, and deeper integrations.", metric: "Custom layouts", accent: "#3B82F6" },
+  { id: "meetings", title: "Premium Meetings", description: "Longer video calls, recording placeholders, agenda notes, and team meeting rooms.", metric: "180 min rooms", accent: "#10B981" },
+  { id: "bank", title: "Universal Bank Plus", description: "Lower payout fee placeholders, freelance earning analytics, invoices, and local payment priority.", metric: "Lower fees", accent: "#F59E0B" },
+  { id: "community", title: "Verified Community", description: "Premium badge, private channels, mentor rooms, boosted posts, and priority moderation.", metric: "Verified badge", accent: "#EF4444" },
+  { id: "support", title: "Priority Support", description: "Fast support lane, onboarding help, product guidance, and premium roadmap access.", metric: "Priority lane", accent: "#8B5CF6" },
+];
+
+export const PREMIUM_PLANS = [
+  {
+    id: "free",
+    name: "Free",
+    price: "$0",
+    period: "forever",
+    badge: "Current MVP",
+    description: "For trying UPZ and managing a light personal workspace.",
+    cta: "Current plan",
+    featured: false,
+    features: ["Basic workspace", "3 active projects", "20 AI actions/day", "30 min demo meetings", "Community read access"],
+  },
+  {
+    id: "pro",
+    name: "Pro",
+    price: "$12",
+    period: "per month",
+    badge: "Best for creators",
+    description: "For freelancers, students, creators, and solo builders who want more power.",
+    cta: "Upgrade to Pro",
+    featured: true,
+    features: ["Unlimited projects", "10x AI assistant usage", "Premium meetings", "Universal Bank Plus", "Verified profile badge"],
+  },
+  {
+    id: "team",
+    name: "Team",
+    price: "$29",
+    period: "per seat",
+    badge: "Teams",
+    description: "For teams that need roles, shared workspaces, analytics, and priority workflows.",
+    cta: "Start team plan",
+    featured: false,
+    features: ["Everything in Pro", "Team roles", "Shared project rooms", "Admin controls", "Priority support"],
+  },
+];
+
+export const PREMIUM_COMPARISON = [
+  { feature: "Active projects", free: "3", pro: "Unlimited", team: "Unlimited + team spaces" },
+  { feature: "AI assistant", free: "20/day", pro: "10x usage", team: "Team shared quota" },
+  { feature: "Meetings", free: "30 min demo", pro: "180 min rooms", team: "Team rooms + admin controls" },
+  { feature: "Universal Bank", free: "Basic wallet", pro: "Plus analytics", team: "Team earning dashboard" },
+  { feature: "Community", free: "Public groups", pro: "Verified badge", team: "Private team channels" },
+  { feature: "Support", free: "Community support", pro: "Priority lane", team: "Dedicated onboarding" },
 ];
 
 export const AI_IDEAS = [

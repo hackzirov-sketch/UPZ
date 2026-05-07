@@ -63,14 +63,14 @@ export function Header() {
             variant="outline"
             className="rounded-2xl font-semibold"
             data-testid="button-login"
-            onClick={() => navigate("/onboarding")}
+            onClick={() => navigate("/onboarding?mode=signin")}
           >
             {t("header.login")}
           </Button>
           <Button
             className="rounded-2xl border-0 bg-gradient-to-r from-indigo-500 to-blue-500 text-white shadow-md shadow-indigo-200 hover:from-indigo-600 hover:to-blue-600"
             data-testid="button-get-started"
-            onClick={() => navigate("/onboarding")}
+            onClick={() => navigate("/onboarding?mode=signup")}
           >
             {t("header.getStarted")}
           </Button>
@@ -106,12 +106,12 @@ export function Header() {
             ))}
           </nav>
           <div className="mt-4 grid gap-2">
-            <Button variant="outline" className="w-full justify-center rounded-2xl" onClick={() => navigate("/onboarding")}>
+            <Button variant="outline" className="w-full justify-center rounded-2xl" onClick={() => navigate("/onboarding?mode=signin")}>
               {t("header.login")}
             </Button>
             <Button
               className="w-full justify-center rounded-2xl border-0 bg-gradient-to-r from-indigo-500 to-blue-500 text-white"
-              onClick={() => navigate("/onboarding")}
+              onClick={() => navigate("/onboarding?mode=signup")}
             >
               {t("header.getStarted")}
             </Button>

@@ -2,8 +2,9 @@ import type { ComponentType } from "react";
 import { FolderOpen, Hash, Users, User as UserIcon } from "lucide-react";
 import type { ChatMessage, ChatReactionEmoji, ChatRoom, ChatType, ChatUser } from "@/types";
 import { MOCK_USERS } from "@/data/mockData";
+import { PREMIUM_REACTIONS, PremiumAvatarRing, PremiumStatusBadge, getPremiumStatusForUser } from "@/components/premium/PremiumAssets";
 
-export const REACTION_EMOJIS: ChatReactionEmoji[] = ["\u{1F44D}", "\u2764\uFE0F", "\u{1F602}", "\u{1F525}", "\u{1F44F}", "\u2705"];
+export const REACTION_EMOJIS: ChatReactionEmoji[] = PREMIUM_REACTIONS.map((reaction) => reaction.id);
 
 export const CHAT_TYPE_LABELS: Record<ChatType, string> = {
   "1on1": "Direct",
@@ -100,22 +101,23 @@ export function Avatar({
   const initials = resolved?.initials ?? "UP";
   const color = resolved?.color ?? "#6366F1";
   const isOnline = resolved?.status === "online";
+  const premiumStatus = getPremiumStatusForUser(resolved);
 
   return (
     <div className={cn("relative flex-shrink-0", className)} style={{ width: size, height: size }}>
-      <div
-        className="flex h-full w-full items-center justify-center rounded-full font-bold text-white shadow-sm ring-1 ring-white/80"
-        style={{ background: color, fontSize: Math.max(10, size * 0.34) }}
-      >
-        {initials}
-      </div>
+      <PremiumAvatarRing active={showOnline && isOnline} className="h-full w-full">
+        <div
+          className="flex h-full w-full items-center justify-center rounded-full font-bold text-white shadow-sm ring-1 ring-white/80"
+          style={{ background: color, fontSize: Math.max(10, size * 0.34) }}
+        >
+          {initials}
+        </div>
+      </PremiumAvatarRing>
       {showOnline && (
-        <span
-          className={cn(
-            "absolute bottom-0 right-0 rounded-full border-2 border-white",
-            isOnline ? "bg-emerald-400" : "bg-slate-500",
-          )}
-          style={{ width: Math.max(9, size * 0.26), height: Math.max(9, size * 0.26) }}
+        <PremiumStatusBadge
+          status={premiumStatus}
+          size={Math.max(14, size * 0.34)}
+          className="absolute -bottom-1 -right-1"
         />
       )}
     </div>

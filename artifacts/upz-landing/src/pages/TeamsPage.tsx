@@ -2,9 +2,9 @@
 import { MessageCircle, Plus, Shield, Users } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { AppLayout } from "@/components/app/AppLayout";
-import { ActionButton, Modal, PageHeader, PageShell, Pill, SectionTitle, SurfaceCard } from "@/components/app/DesignSystem";
+import { ActionButton, Modal, PageHeader, PageShell, Pill, ProgressBar, SectionTitle, SurfaceCard } from "@/components/app/DesignSystem";
 import { PremiumAvatarRing, PremiumGradientBadge, PremiumStatusBadge, type PremiumStatusId } from "@/components/premium/PremiumAssets";
-import { TEAM_MEMBERS } from "@/data/ecosystemData";
+import { TEAM_MEMBERS, TEAM_SPACES } from "@/data/ecosystemData";
 import type { UserProfile } from "@/types";
 
 interface Props {
@@ -93,6 +93,39 @@ export default function TeamsPage({ user, onLogout }: Props) {
                   <div className="flex flex-wrap justify-end gap-2">
                     <Pill tone={member.role === "Admin" ? "indigo" : "slate"}>{t(`app.teams.roles.${member.role.toLowerCase()}`, member.role)}</Pill>
                     <Pill tone={member.status === "Online" ? "green" : member.status === "Away" ? "amber" : "slate"}>{t(`app.chat.${member.status.toLowerCase()}`, member.status)}</Pill>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </SurfaceCard>
+        </div>
+
+        <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
+          <SurfaceCard>
+            <SectionTitle icon={Users} title="Team spaces" description="Spaces connect people, projects, chats, workload and permissions." />
+            <div className="grid gap-3 md:grid-cols-3">
+              {TEAM_SPACES.map((space) => (
+                <div key={space.id} className="rounded-2xl border border-[#E5E7EB] bg-[#F7FAFC] p-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <h3 className="font-black text-[#111827]">{space.name}</h3>
+                    <Pill tone="indigo">{space.projects} projects</Pill>
+                  </div>
+                  <p className="mt-2 text-sm text-[#6B7280]">{space.permissions}</p>
+                  <div className="mt-4"><ProgressBar value={space.workload} label="Workload" /></div>
+                </div>
+              ))}
+            </div>
+          </SurfaceCard>
+
+          <SurfaceCard>
+            <SectionTitle icon={Shield} title="Roles and permissions" description="Admin/member roles are ready for future backend permissions." />
+            <div className="space-y-3">
+              {["Create projects", "Manage automations", "Invite members", "Approve deliverables"].map((permission, index) => (
+                <div key={permission} className="flex items-center justify-between rounded-2xl bg-[#F7FAFC] p-3 ring-1 ring-[#E5E7EB]">
+                  <span className="text-sm font-bold text-[#111827]">{permission}</span>
+                  <div className="flex gap-2">
+                    <Pill tone="indigo">Admin</Pill>
+                    <Pill tone={index < 2 ? "slate" : "blue"}>{index < 2 ? "Restricted" : "Member"}</Pill>
                   </div>
                 </div>
               ))}

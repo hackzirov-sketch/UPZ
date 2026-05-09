@@ -3,8 +3,10 @@ import {
   Calendar,
   CalendarPlus,
   CheckCircle2,
+  CheckSquare,
   Clock3,
   Copy,
+  FileVideo,
   Hand,
   Link2,
   Mic,
@@ -22,7 +24,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { AppLayout } from "@/components/app/AppLayout";
 import { ActionButton, Modal, PageHeader, PageShell, Pill, SectionTitle, SurfaceCard, Toast, cn } from "@/components/app/DesignSystem";
-import { MEETING_PARTICIPANTS, MEETING_ROOMS } from "@/data/ecosystemData";
+import { CLIP_ITEMS, MEETING_PARTICIPANTS, MEETING_ROOMS, SMART_TASKS } from "@/data/ecosystemData";
 import type { UserProfile } from "@/types";
 
 interface Props {
@@ -306,6 +308,52 @@ export default function MeetingsPage({ user, onLogout }: Props) {
             </div>
           </SurfaceCard>
         </div>
+
+        <SurfaceCard>
+          <SectionTitle
+            icon={CheckSquare}
+            title={t("app.meetings.meetingToTasksTitle", "Meeting to tasks")}
+            description={t("app.meetings.meetingToTasksDesc", "Convert agendas, notes, and recordings into action items, owners, clips, and follow-up Smart Tasks.")}
+          />
+          <div className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
+            <div className="grid gap-3 md:grid-cols-3">
+              {SMART_TASKS.slice(0, 3).map((task) => (
+                <div key={task.id} className="rounded-[24px] border border-[#E5E7EB] bg-[#F7FAFC] p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <span className="grid h-10 w-10 place-items-center rounded-2xl bg-white text-indigo-600 shadow-sm ring-1 ring-[#E5E7EB]">
+                      <CheckSquare className="h-5 w-5" />
+                    </span>
+                    <Pill tone={task.priority === "high" ? "red" : task.priority === "medium" ? "amber" : "green"}>{task.priority}</Pill>
+                  </div>
+                  <h3 className="mt-4 text-sm font-black text-[#111827]">{task.title}</h3>
+                  <p className="mt-2 text-xs leading-5 text-[#6B7280]">{task.assignee} - due {task.dueDate}</p>
+                  <ActionButton variant="secondary" className="mt-4 w-full" onClick={() => showToast("Action item assigned locally")}>
+                    Assign from meeting
+                  </ActionButton>
+                </div>
+              ))}
+            </div>
+            <div className="rounded-[26px] border border-[#E5E7EB] bg-white p-4 shadow-sm">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.16em] text-indigo-500">Recording and notes</p>
+                  <h3 className="mt-2 font-black text-[#111827]">{CLIP_ITEMS[0].title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-[#6B7280]">
+                    Summary card extracts decisions, blockers, owners, and linked task suggestions from the meeting room.
+                  </p>
+                </div>
+                <span className="grid h-11 w-11 flex-shrink-0 place-items-center rounded-2xl bg-indigo-50 text-indigo-600">
+                  <FileVideo className="h-5 w-5" />
+                </span>
+              </div>
+              <div className="mt-4 grid gap-2 text-sm">
+                {["Decision: keep launch scope focused", "Blocker: finish responsive QA", "Follow-up: share notes in Knowledge Hub"].map((item) => (
+                  <div key={item} className="rounded-2xl bg-[#F7FAFC] px-3 py-2 font-semibold text-[#111827] ring-1 ring-[#E5E7EB]">{item}</div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </SurfaceCard>
 
         <Modal open={scheduleOpen} title={t("app.meetings.modalTitle")} description={t("app.meetings.modalDesc")} onClose={() => setScheduleOpen(false)}>
           <div className="space-y-3">

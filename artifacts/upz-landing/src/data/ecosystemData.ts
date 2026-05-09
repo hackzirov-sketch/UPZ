@@ -1,4 +1,18 @@
-﻿export const COMMUNITY_GROUPS = [
+import type {
+  AutomationRule,
+  ClipItem,
+  DashboardWidget,
+  DocPage,
+  FormField,
+  MilestoneGoal,
+  SmartTask,
+  TaskView,
+  TimeEntry,
+  WhiteboardNode,
+  WorkspaceZone,
+} from "@/types";
+
+export const COMMUNITY_GROUPS = [
   { id: "dev", name: "Developer Guild", profession: "Developers", members: 12840, joined: true, moderation: "3 pending posts", description: "Code reviews, build logs, job leads, and framework discussions." },
   { id: "design", name: "Design Circle", profession: "Designers", members: 6240, joined: false, moderation: "Clean", description: "Portfolio critique, UI systems, motion, and client workflows." },
   { id: "teach", name: "Teacher Hub", profession: "Teachers", members: 3810, joined: false, moderation: "1 report", description: "Lesson planning, student engagement, classroom resources." },
@@ -253,4 +267,222 @@ export const AI_IDEAS = [
   { prompt: "Suggest tasks for UPZ launch", output: "Finalize onboarding, invite beta users, publish feature tour, monitor feedback." },
   { prompt: "Create a learning plan", output: "Three-week path: fundamentals, practice projects, portfolio proof." },
   { prompt: "Improve my freelance workflow", output: "Add proposal templates, invoice milestones, client check-ins, and delivery archive." },
+];
+
+
+export const POWER_VIEWS: TaskView[] = ["list", "board", "table", "calendar", "timeline", "dashboard"];
+
+export const WORKSPACE_ZONE: WorkspaceZone = {
+  id: "zone-upz",
+  name: "UPZ Operating Zone",
+  health: 91,
+  spaces: [
+    {
+      id: "space-product",
+      name: "Product",
+      collections: [
+        { id: "collection-launch", name: "Launch System", boards: ["Roadmap", "Sprint", "QA"] },
+        { id: "collection-growth", name: "Growth Lab", boards: ["Community", "News", "Premium"] },
+      ],
+    },
+    {
+      id: "space-client",
+      name: "Client Work",
+      collections: [
+        { id: "collection-freelance", name: "Freelance Ops", boards: ["Deals", "Delivery", "Invoices"] },
+        { id: "collection-learning", name: "Learning Hub", boards: ["Paths", "Mentors", "Reviews"] },
+      ],
+    },
+  ],
+};
+
+export const SMART_TASKS: SmartTask[] = [
+  {
+    id: "st-101",
+    title: "Design task drawer power workflow",
+    description: "Create a task detail drawer with smart fields, subtasks, comments, activity, and linked chat actions.",
+    status: "in_progress",
+    priority: "high",
+    assignee: "Sara Chen",
+    dueDate: "May 9",
+    project: "UPZ Platform",
+    tags: ["Design System", "Tasks", "Power UI"],
+    progress: 68,
+    estimate: "6h",
+    timeTracked: "3h 20m",
+    fields: [
+      { id: "field-type", label: "Type", type: "select", value: "Feature", tone: "indigo" },
+      { id: "field-risk", label: "Risk", type: "select", value: "Medium", tone: "amber" },
+      { id: "field-space", label: "Space", type: "text", value: "Product", tone: "blue" },
+      { id: "field-client", label: "Client", type: "person", value: "Internal", tone: "slate" },
+    ],
+    subtasks: [
+      { id: "sub-1", text: "Map fields", done: true },
+      { id: "sub-2", text: "Build drawer", done: true },
+      { id: "sub-3", text: "Add comments and activity", done: false },
+    ],
+    comments: [
+      { id: "c-1", author: "Alex Kim", text: "Keep the drawer dense, but readable on mobile.", time: "18m" },
+      { id: "c-2", author: "Mira Johnson", text: "Add create-task-from-chat as a visible placeholder.", time: "7m" },
+    ],
+    activity: ["Moved to In progress", "Sara updated the due date", "AI suggested 3 nested actions"],
+  },
+  {
+    id: "st-102",
+    title: "Build workspace hierarchy navigation",
+    description: "Add Zone, Spaces, Collections, and Boards to make UPZ feel like a true operating system.",
+    status: "review",
+    priority: "high",
+    assignee: "Alex Kim",
+    dueDate: "May 10",
+    project: "Workspace Core",
+    tags: ["Workspace", "Navigation", "Views"],
+    progress: 82,
+    estimate: "5h",
+    timeTracked: "4h 10m",
+    fields: [
+      { id: "field-type", label: "Type", type: "select", value: "Architecture", tone: "indigo" },
+      { id: "field-risk", label: "Risk", type: "select", value: "Low", tone: "green" },
+      { id: "field-space", label: "Space", type: "text", value: "Product", tone: "blue" },
+      { id: "field-client", label: "Client", type: "person", value: "Internal", tone: "slate" },
+    ],
+    subtasks: [
+      { id: "sub-4", text: "Create zone data", done: true },
+      { id: "sub-5", text: "Add board switcher", done: true },
+      { id: "sub-6", text: "Save selected board", done: false },
+    ],
+    comments: [{ id: "c-3", author: "James Wright", text: "Hierarchy should stay clear for beginners.", time: "1h" }],
+    activity: ["Created from planning session", "Linked to Workspace route", "Review requested"],
+  },
+  {
+    id: "st-103",
+    title: "Create automation builder demo",
+    description: "Show Flow Automations with trigger/action rules, enable toggles, and local run counters.",
+    status: "todo",
+    priority: "medium",
+    assignee: "Otabek Karimov",
+    dueDate: "May 11",
+    project: "Automation",
+    tags: ["Automation", "MVP", "LocalStorage"],
+    progress: 30,
+    estimate: "4h",
+    timeTracked: "45m",
+    fields: [
+      { id: "field-type", label: "Type", type: "select", value: "Automation", tone: "indigo" },
+      { id: "field-risk", label: "Risk", type: "select", value: "Medium", tone: "amber" },
+      { id: "field-space", label: "Space", type: "text", value: "Workflow", tone: "blue" },
+      { id: "field-client", label: "Client", type: "person", value: "Team", tone: "slate" },
+    ],
+    subtasks: [
+      { id: "sub-7", text: "Create rules", done: true },
+      { id: "sub-8", text: "Add toggles", done: false },
+      { id: "sub-9", text: "Persist local state", done: false },
+    ],
+    comments: [{ id: "c-4", author: "Mira Johnson", text: "Make the rules feel powerful but obvious.", time: "2h" }],
+    activity: ["Backlog triaged", "Assigned to backend-ready UI lane"],
+  },
+  {
+    id: "st-104",
+    title: "Meeting summary to tasks flow",
+    description: "Convert agenda notes into task previews, owners, and due dates inside the meetings page.",
+    status: "done",
+    priority: "medium",
+    assignee: "James Wright",
+    dueDate: "May 8",
+    project: "Meetings",
+    tags: ["Meetings", "AI", "Tasks"],
+    progress: 100,
+    estimate: "3h",
+    timeTracked: "3h",
+    fields: [
+      { id: "field-type", label: "Type", type: "select", value: "Collaboration", tone: "indigo" },
+      { id: "field-risk", label: "Risk", type: "select", value: "Low", tone: "green" },
+      { id: "field-space", label: "Space", type: "text", value: "Team", tone: "blue" },
+      { id: "field-client", label: "Client", type: "person", value: "Internal", tone: "slate" },
+    ],
+    subtasks: [
+      { id: "sub-10", text: "Agenda cards", done: true },
+      { id: "sub-11", text: "Action item preview", done: true },
+      { id: "sub-12", text: "Assign owners", done: true },
+    ],
+    comments: [{ id: "c-5", author: "Sara Chen", text: "This makes meetings feel tied to actual output.", time: "1d" }],
+    activity: ["Completed", "Added to demo checklist"],
+  },
+];
+
+export const AUTOMATION_RULES: AutomationRule[] = [
+  { id: "auto-1", name: "Review handoff", trigger: "task moves to Review", action: "notify assignee and create QA checklist", enabled: true, runs: 18 },
+  { id: "auto-2", name: "Client invoice reminder", trigger: "milestone becomes Done", action: "draft Universal Bank invoice", enabled: true, runs: 7 },
+  { id: "auto-3", name: "Meeting action extractor", trigger: "meeting ends", action: "create action item previews", enabled: false, runs: 4 },
+];
+
+export const GOALS: MilestoneGoal[] = [
+  { id: "goal-1", title: "Launch UPZ power workspace", owner: "Ahmad", progress: 76, dueDate: "May 20" },
+  { id: "goal-2", title: "Reach first 100 beta users", owner: "Growth Team", progress: 44, dueDate: "Jun 1" },
+  { id: "goal-3", title: "Ship backend-ready data model", owner: "Alex Kim", progress: 58, dueDate: "May 28" },
+];
+
+export const DASHBOARD_WIDGETS: DashboardWidget[] = [
+  { id: "w-tasks", title: "Smart tasks", value: "42", meta: "12 due this week", tone: "indigo" },
+  { id: "w-workload", title: "Workload", value: "84%", meta: "Team capacity is healthy", tone: "green" },
+  { id: "w-goals", title: "Milestones", value: "3", meta: "1 launch goal at risk", tone: "amber" },
+  { id: "w-time", title: "Focus time", value: "28h", meta: "Tracked this week", tone: "blue" },
+  { id: "w-risk", title: "Project risk", value: "Low", meta: "2 blockers open", tone: "green" },
+  { id: "w-mentions", title: "Mentions", value: "9", meta: "Chat and docs", tone: "red" },
+  { id: "w-wallet", title: "Earnings", value: "$4.6k", meta: "Universal Bank demo", tone: "green" },
+  { id: "w-ai", title: "AI suggestions", value: "14", meta: "Ready to apply", tone: "indigo" },
+];
+
+export const DOC_PAGES: DocPage[] = [
+  { id: "doc-1", title: "UPZ Product Operating Manual", space: "Product", updated: "Today", linkedTasks: 8, excerpt: "Vision, feature principles, routes, and delivery rituals for the UPZ ecosystem." },
+  { id: "doc-2", title: "Client Delivery Checklist", space: "Freelance Ops", updated: "Yesterday", linkedTasks: 5, excerpt: "Proposal, kickoff, delivery, invoice, feedback, and archive steps." },
+  { id: "doc-3", title: "Community Moderation Guide", space: "Growth Lab", updated: "May 5", linkedTasks: 4, excerpt: "Public group rules, creator badges, reports, and escalation flow." },
+];
+
+export const WHITEBOARD_NODES: WhiteboardNode[] = [
+  { id: "node-1", title: "Workspace hierarchy", type: "idea", x: 18, y: 18 },
+  { id: "node-2", title: "Task drawer", type: "task", x: 54, y: 28 },
+  { id: "node-3", title: "Automation flow", type: "decision", x: 33, y: 62 },
+  { id: "node-4", title: "Mobile density risk", type: "risk", x: 72, y: 66 },
+];
+
+export const FORM_FIELDS: FormField[] = [
+  { id: "form-1", label: "Requester email", type: "email", required: true },
+  { id: "form-2", label: "Project type", type: "select", required: true },
+  { id: "form-3", label: "Deadline", type: "date", required: false },
+  { id: "form-4", label: "Brief", type: "textarea", required: true },
+];
+
+export const CLIP_ITEMS: ClipItem[] = [
+  { id: "clip-1", title: "Task drawer walkthrough", duration: "02:14", owner: "Sara", linkedTask: "st-101" },
+  { id: "clip-2", title: "Workspace hierarchy QA", duration: "01:32", owner: "Alex", linkedTask: "st-102" },
+  { id: "clip-3", title: "Meeting action extraction", duration: "03:08", owner: "James", linkedTask: "st-104" },
+];
+
+export const TIME_ENTRIES: TimeEntry[] = [
+  { id: "time-1", task: "Design task drawer power workflow", owner: "Sara Chen", duration: "3h 20m", date: "Today" },
+  { id: "time-2", task: "Build workspace hierarchy navigation", owner: "Alex Kim", duration: "4h 10m", date: "Today" },
+  { id: "time-3", task: "Create automation builder demo", owner: "Otabek Karimov", duration: "45m", date: "Yesterday" },
+];
+
+export const AI_AGENTS = [
+  { id: "agent-task", title: "Task Planner", description: "Turns loose goals into Smart Tasks, nested actions, owners, and due dates." },
+  { id: "agent-doc", title: "Doc Summarizer", description: "Summarizes Knowledge Hub pages and extracts linked task decisions." },
+  { id: "agent-project", title: "Project Idea Generator", description: "Creates project briefs, milestones, risk notes, and starter boards." },
+  { id: "agent-meeting", title: "Meeting Summary", description: "Turns agenda notes into action items and follow-up task previews." },
+  { id: "agent-auto", title: "Automation Builder", description: "Suggests Flow Automation trigger/action rules from repeated work." },
+];
+
+export const TEAM_SPACES = [
+  { id: "ts-1", name: "Launch Squad", projects: 4, workload: 82, permissions: "Admin + Member roles" },
+  { id: "ts-2", name: "Design Systems", projects: 3, workload: 71, permissions: "Reviewer workflow" },
+  { id: "ts-3", name: "Growth & Community", projects: 5, workload: 88, permissions: "Moderator lane" },
+];
+
+export const WORKSPACE_SETTINGS = [
+  { id: "settings-status", title: "Statuses", value: "Backlog, To do, In progress, Review, Done" },
+  { id: "settings-fields", title: "Smart fields", value: "Risk, client, estimate, focus mode, invoice state" },
+  { id: "settings-templates", title: "Templates", value: "Launch, freelance delivery, learning path, team sprint" },
+  { id: "settings-density", title: "Design density", value: "Power user compact mode" },
+  { id: "settings-views", title: "Saved views", value: "Personal, Team, Freelancer, Launch" },
 ];

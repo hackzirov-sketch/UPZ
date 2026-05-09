@@ -1,17 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Pin, Search, X } from "lucide-react";
+import { CheckSquare, Pin, Search, Sparkles, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { AppLayout } from "@/components/app/AppLayout";
-import { Toast } from "@/components/app/DesignSystem";
+import { ActionButton, Pill, Toast } from "@/components/app/DesignSystem";
 import { ChatCallOverlay } from "@/components/chat/ChatCallOverlay";
 import { ChatHeader, type ChatCallMode, type ChatHeaderAction } from "@/components/chat/ChatHeader";
 import { ChatSidebar } from "@/components/chat/ChatSidebar";
 import { MessageBubble } from "@/components/chat/MessageBubble";
 import { MessageInput } from "@/components/chat/MessageInput";
 import { cn, getMessageText, getReplySnippet, getRoomName } from "@/components/chat/chatShared";
-import { PremiumGradientBadge, normalizeReactionId } from "@/components/premium/PremiumAssets";
+import { normalizeReactionId } from "@/components/premium/PremiumAssets";
 import { MOCK_CHAT_ROOMS, MOCK_USERS } from "@/data/mockData";
+import { SMART_TASKS } from "@/data/ecosystemData";
 import type { ChatMessage, ChatReactionEmoji, ChatRoom, UserProfile } from "@/types";
 import { storage } from "@/utils/storage";
 
@@ -277,6 +278,29 @@ export default function ChatPage({ user, onLogout }: Props) {
               onStartCall={handleStartCall}
             />
 
+            <div className="relative z-20 border-b border-gray-200 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-900">
+              <div className="flex min-h-11 items-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-50 via-white to-blue-50 px-3 py-2 ring-1 ring-indigo-100 dark:from-indigo-950/30 dark:via-gray-800 dark:to-blue-950/30 dark:ring-indigo-900/40">
+                <span className="grid h-8 w-8 flex-shrink-0 place-items-center rounded-xl bg-white text-indigo-600 shadow-sm ring-1 ring-indigo-100 dark:bg-gray-900 dark:ring-indigo-900/50">
+                  <CheckSquare className="h-4 w-4" />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex min-w-0 items-center gap-2">
+                    <Pill tone="indigo" className="hidden sm:inline-flex">Linked</Pill>
+                    <p className="truncate text-sm font-black text-[#111827] dark:text-gray-100">{SMART_TASKS[0].title}</p>
+                  </div>
+                  <p className="truncate text-[11px] text-[#6B7280] dark:text-gray-400">Task card, pinned context and AI summary are local MVP actions.</p>
+                </div>
+                <div className="flex flex-shrink-0 gap-1">
+                  <ActionButton variant="secondary" className="px-2.5 py-1.5 text-xs" onClick={() => setNotice("Task created from selected message locally")}>
+                    <CheckSquare className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Task</span>
+                  </ActionButton>
+                  <ActionButton className="px-2.5 py-1.5 text-xs" onClick={() => setNotice("AI summarized this chat locally")}>
+                    <Sparkles className="h-3.5 w-3.5" /> <span className="hidden sm:inline">AI</span>
+                  </ActionButton>
+                </div>
+              </div>
+            </div>
+
             <AnimatePresence>
               {activeCall && callRoom && (
                 <ChatCallOverlay
@@ -297,9 +321,9 @@ export default function ChatPage({ user, onLogout }: Props) {
                   initial={{ opacity: 0, y: -8 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
-                  className="relative z-30 border-b border-[#E5E7EB] bg-white px-4 py-3"
+                  className="relative z-30 border-b border-gray-200 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-900"
                 >
-                  <div className="mx-auto flex h-10 max-w-4xl items-center gap-2 rounded-2xl border border-[#E5E7EB] bg-[#F7FAFC] px-3 focus-within:border-indigo-300 focus-within:bg-white">
+                  <div className="mx-auto flex h-9 max-w-4xl items-center gap-2 rounded-2xl border border-[#E5E7EB] bg-[#F7FAFC] px-3 focus-within:border-indigo-300 focus-within:bg-white dark:border-gray-700 dark:bg-gray-800 dark:focus-within:bg-gray-800">
                     <Search className="h-4 w-4 text-[#6B7280]" />
                     <input
                       value={chatSearchQuery}
@@ -333,16 +357,15 @@ export default function ChatPage({ user, onLogout }: Props) {
               <button
                 type="button"
                 onClick={() => setNotice(t("app.chat.pinnedNotice"))}
-                className="relative z-20 flex items-center gap-3 border-b border-indigo-100 bg-gradient-to-r from-indigo-50 via-white to-blue-50 px-5 py-2.5 text-left shadow-sm transition-colors hover:from-indigo-100 hover:to-blue-50"
+                className="relative z-20 flex items-center gap-2 border-b border-indigo-100 bg-gradient-to-r from-indigo-50 via-white to-blue-50 px-4 py-1.5 text-left shadow-sm transition-colors hover:from-indigo-100 hover:to-blue-50 dark:border-indigo-900/50 dark:from-indigo-950/30 dark:via-gray-900 dark:to-blue-950/30"
               >
-                <span className="grid h-9 w-9 place-items-center rounded-2xl bg-white text-indigo-600 shadow-sm ring-1 ring-indigo-100">
-                  <Pin className="h-4 w-4" />
+                <span className="grid h-7 w-7 place-items-center rounded-xl bg-white text-indigo-600 shadow-sm ring-1 ring-indigo-100 dark:bg-gray-900 dark:ring-indigo-900/50">
+                  <Pin className="h-3.5 w-3.5" />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block text-xs font-semibold uppercase tracking-[0.18em] text-indigo-600">{t("app.chat.pinnedMessage")}</span>
-                  <span className="block truncate text-sm text-[#111827]">{getReplySnippet(pinnedMessage, t)}</span>
+                  <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-indigo-600">{t("app.chat.pinnedMessage")}</span>
+                  <span className="block truncate text-xs text-[#111827] dark:text-gray-100">{getReplySnippet(pinnedMessage, t)}</span>
                 </span>
-                <PremiumGradientBadge label="Pinned" icon="/emojis/sparkle.svg" className="hidden sm:inline-flex" />
               </button>
             )}
 

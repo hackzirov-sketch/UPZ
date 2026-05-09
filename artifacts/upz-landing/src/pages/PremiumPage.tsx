@@ -19,7 +19,8 @@ import {
 import { useTranslation } from "react-i18next";
 import { AppLayout } from "@/components/app/AppLayout";
 import { ActionButton, PageHeader, PageShell, Pill, SectionTitle, SurfaceCard, Toast, cn } from "@/components/app/DesignSystem";
-import { PREMIUM_BENEFITS, PREMIUM_COMPARISON, PREMIUM_PLANS } from "@/data/ecosystemData";
+import { AutomationRuleCard, WidgetCard } from "@/components/app/PowerWorkspaceSystem";
+import { AI_AGENTS, AUTOMATION_RULES, DASHBOARD_WIDGETS, PREMIUM_BENEFITS, PREMIUM_COMPARISON, PREMIUM_PLANS } from "@/data/ecosystemData";
 import type { UserProfile } from "@/types";
 
 interface Props {
@@ -135,6 +136,47 @@ export default function PremiumPage({ user, onLogout }: Props) {
             </div>
           </SurfaceCard>
         </section>
+
+        <SurfaceCard>
+          <SectionTitle
+            icon={Zap}
+            title={t("app.premium.productivityTitle", "Premium productivity engine")}
+            description={t("app.premium.productivityDesc", "Advanced dashboards, Flow Automations, AI agents, workspace packs, longer meetings, premium reactions, and team admin tools in one scalable layer.")}
+          />
+          <div className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
+            <div className="grid gap-3 md:grid-cols-2">
+              {DASHBOARD_WIDGETS.slice(0, 4).map((widget) => (
+                <WidgetCard key={widget.id} widget={widget} />
+              ))}
+            </div>
+            <div className="space-y-3">
+              <div className="rounded-[24px] border border-[#E5E7EB] bg-[#F7FAFC] p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-[0.16em] text-indigo-500">AI agent bundle</p>
+                    <h3 className="mt-2 font-black text-[#111827]">{AI_AGENTS.length} premium agents ready</h3>
+                  </div>
+                  <Pill tone="indigo">Pro</Pill>
+                </div>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {AI_AGENTS.slice(0, 4).map((agent) => (
+                    <Pill key={agent.id} tone="blue">{agent.title}</Pill>
+                  ))}
+                </div>
+              </div>
+              {AUTOMATION_RULES.slice(0, 2).map((rule) => (
+                <AutomationRuleCard key={rule.id} rule={rule} />
+              ))}
+              <div className="grid gap-2 sm:grid-cols-2">
+                {["Longer meetings", "Team admin tools", "Workspace packs", "Premium reactions"].map((benefit) => (
+                  <div key={benefit} className="rounded-2xl bg-white p-3 text-sm font-black text-[#111827] ring-1 ring-[#E5E7EB]">
+                    {benefit}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </SurfaceCard>
 
         <section className="grid gap-4 lg:grid-cols-3">
           {PREMIUM_PLANS.map((plan) => (

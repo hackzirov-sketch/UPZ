@@ -1,9 +1,11 @@
-﻿import { useState } from "react";
-import { Bot, Lightbulb, MessageSquare, Send, Sparkles, Wand2 } from "lucide-react";
+import { useState } from "react";
+import { Bot, CalendarClock, CheckSquare, Lightbulb, MessageSquare, Send, Sparkles, Wand2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { AppLayout } from "@/components/app/AppLayout";
 import { ActionButton, PageHeader, PageShell, Pill, SectionTitle, SurfaceCard } from "@/components/app/DesignSystem";
-import { AI_IDEAS, LEARNING_PATHS } from "@/data/ecosystemData";
+import { CommandMenu, TaskDrawer } from "@/components/app/PowerWorkspaceSystem";
+import { AIAssistantStateBadge } from "@/components/premium/PremiumAssets";
+import { AI_AGENTS, AI_IDEAS, AUTOMATION_RULES, LEARNING_PATHS, SMART_TASKS } from "@/data/ecosystemData";
 import type { UserProfile } from "@/types";
 
 interface Props {
@@ -30,6 +32,10 @@ export default function AssistantPage({ user, onLogout }: Props) {
   const { t } = useTranslation();
   const [messages, setMessages] = useState<AssistantMessage[]>(INITIAL_MESSAGES);
   const [draft, setDraft] = useState("");
+  const [previewTaskId, setPreviewTaskId] = useState(SMART_TASKS[0]?.id ?? "");
+  const [drawerTaskId, setDrawerTaskId] = useState<string | null>(null);
+  const previewTask = SMART_TASKS.find((task) => task.id === previewTaskId) ?? SMART_TASKS[0];
+  const drawerTask = SMART_TASKS.find((task) => task.id === drawerTaskId) ?? null;
 
   const messageText = (message: AssistantMessage) => message.text ?? t(`app.assistant.messages.${message.textKey}`);
 
@@ -53,6 +59,28 @@ export default function AssistantPage({ user, onLogout }: Props) {
         >
           <ActionButton><Sparkles className="h-4 w-4" /> {t("app.assistant.generatePlan")}</ActionButton>
         </PageHeader>
+
+        <SurfaceCard>
+          <SectionTitle
+            icon={Sparkles}
+            title={t("app.assistant.agentsTitle", "UPZ AI Agents")}
+            description={t("app.assistant.agentsDesc", "Task planner, doc summarizer, project idea generator, meeting summary, and automation builder agents for the whole workspace.")}
+          />
+          <div className="mb-4 flex flex-wrap gap-2">
+            <AIAssistantStateBadge state="thinking" />
+            <AIAssistantStateBadge state="typing" />
+            <AIAssistantStateBadge state="generating" />
+            <AIAssistantStateBadge state="completed" />
+          </div>
+          <CommandMenu
+            commands={AI_AGENTS}
+            onRun={(id) => {
+              const agent = AI_AGENTS.find((item) => item.id === id);
+              setPreviewTaskId(SMART_TASKS[Math.max(0, AI_AGENTS.findIndex((item) => item.id === id)) % SMART_TASKS.length].id);
+              sendMessage(agent ? `Run ${agent.title} for this workspace` : "Run UPZ AI agent");
+            }}
+          />
+        </SurfaceCard>
 
         <div className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
           <SurfaceCard className="flex min-h-[620px] flex-col">
@@ -110,6 +138,38 @@ export default function AssistantPage({ user, onLogout }: Props) {
             </SurfaceCard>
 
             <SurfaceCard>
+              <SectionTitle
+                icon={CheckSquare}
+                title={t("app.assistant.generatedTaskTitle", "Generated task preview")}
+                description={t("app.assistant.generatedTaskDesc", "Backend-ready Smart Task shape generated locally from the selected AI agent.")}
+              />
+              <div className="rounded-[24px] border border-[#E5E7EB] bg-[#F7FAFC] p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h3 className="font-black text-[#111827]">{previewTask.title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-[#6B7280]">{previewTask.description}</p>
+                  </div>
+                  <Pill tone={previewTask.priority === "high" ? "red" : previewTask.priority === "medium" ? "amber" : "green"}>{previewTask.priority}</Pill>
+                </div>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <Pill tone="indigo">{previewTask.assignee}</Pill>
+                  <Pill tone="blue"><CalendarClock className="mr-1 h-3.5 w-3.5" /> {previewTask.dueDate}</Pill>
+                </div>
+                <ActionButton className="mt-4 w-full" onClick={() => setDrawerTaskId(previewTask.id)}>
+                  <CheckSquare className="h-4 w-4" />
+                  Open task preview
+                </ActionButton>
+              </div>
+              <div className="mt-3 space-y-2">
+                {AUTOMATION_RULES.slice(0, 2).map((rule) => (
+                  <div key={rule.id} className="rounded-2xl bg-white p-3 text-xs font-semibold text-[#6B7280] ring-1 ring-[#E5E7EB]">
+                    Suggested flow: <span className="font-black text-[#111827]">{rule.trigger}</span> {"->"} {rule.action}
+                  </div>
+                ))}
+              </div>
+            </SurfaceCard>
+
+            <SurfaceCard>
               <SectionTitle title={t("app.assistant.ideaGenerator")} description={t("app.assistant.ideaGeneratorDesc")} />
               <div className="space-y-3">
                 {AI_IDEAS.map((idea, index) => {
@@ -144,6 +204,7 @@ export default function AssistantPage({ user, onLogout }: Props) {
             ))}
           </div>
         </SurfaceCard>
+        <TaskDrawer task={drawerTask} onClose={() => setDrawerTaskId(null)} onCreateTask={() => sendMessage("Create this generated Smart Task")} />
       </PageShell>
     </AppLayout>
   );

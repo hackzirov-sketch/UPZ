@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Edit, Mic, Paperclip, Reply, Send, Smile } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { ChatMessage, ChatReactionEmoji, ChatRoom, ChatUser } from "@/types";
-import { StickerPicker, getReactionAsset } from "@/components/premium/PremiumAssets";
+import { AIAssistantStateBadge, StickerPicker, getReactionAsset } from "@/components/premium/PremiumAssets";
 import { ReactionPicker } from "./ReactionPicker";
 import { cn, getReplySnippet, getRoomName, getUser } from "./chatShared";
 
@@ -59,6 +59,12 @@ export function MessageInput({
     textareaRef.current?.focus();
   };
 
+  const appendNativeEmoji = (native: string) => {
+    onChange(`${value}${value.endsWith(" ") || !value ? "" : " "}${native}`);
+    setEmojiOpen(false);
+    textareaRef.current?.focus();
+  };
+
   const appendSticker = (prompt: string) => {
     onChange(`${value}${value.endsWith(" ") || !value ? "" : " "}${prompt}`);
     setStickerOpen(false);
@@ -75,7 +81,7 @@ export function MessageInput({
             exit={{ opacity: 0, y: 4 }}
             className="mb-2 flex items-center gap-2 px-2 text-xs text-gray-400 dark:text-gray-500"
           >
-            <img src="/emojis/laptop.svg" alt="Typing status" className="h-5 w-5" loading="lazy" decoding="async" />
+            <AIAssistantStateBadge state="typing" className="px-2 py-1" />
             <span className="font-medium text-indigo-600 dark:text-indigo-400">{typingUser.name.split(" ")[0]}</span>
             <span>{t("app.chat.isTyping")}</span>
             <span className="flex gap-0.5">
@@ -192,7 +198,7 @@ export function MessageInput({
         <AnimatePresence>
           {emojiOpen && (
             <div className="absolute bottom-[64px] left-11 z-40">
-              <ReactionPicker onSelect={appendEmoji} onSelectAsset={appendEmojiAsset} />
+              <ReactionPicker mode="message" onSelect={appendEmoji} onSelectAsset={appendEmojiAsset} onSelectNative={appendNativeEmoji} />
             </div>
           )}
           {stickerOpen && (

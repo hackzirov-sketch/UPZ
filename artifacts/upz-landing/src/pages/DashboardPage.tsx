@@ -7,6 +7,7 @@ import {
   CheckSquare,
   Clock,
   FolderOpen,
+  LayoutDashboard,
   MessageCircle,
   Target,
   TrendingUp,
@@ -14,14 +15,17 @@ import {
   WalletCards,
   Zap,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import { useTranslation } from "react-i18next";
 import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { AppLayout } from "@/components/app/AppLayout";
 import { CommandCard, MetricTile, PageHeader, PageShell, Pill, ProgressBar, SectionTitle, SurfaceCard } from "@/components/app/DesignSystem";
-import { BANK_TRANSACTIONS, ECOSYSTEM_MODULES, NOTIFICATIONS } from "@/data/ecosystemData";
+import { WidgetCard } from "@/components/app/PowerWorkspaceSystem";
+import { BANK_TRANSACTIONS, DASHBOARD_WIDGETS, ECOSYSTEM_MODULES, GOALS, NOTIFICATIONS } from "@/data/ecosystemData";
 import { WEEKLY_ACTIVITY } from "@/data/mockData";
 import type { UserProfile } from "@/types";
+import { storage } from "@/utils/storage";
 
 interface Props {
   user: UserProfile;
@@ -88,7 +92,33 @@ const tooltipStyle = {
 
 export default function DashboardPage({ user, onLogout }: Props) {
   const { t } = useTranslation();
+  const [preset, setPreset] = useState("Launch");
+  const [draggingId, setDraggingId] = useState<string | null>(null);
+  const [widgetOrder, setWidgetOrder] = useState(() => {
+    const saved = storage.getDashboardLayout();
+    return saved.length ? saved : DASHBOARD_WIDGETS.map((widget) => widget.id);
+  });
   const unreadNotifications = NOTIFICATIONS.filter((notification) => notification.unread).length;
+  const orderedWidgets = widgetOrder
+    .map((id) => DASHBOARD_WIDGETS.find((widget) => widget.id === id))
+    .filter((widget): widget is (typeof DASHBOARD_WIDGETS)[number] => Boolean(widget));
+
+  useEffect(() => {
+    storage.saveDashboardLayout(widgetOrder);
+  }, [widgetOrder]);
+
+  const moveWidget = (targetId: string) => {
+    if (!draggingId || draggingId === targetId) return;
+    setWidgetOrder((current) => {
+      const sourceIndex = current.indexOf(draggingId);
+      const targetIndex = current.indexOf(targetId);
+      if (sourceIndex < 0 || targetIndex < 0) return current;
+      const next = [...current];
+      const [moved] = next.splice(sourceIndex, 1);
+      next.splice(targetIndex, 0, moved);
+      return next;
+    });
+  };
 
   return (
     <AppLayout user={user} title={t("app.nav.dashboard")} onLogout={onLogout}>
@@ -109,6 +139,35 @@ export default function DashboardPage({ user, onLogout }: Props) {
             </span>
           </Link>
         </PageHeader>
+
+        <SurfaceCard>
+          <SectionTitle icon={LayoutDashboard} title="Insight Boards" description="Customizable dashboard presets with draggable widgets saved to localStorage." />
+          <div className="mb-4 flex flex-wrap gap-2">
+            {["Personal", "Team", "Freelancer", "Launch"].map((item) => (
+              <button
+                key={item}
+                type="button"
+                onClick={() => setPreset(item)}
+                className={`rounded-2xl px-3 py-2 text-xs font-black transition-colors ${preset === item ? "bg-indigo-600 text-white" : "bg-[#F7FAFC] text-[#6B7280] ring-1 ring-[#E5E7EB] hover:bg-white"}`}
+              >
+                {item}
+              </button>
+            ))}
+            <Pill tone="green">{GOALS.length} milestones tracked</Pill>
+          </div>
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            {orderedWidgets.map((widget) => (
+              <WidgetCard
+                key={widget.id}
+                widget={widget}
+                draggable
+                onDragStart={() => setDraggingId(widget.id)}
+                onDragOver={() => moveWidget(widget.id)}
+                onDragEnd={() => setDraggingId(null)}
+              />
+            ))}
+          </div>
+        </SurfaceCard>
 
         <div className="grid gap-5 xl:grid-cols-[1.4fr_0.8fr]">
           <SurfaceCard className="overflow-hidden bg-gradient-to-br from-white via-white to-indigo-50">

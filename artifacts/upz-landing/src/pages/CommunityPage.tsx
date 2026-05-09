@@ -1,10 +1,10 @@
-﻿import { useState } from "react";
-import { MessageSquare, Plus, ShieldCheck, Users } from "lucide-react";
+import { useState } from "react";
+import { CheckSquare, GitBranch, Lightbulb, MessageSquare, Plus, ShieldCheck, Users } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { AppLayout } from "@/components/app/AppLayout";
 import { ActionButton, PageHeader, PageShell, Pill, SectionTitle, SurfaceCard } from "@/components/app/DesignSystem";
-import { CommunityRoleIcon, PremiumGradientBadge } from "@/components/premium/PremiumAssets";
-import { COMMUNITY_CHANNELS, COMMUNITY_GROUPS, COMMUNITY_THREADS, FEATURED_CREATORS, PROFESSIONAL_COMMUNITIES } from "@/data/ecosystemData";
+import { CommunityRoleIcon, PREMIUM_REACTIONS, PremiumGradientBadge, ReactionButton } from "@/components/premium/PremiumAssets";
+import { COMMUNITY_CHANNELS, COMMUNITY_GROUPS, COMMUNITY_THREADS, FEATURED_CREATORS, PROFESSIONAL_COMMUNITIES, SMART_TASKS, WORKSPACE_ZONE } from "@/data/ecosystemData";
 import type { UserProfile } from "@/types";
 
 interface Props {
@@ -20,6 +20,7 @@ export default function CommunityPage({ user, onLogout }: Props) {
   const [joinedGroups, setJoinedGroups] = useState(() => COMMUNITY_GROUPS.filter((group) => group.joined).map((group) => group.id));
   const [post, setPost] = useState("");
   const [userComments, setUserComments] = useState<string[]>([]);
+  const [convertedThreadId, setConvertedThreadId] = useState(COMMUNITY_THREADS[0]?.id ?? "");
 
   const toggleGroup = (groupId: string) => {
     setJoinedGroups((current) => (current.includes(groupId) ? current.filter((id) => id !== groupId) : [...current, groupId]));
@@ -124,6 +125,65 @@ export default function CommunityPage({ user, onLogout }: Props) {
             </div>
           </SurfaceCard>
         </div>
+
+        <SurfaceCard>
+          <SectionTitle
+            icon={Lightbulb}
+            title={t("app.community.workIntelligenceTitle", "Community work intelligence")}
+            description={t("app.community.workIntelligenceDesc", "Turn strong discussions into task previews, project ideas, and moderated action lanes without leaving the social flow.")}
+          />
+          <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+            <div className="grid gap-3 md:grid-cols-2">
+              {COMMUNITY_THREADS.slice(0, 4).map((thread, index) => {
+                const selected = convertedThreadId === thread.id;
+                return (
+                  <button
+                    key={thread.id}
+                    type="button"
+                    onClick={() => setConvertedThreadId(thread.id)}
+                    className={`rounded-[24px] border p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${selected ? "border-indigo-200 bg-indigo-50/60 ring-4 ring-indigo-100" : "border-[#E5E7EB] bg-white"}`}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <span className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-2xl bg-white text-indigo-600 shadow-sm ring-1 ring-[#E5E7EB]">
+                        <MessageSquare className="h-5 w-5" />
+                      </span>
+                      <Pill tone={thread.status === "Hot" ? "red" : thread.status === "Pinned" ? "indigo" : "slate"}>{thread.status}</Pill>
+                    </div>
+                    <h3 className="mt-4 text-sm font-black text-[#111827]">{t(`app.community.threads.${thread.id}.title`, thread.title)}</h3>
+                    <p className="mt-2 text-xs leading-5 text-[#6B7280]">{thread.replies} replies analyzed by UPZ AI agent {index + 1}</p>
+                  </button>
+                );
+              })}
+            </div>
+            <div className="rounded-[28px] border border-[#E5E7EB] bg-[#F7FAFC] p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.16em] text-indigo-500">Generated work preview</p>
+                  <h3 className="mt-2 text-lg font-black text-[#111827]">{SMART_TASKS[0].title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-[#6B7280]">{SMART_TASKS[0].description}</p>
+                </div>
+                <span className="grid h-11 w-11 flex-shrink-0 place-items-center rounded-2xl bg-white text-indigo-600 shadow-sm ring-1 ring-[#E5E7EB]">
+                  <CheckSquare className="h-5 w-5" />
+                </span>
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {WORKSPACE_ZONE.spaces.slice(0, 2).map((space) => (
+                  <Pill key={space.id} tone="blue"><GitBranch className="mr-1 h-3.5 w-3.5" /> {space.name}</Pill>
+                ))}
+                <Pill tone="amber">Project idea</Pill>
+              </div>
+              <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                <ActionButton className="w-full"><CheckSquare className="h-4 w-4" /> Create task</ActionButton>
+                <ActionButton variant="secondary" className="w-full"><Lightbulb className="h-4 w-4" /> Save idea</ActionButton>
+              </div>
+              <div className="mt-4 flex max-w-full items-center gap-1 overflow-x-auto rounded-2xl bg-white/70 p-1.5 ring-1 ring-[#E5E7EB]">
+                {PREMIUM_REACTIONS.slice(0, 6).map((reaction) => (
+                  <ReactionButton key={reaction.id} asset={reaction} compact onClick={() => setConvertedThreadId(COMMUNITY_THREADS[(COMMUNITY_THREADS.findIndex((thread) => thread.id === convertedThreadId) + 1) % COMMUNITY_THREADS.length]?.id ?? convertedThreadId)} />
+                ))}
+              </div>
+            </div>
+          </div>
+        </SurfaceCard>
 
         <div className="grid gap-5 lg:grid-cols-[1fr_1fr]">
           <SurfaceCard>

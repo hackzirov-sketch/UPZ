@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { User, Bell, Plug, Github, Send, Instagram, Youtube, HardDrive, Mail, Calendar, BookOpen, CheckCircle2, XCircle } from "lucide-react";
+import { User, Bell, Plug, Github, Send, Instagram, Youtube, HardDrive, Mail, Calendar, BookOpen, CheckCircle2, XCircle, Settings2, ShieldCheck, SlidersHorizontal } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { AppLayout } from "@/components/app/AppLayout";
-import type { UserProfile } from "@/types";
+import { ActionButton, Pill, ProgressBar, SectionTitle, SurfaceCard } from "@/components/app/DesignSystem";
+import { AutomationRuleCard, ViewSwitcher } from "@/components/app/PowerWorkspaceSystem";
+import { AUTOMATION_RULES, POWER_VIEWS, WORKSPACE_SETTINGS } from "@/data/ecosystemData";
+import type { TaskView, UserProfile } from "@/types";
 import { storage } from "@/utils/storage";
 
 interface Props { user: UserProfile; onLogout: () => void; }
@@ -23,6 +26,7 @@ const TABS = [
   { id: "account", icon: User },
   { id: "notifications", icon: Bell },
   { id: "integrations", icon: Plug },
+  { id: "workspace", icon: Settings2 },
 ] as const;
 
 const NOTIFICATION_KEYS = ["email", "push", "taskReminders", "chatMessages", "weeklyReport", "productUpdates"] as const;
@@ -31,6 +35,7 @@ export default function SettingsPage({ user, onLogout }: Props) {
   const { t } = useTranslation();
   const [tab, setTab] = useState<(typeof TABS)[number]["id"]>("account");
   const [connected, setConnected] = useState<Record<string, boolean>>({});
+  const [workspaceView, setWorkspaceView] = useState<TaskView>(() => storage.getActiveView() ?? "list");
   const [notifs, setNotifs] = useState({
     email: true,
     push: true,
@@ -51,9 +56,14 @@ export default function SettingsPage({ user, onLogout }: Props) {
     storage.saveIntegrations(updated);
   };
 
+  const changeWorkspaceView = (view: TaskView) => {
+    setWorkspaceView(view);
+    storage.saveActiveView(view);
+  };
+
   return (
     <AppLayout user={user} title={t("app.nav.settings")} onLogout={onLogout}>
-      <div className="mx-auto max-w-3xl">
+      <div className="mx-auto max-w-5xl">
         <div className="mb-6 flex w-fit gap-1 rounded-xl bg-white p-1 dark:bg-gray-800">
           {TABS.map((item) => (
             <button
@@ -67,7 +77,7 @@ export default function SettingsPage({ user, onLogout }: Props) {
               ].join(" ")}
             >
               <item.icon className="h-3.5 w-3.5" />
-              {t(`app.settings.tabs.${item.id}`)}
+              {t(`app.settings.tabs.${item.id}`, item.id === "workspace" ? "Workspace" : item.id)}
             </button>
           ))}
         </div>
@@ -196,6 +206,67 @@ export default function SettingsPage({ user, onLogout }: Props) {
                 </motion.div>
               );
             })}
+          </motion.div>
+        )}
+
+        {tab === "workspace" && (
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
+            <SurfaceCard>
+              <SectionTitle
+                icon={SlidersHorizontal}
+                title={t("app.settings.workspaceTitle", "Workspace operating system")}
+                description={t("app.settings.workspaceDesc", "Configure statuses, custom fields, templates, permissions, saved views, and compact design density for UPZ power users.")}
+              />
+              <div className="grid gap-3 md:grid-cols-2">
+                {WORKSPACE_SETTINGS.map((setting) => (
+                  <div key={setting.id} className="rounded-2xl border border-[#E5E7EB] bg-[#F7FAFC] p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <h3 className="font-black text-[#111827]">{setting.title}</h3>
+                        <p className="mt-2 text-sm leading-6 text-[#6B7280]">{setting.value}</p>
+                      </div>
+                      <Pill tone="indigo">Demo</Pill>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </SurfaceCard>
+
+            <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
+              <SurfaceCard>
+                <SectionTitle icon={Settings2} title="Saved default view" description="Persists the workspace view preference locally for this demo." />
+                <ViewSwitcher views={POWER_VIEWS} value={workspaceView} onChange={changeWorkspaceView} />
+                <div className="mt-5 rounded-[24px] bg-[#F7FAFC] p-4 ring-1 ring-[#E5E7EB]">
+                  <div className="mb-3 flex items-center justify-between">
+                    <p className="text-sm font-black text-[#111827]">Density and layout</p>
+                    <Pill tone="blue">Compact</Pill>
+                  </div>
+                  <ProgressBar value={82} label="Power-user readiness" />
+                  <div className="mt-4 grid gap-2 text-sm font-semibold text-[#6B7280]">
+                    <span className="rounded-2xl bg-white px-3 py-2 ring-1 ring-[#E5E7EB]">Tables collapse into cards on mobile</span>
+                    <span className="rounded-2xl bg-white px-3 py-2 ring-1 ring-[#E5E7EB]">Task drawer becomes full-screen sheet</span>
+                    <span className="rounded-2xl bg-white px-3 py-2 ring-1 ring-[#E5E7EB]">Filters and views are localStorage-ready</span>
+                  </div>
+                </div>
+              </SurfaceCard>
+
+              <SurfaceCard>
+                <SectionTitle icon={ShieldCheck} title="Permissions and Flow Automations" description="Role-ready settings and automation rules prepared for future backend integration." />
+                <div className="grid gap-3 md:grid-cols-2">
+                  {["Admin can create spaces", "Members can manage assigned tasks", "Guests can comment only", "Moderators can review community posts"].map((rule) => (
+                    <div key={rule} className="rounded-2xl bg-[#F7FAFC] p-3 text-sm font-semibold text-[#111827] ring-1 ring-[#E5E7EB]">
+                      {rule}
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-4 grid gap-3">
+                  {AUTOMATION_RULES.slice(0, 2).map((rule) => (
+                    <AutomationRuleCard key={rule.id} rule={rule} />
+                  ))}
+                </div>
+                <ActionButton className="mt-4 w-full">Create workspace template</ActionButton>
+              </SurfaceCard>
+            </div>
           </motion.div>
         )}
       </div>

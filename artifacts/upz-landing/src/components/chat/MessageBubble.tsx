@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import type { CSSProperties, MouseEvent as ReactMouseEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Pin } from "lucide-react";
+import { Pin, Smile } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { ChatMessage, ChatReactionEmoji, ChatRoom, ChatUser } from "@/types";
-import { EmojiRenderer, ReactionButton, findEmojiAsset, getReactionAsset, normalizeReactionId } from "@/components/premium/PremiumAssets";
+import { EmojiRenderer, ReactionButton, encodeNativeEmojiReaction, findEmojiAsset, getReactionAsset, normalizeReactionId } from "@/components/premium/PremiumAssets";
 import { Avatar, cn, formatMessageTime, getMessageText, getReplySnippet, getUser } from "./chatShared";
 import { MessageOptionsMenu, type MessageOptionAction } from "./MessageOptionsMenu";
 import { ReactionPicker } from "./ReactionPicker";
@@ -31,7 +31,16 @@ type FloatingState = {
   alignRight?: boolean;
 };
 
-function PremiumMessageText({ text, isOwn }: { text: string; isOwn: boolean }) {
+function isLargeEmojiOnly(text: string) {
+  const withoutAssetTokens = text.replace(/:([a-z0-9-]+):/g, "").trim();
+  const assetTokenCount = (text.match(/:([a-z0-9-]+):/g) ?? []).length;
+  const hasNativeEmoji = /\p{Extended_Pictographic}/u.test(withoutAssetTokens);
+  const hasWords = /[A-Za-z0-9]/.test(withoutAssetTokens);
+  const visibleLength = Array.from(withoutAssetTokens.replace(/\s/g, "")).length + assetTokenCount;
+  return visibleLength > 0 && visibleLength <= 4 && !hasWords && (hasNativeEmoji || assetTokenCount > 0);
+}
+
+function PremiumMessageText({ text, isOwn, large = false }: { text: string; isOwn: boolean; large?: boolean }) {
   const parts: Array<string | { token: string; key: string }> = [];
   const pattern = /:([a-z0-9-]+):/g;
   let lastIndex = 0;
@@ -60,10 +69,11 @@ function PremiumMessageText({ text, isOwn }: { text: string; isOwn: boolean }) {
             key={part.key}
             className={cn(
               "mx-0.5 inline-flex translate-y-1 items-center rounded-full p-0.5 align-middle shadow-sm",
+              large && "translate-y-0 p-1",
               isOwn ? "bg-white/20" : "bg-[#F7FAFC] ring-1 ring-[#E5E7EB]",
             )}
           >
-            <EmojiRenderer assetId={part.token} size={22} />
+            <EmojiRenderer assetId={part.token} size={large ? 42 : 22} />
           </span>
         ),
       )}
@@ -92,6 +102,7 @@ export function MessageBubble({
   const showSender = !isOwn && room.type !== "1on1";
   const activeReactionEmojis = message.reactions?.filter((reaction) => reaction.userIds.includes("me")).map((reaction) => normalizeReactionId(reaction.emoji)) ?? [];
   const text = getMessageText(message, t);
+  const largeEmojiOnly = isLargeEmojiOnly(text);
 
   useEffect(() => {
     if (!menu && !picker) return;
@@ -103,16 +114,24 @@ export function MessageBubble({
     return () => window.removeEventListener("click", close);
   }, [menu, picker]);
 
-  const calcFixedPos = (event: ReactMouseEvent, menuW = 208, menuH = 260) => {
+  const calcFixedPos = (event: ReactMouseEvent, menuW = 240, menuH = 52) => {
     const vw = window.innerWidth;
     const vh = window.innerHeight;
     const x = event.clientX;
     const y = event.clientY;
     const above = y + menuH + 12 > vh;
     const alignRight = x + menuW + 8 > vw;
-    const clampedX = alignRight ? Math.max(8, x - menuW) : Math.min(x, vw - menuW - 8);
-    const clampedY = above ? Math.max(8, y - menuH - 8) : y + 12;
+    const minY = vw < 768 ? 84 : 76;
+    const clampedX = alignRight ? Math.max(10, x - menuW) : Math.min(Math.max(10, x), vw - menuW - 10);
+    const clampedY = above ? Math.max(minY, y - menuH - 8) : Math.max(minY, Math.min(y + 10, vh - menuH - 10));
     return { fixed: true, x: clampedX, y: clampedY, above, alignRight };
+  };
+
+  const openPickerFromHoverButton = (event: ReactMouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setMenu(null);
+    setPicker(calcFixedPos(event, 280, 220));
   };
 
   const openMenuFromClick = (event: ReactMouseEvent) => {
@@ -130,7 +149,7 @@ export function MessageBubble({
 
   const handleAction = (action: MessageOptionAction) => {
     if (action === "react") {
-      setPicker(menu ?? null);
+      setPicker(menu ? { ...menu, x: Math.min(menu.x, window.innerWidth - 288), y: Math.max(84, menu.y + 46) } : null);
       setMenu(null);
       return;
     }
@@ -148,6 +167,11 @@ export function MessageBubble({
 
   const handleReaction = (emoji: ChatReactionEmoji) => {
     onToggleReaction(message.id, emoji);
+    setPicker(null);
+  };
+
+  const handleNativeReaction = (native: string) => {
+    onToggleReaction(message.id, encodeNativeEmojiReaction(native));
     setPicker(null);
   };
 
@@ -171,49 +195,63 @@ export function MessageBubble({
       {!isOwn && <Avatar user={sender} size={30} />}
       <div className={cn("relative flex max-w-[78%] flex-col sm:max-w-[68%] lg:max-w-[58%]", isOwn ? "items-end" : "items-start")}>
         {showSender && <span className="mb-1 ml-2 text-xs font-medium text-[#6B7280]">{sender?.name}</span>}
-        <button
-          type="button"
-          onClick={openMenuFromClick}
-          onContextMenu={openMenuFromContext}
-          className={cn(
-            "group/bubble relative rounded-[22px] px-4 py-2.5 text-left text-sm leading-relaxed shadow-sm transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-400/30",
-            isOwn
-              ? "rounded-br-md bg-gradient-to-br from-indigo-500 to-blue-500 text-white shadow-indigo-950/25 hover:shadow-indigo-500/25"
-              : "rounded-bl-md border border-[#E5E7EB] bg-white text-[#111827] hover:bg-white hover:shadow-indigo-100",
-          )}
-        >
-          {replyMessage && (
-            <div
-              className={cn(
-                "relative mb-2 overflow-hidden rounded-xl border-l-2 px-3 py-2 text-xs",
-                isOwn ? "border-white/70 bg-white/20 text-white" : "border-indigo-300 bg-indigo-50 text-[#111827]",
-              )}
-            >
-              <motion.span
-                aria-hidden="true"
-                animate={{ opacity: [0.35, 0.9, 0.35] }}
-                transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-                className={cn("absolute inset-y-2 left-0 w-0.5 rounded-full", isOwn ? "bg-white" : "bg-indigo-500")}
-              />
-              <div className="font-semibold">{getUser(replyMessage.userId, users)?.name ?? t("app.chat.unknown")}</div>
-              <div className="mt-0.5 line-clamp-2 opacity-80">{getReplySnippet(replyMessage, t)}</div>
+        <div className="group/message relative">
+          <button
+            type="button"
+            onClick={openMenuFromClick}
+            onContextMenu={openMenuFromContext}
+            className={cn(
+              "group/bubble relative rounded-[22px] px-4 py-2.5 text-left text-sm leading-relaxed shadow-sm transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-400/30",
+              largeEmojiOnly && "px-4 py-3 text-4xl leading-tight",
+              isOwn
+                ? "rounded-br-md bg-gradient-to-br from-indigo-500 to-blue-500 text-white shadow-indigo-950/25 hover:shadow-indigo-500/25"
+                : "rounded-bl-md border border-[#E5E7EB] bg-white text-[#111827] hover:bg-white hover:shadow-indigo-100",
+            )}
+          >
+            {replyMessage && (
+              <div
+                className={cn(
+                  "relative mb-2 overflow-hidden rounded-xl border-l-2 px-3 py-2 text-xs",
+                  isOwn ? "border-white/70 bg-white/20 text-white" : "border-indigo-300 bg-indigo-50 text-[#111827]",
+                )}
+              >
+                <motion.span
+                  aria-hidden="true"
+                  animate={{ opacity: [0.35, 0.9, 0.35] }}
+                  transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+                  className={cn("absolute inset-y-2 left-0 w-0.5 rounded-full", isOwn ? "bg-white" : "bg-indigo-500")}
+                />
+                <div className="font-semibold">{getUser(replyMessage.userId, users)?.name ?? t("app.chat.unknown")}</div>
+                <div className="mt-0.5 line-clamp-2 opacity-80">{getReplySnippet(replyMessage, t)}</div>
+              </div>
+            )}
+            {isPinned && (
+              <div className={cn("mb-1.5 flex items-center gap-1 text-[11px] font-semibold", isOwn ? "text-white/75" : "text-indigo-600")}>
+                <Pin className="h-3 w-3" />
+                {t("app.chat.pinnedLabel")}
+              </div>
+            )}
+            <div className="whitespace-pre-wrap break-words">
+              <PremiumMessageText text={text} isOwn={isOwn} large={largeEmojiOnly} />
             </div>
-          )}
-          {isPinned && (
-            <div className={cn("mb-1.5 flex items-center gap-1 text-[11px] font-semibold", isOwn ? "text-white/75" : "text-indigo-600")}>
-              <Pin className="h-3 w-3" />
-              {t("app.chat.pinnedLabel")}
+            <div className={cn("mt-1.5 flex items-center justify-end gap-1 text-[11px]", isOwn ? "text-white/70" : "text-[#6B7280]", largeEmojiOnly && "text-xs")}>
+              {message.edited && <span>{t("app.chat.edited")}</span>}
+              <span>{formatMessageTime(message.timestamp)}</span>
+              {isOwn && <span className={message.read === false ? "text-white/65" : "text-cyan-100"}>{message.read === false ? t("app.chat.sent") : t("app.chat.readStatus")}</span>}
             </div>
-          )}
-          <div className="whitespace-pre-wrap break-words">
-            <PremiumMessageText text={text} isOwn={isOwn} />
-          </div>
-          <div className={cn("mt-1.5 flex items-center justify-end gap-1 text-[11px]", isOwn ? "text-white/70" : "text-[#6B7280]")}>
-            {message.edited && <span>{t("app.chat.edited")}</span>}
-            <span>{formatMessageTime(message.timestamp)}</span>
-            {isOwn && <span className={message.read === false ? "text-white/65" : "text-cyan-100"}>{message.read === false ? t("app.chat.sent") : t("app.chat.readStatus")}</span>}
-          </div>
-        </button>
+          </button>
+          <button
+            type="button"
+            onClick={openPickerFromHoverButton}
+            className={cn(
+              "absolute top-1/2 z-10 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full border border-white/70 bg-white/90 text-gray-500 opacity-0 shadow-lg shadow-indigo-950/10 backdrop-blur transition-all hover:scale-105 hover:text-indigo-600 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-indigo-400/30 group-hover/message:opacity-100 dark:border-gray-700 dark:bg-gray-800/90 dark:text-gray-300",
+              isOwn ? "-left-10" : "-right-10",
+            )}
+            aria-label="Open quick reactions"
+          >
+            <Smile className="h-4 w-4" />
+          </button>
+        </div>
 
         {!!message.reactions?.length && (
           <div className={cn("mt-1 flex max-w-full gap-1 overflow-x-auto", isOwn ? "justify-end pr-2" : "justify-start pl-2")}>
@@ -238,7 +276,7 @@ export function MessageBubble({
           {menu && <MessageOptionsMenu isOwn={isOwn} onAction={handleAction} style={menuStyle} />}
           {picker && (
             <div key="reaction-picker" style={pickerStyle}>
-              <ReactionPicker activeEmojis={activeReactionEmojis} onSelect={handleReaction} />
+              <ReactionPicker activeEmojis={activeReactionEmojis} onSelect={handleReaction} onSelectNative={handleNativeReaction} />
             </div>
           )}
         </AnimatePresence>

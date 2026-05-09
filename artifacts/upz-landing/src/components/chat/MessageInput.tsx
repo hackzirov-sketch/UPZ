@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Edit, Mic, Paperclip, Reply, Send, Smile } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { ChatMessage, ChatReactionEmoji, ChatRoom, ChatUser } from "@/types";
-import { AIAssistantStateBadge, StickerPicker, getReactionAsset } from "@/components/premium/PremiumAssets";
+import { StickerPicker, getReactionAsset } from "@/components/premium/PremiumAssets";
 import { ReactionPicker } from "./ReactionPicker";
 import { cn, getReplySnippet, getRoomName, getUser } from "./chatShared";
 
@@ -72,22 +72,21 @@ export function MessageInput({
   };
 
   return (
-    <div className="flex-shrink-0 border-t border-gray-200 bg-white px-3 py-3 backdrop-blur-xl dark:border-gray-700 dark:bg-gray-900 sm:px-5 sm:py-4">
+    <div className="flex-shrink-0 border-t border-gray-200 bg-white px-3 py-2.5 backdrop-blur-xl dark:border-gray-700 dark:bg-gray-900 sm:px-5">
       <AnimatePresence>
         {typingUser && !editingMessage && (
           <motion.div
-            initial={{ opacity: 0, y: 6 }}
+            initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 4 }}
-            className="mb-2 flex items-center gap-2 px-2 text-xs text-gray-400 dark:text-gray-500"
+            exit={{ opacity: 0, y: 3 }}
+            className="mb-1.5 flex h-5 items-center gap-1.5 px-2 text-[11px] text-gray-400 dark:text-gray-500"
           >
-            <AIAssistantStateBadge state="typing" className="px-2 py-1" />
             <span className="font-medium text-indigo-600 dark:text-indigo-400">{typingUser.name.split(" ")[0]}</span>
             <span>{t("app.chat.isTyping")}</span>
-            <span className="flex gap-0.5">
-              <span className="h-1 w-1 animate-bounce rounded-full bg-slate-500 [animation-delay:-0.2s]" />
-              <span className="h-1 w-1 animate-bounce rounded-full bg-slate-500 [animation-delay:-0.1s]" />
-              <span className="h-1 w-1 animate-bounce rounded-full bg-slate-500" />
+            <span className="ml-0.5 flex items-end gap-0.5" aria-hidden="true">
+              <span className="h-1 w-1 animate-bounce rounded-full bg-indigo-400 [animation-delay:-0.2s]" />
+              <span className="h-1 w-1 animate-bounce rounded-full bg-indigo-400 [animation-delay:-0.1s]" />
+              <span className="h-1 w-1 animate-bounce rounded-full bg-indigo-400" />
             </span>
           </motion.div>
         )}
@@ -99,11 +98,11 @@ export function MessageInput({
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 6 }}
-            className="mb-2 flex items-start gap-3 rounded-2xl border border-indigo-100 bg-gradient-to-r from-indigo-50 via-white to-blue-50 px-4 py-3 text-sm shadow-sm dark:border-indigo-900/50 dark:from-indigo-950/40 dark:via-gray-800 dark:to-blue-950/40"
+            className="mb-2 flex items-center gap-2 rounded-2xl border border-indigo-100 bg-indigo-50/70 px-3 py-2 text-sm dark:border-indigo-900/50 dark:bg-indigo-950/25"
           >
-            <Reply className="mt-0.5 h-4 w-4 flex-shrink-0 text-indigo-600 dark:text-indigo-400" />
+            <Reply className="h-4 w-4 flex-shrink-0 text-indigo-600 dark:text-indigo-400" />
             <div className="min-w-0 flex-1">
-              <div className="font-semibold text-indigo-700 dark:text-indigo-300">{t("app.chat.replyingTo", { name: getUser(replyTo.userId, users)?.name ?? t("app.chat.messageFallback") })}</div>
+              <div className="text-xs font-semibold text-indigo-700 dark:text-indigo-300">{t("app.chat.replyingTo", { name: getUser(replyTo.userId, users)?.name ?? t("app.chat.messageFallback") })}</div>
               <div className="truncate text-xs text-gray-400 dark:text-gray-500">{getReplySnippet(replyTo, t)}</div>
             </div>
             <button type="button" onClick={onCancelReply} className="text-lg leading-none text-gray-400 transition-colors hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-200" aria-label={t("app.chat.closeSearch")}>
@@ -116,11 +115,11 @@ export function MessageInput({
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 6 }}
-            className="mb-2 flex items-start gap-3 rounded-2xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm dark:border-amber-900/40 dark:bg-amber-950/30"
+            className="mb-2 flex items-center gap-2 rounded-2xl border border-amber-100 bg-amber-50 px-3 py-2 text-sm dark:border-amber-900/40 dark:bg-amber-950/30"
           >
-            <Edit className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600 dark:text-amber-400" />
+            <Edit className="h-4 w-4 flex-shrink-0 text-amber-600 dark:text-amber-400" />
             <div className="min-w-0 flex-1">
-              <div className="font-semibold text-amber-700 dark:text-amber-300">{t("app.chat.editingMessage")}</div>
+              <div className="text-xs font-semibold text-amber-700 dark:text-amber-300">{t("app.chat.editingMessage")}</div>
               <div className="truncate text-xs text-gray-400 dark:text-gray-500">{t("app.chat.pressEnterSave")}</div>
             </div>
             <button type="button" onClick={onCancelEdit} className="text-lg leading-none text-gray-400 transition-colors hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-200" aria-label={t("app.chat.editingMessage")}>
@@ -130,7 +129,7 @@ export function MessageInput({
         )}
       </AnimatePresence>
 
-      <div className="relative flex items-end gap-2 rounded-[26px] border border-gray-200 bg-gray-50 p-2 shadow-sm transition-colors focus-within:border-indigo-300 focus-within:bg-white dark:border-gray-600 dark:bg-gray-800 dark:focus-within:border-indigo-500 dark:focus-within:bg-gray-700">
+      <div className="relative flex items-end gap-2 rounded-[24px] border border-gray-200 bg-gray-50 p-1.5 shadow-sm transition-colors focus-within:border-indigo-300 focus-within:bg-white dark:border-gray-600 dark:bg-gray-800 dark:focus-within:border-indigo-500 dark:focus-within:bg-gray-700">
         <button
           type="button"
           onClick={() => {
@@ -197,12 +196,12 @@ export function MessageInput({
 
         <AnimatePresence>
           {emojiOpen && (
-            <div className="absolute bottom-[64px] left-11 z-40">
+            <div className="absolute bottom-[58px] left-0 z-40 max-w-[calc(100vw-1.5rem)]">
               <ReactionPicker mode="message" onSelect={appendEmoji} onSelectAsset={appendEmojiAsset} onSelectNative={appendNativeEmoji} />
             </div>
           )}
           {stickerOpen && (
-            <div className="absolute bottom-[64px] left-0 z-40">
+            <div className="absolute bottom-[58px] left-0 z-40 max-w-[calc(100vw-1.5rem)]">
               <StickerPicker
                 onSelect={(sticker) => appendSticker(sticker.prompt)}
                 onClose={() => setStickerOpen(false)}

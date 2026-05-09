@@ -17,6 +17,8 @@ const BASE_ACTIONS = [
   { action: "reply", labelKey: "reply", icon: Reply },
   { action: "react", labelKey: "react", icon: Smile },
   { action: "copy", labelKey: "copy", icon: Copy },
+  { action: "forward", labelKey: "forward", icon: Forward },
+  { action: "pin", labelKey: "pin", icon: Pin },
 ] as const;
 
 export function MessageOptionsMenu({ isOwn, onAction, className, style }: MessageOptionsMenuProps) {
@@ -27,58 +29,42 @@ export function MessageOptionsMenu({ isOwn, onAction, className, style }: Messag
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.94, y: 6 }}
+      initial={{ opacity: 0, scale: 0.96, y: 4 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.96, y: 4 }}
+      exit={{ opacity: 0, scale: 0.98, y: 3 }}
       transition={{ duration: 0.13, ease: "easeOut" }}
       className={cn(
-        "z-50 w-max max-w-[min(286px,calc(100vw-1rem))] overflow-hidden rounded-full border border-white/80 bg-white/92 p-1 text-xs text-gray-900 shadow-xl shadow-indigo-950/12 backdrop-blur-xl dark:border-gray-700/80 dark:bg-gray-900/92 dark:text-gray-100",
+        "z-50 w-[196px] max-w-[calc(100vw-1rem)] overflow-hidden rounded-[18px] border border-white/80 bg-white/96 p-1.5 text-xs text-gray-900 shadow-2xl shadow-indigo-950/14 backdrop-blur-xl dark:border-gray-700/80 dark:bg-gray-900/96 dark:text-gray-100",
         className,
       )}
       style={style}
       onClick={(event) => event.stopPropagation()}
+      role="menu"
+      aria-label="Message options"
     >
-      <div className="flex items-center gap-0.5 pr-1">
-        {actions.map(({ action, labelKey, icon: Icon }) => (
-          <button
-            key={action}
-            type="button"
-            onClick={() => onAction(action)}
-            className="group grid h-9 w-9 place-items-center rounded-full text-gray-500 transition-colors hover:bg-indigo-50 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-400/30 dark:text-gray-400 dark:hover:bg-indigo-950/40 dark:hover:text-indigo-300"
-            aria-label={t(`app.chat.menu.${labelKey}`)}
-            title={t(`app.chat.menu.${labelKey}`)}
-          >
-            <Icon className="h-4 w-4" />
-          </button>
-        ))}
+      {actions.map(({ action, labelKey, icon: Icon }) => (
         <button
+          key={action}
           type="button"
-          onClick={() => onAction("forward")}
-          className="group grid h-9 w-9 place-items-center rounded-full text-gray-500 transition-colors hover:bg-indigo-50 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-400/30 dark:text-gray-400 dark:hover:bg-indigo-950/40 dark:hover:text-indigo-300"
-          aria-label={t("app.chat.menu.forward")}
-          title={t("app.chat.menu.forward")}
+          onClick={() => onAction(action)}
+          className="flex h-8 w-full items-center gap-2.5 rounded-xl px-2.5 text-left font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-950 focus:outline-none focus:ring-2 focus:ring-indigo-400/30 dark:text-gray-200 dark:hover:bg-gray-800 dark:hover:text-white"
+          aria-label={t(`app.chat.menu.${labelKey}`)}
+          role="menuitem"
         >
-          <Forward className="h-4 w-4" />
+          <Icon className="h-4 w-4 text-gray-400 dark:text-gray-500" />
+          <span className="truncate">{t(`app.chat.menu.${labelKey}`)}</span>
         </button>
-        <button
-          type="button"
-          onClick={() => onAction("pin")}
-          className="group grid h-9 w-9 place-items-center rounded-full text-gray-500 transition-colors hover:bg-indigo-50 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-400/30 dark:text-gray-400 dark:hover:bg-indigo-950/40 dark:hover:text-indigo-300"
-          aria-label={t("app.chat.menu.pin")}
-          title={t("app.chat.menu.pin")}
-        >
-          <Pin className="h-4 w-4" />
-        </button>
-      </div>
+      ))}
+      <div className="my-1 h-px bg-gray-100 dark:bg-gray-800" />
       <button
         type="button"
         onClick={() => onAction("delete")}
-        className="ml-1 inline-flex h-9 items-center gap-1.5 rounded-full bg-rose-50 px-2.5 text-rose-600 ring-1 ring-rose-100 transition-colors hover:bg-rose-100 focus:outline-none focus:ring-2 focus:ring-rose-300/40 dark:bg-rose-950/50 dark:ring-rose-900/60"
+        className="flex h-8 w-full items-center gap-2.5 rounded-xl px-2.5 text-left font-semibold text-rose-600 transition-colors hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-rose-300/40 dark:hover:bg-rose-950/35"
         aria-label={t("app.chat.menu.delete")}
-        title={t("app.chat.menu.delete")}
+        role="menuitem"
       >
         <Trash className="h-4 w-4" />
-        <span className="hidden text-[11px] font-bold sm:inline">{t("app.chat.menu.delete")}</span>
+        <span className="truncate">{t("app.chat.menu.delete")}</span>
       </button>
     </motion.div>
   );

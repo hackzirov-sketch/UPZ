@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckSquare, Pin, Search, Sparkles, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { AppLayout } from "@/components/app/AppLayout";
-import { ActionButton, Pill, Toast } from "@/components/app/DesignSystem";
+import { useLocation } from "wouter";
+import { Toast } from "@/components/app/DesignSystem";
 import { ChatCallOverlay } from "@/components/chat/ChatCallOverlay";
 import { ChatHeader, type ChatCallMode, type ChatHeaderAction } from "@/components/chat/ChatHeader";
 import { ChatSidebar } from "@/components/chat/ChatSidebar";
@@ -52,8 +52,9 @@ function updateMessageReaction(message: ChatMessage, emoji: ChatReactionEmoji): 
   return { ...message, reactions: reactions.filter((reaction) => reaction.userIds.length > 0) };
 }
 
-export default function ChatPage({ user, onLogout }: Props) {
+export default function ChatPage(_: Props) {
   const { t } = useTranslation();
+  const [, navigate] = useLocation();
   const [rooms, setRooms] = useState<ChatRoom[]>(getInitialRooms);
   const [activeId, setActiveId] = useState(MOCK_CHAT_ROOMS[0]?.id ?? "");
   const [searchQuery, setSearchQuery] = useState("");
@@ -75,7 +76,6 @@ export default function ChatPage({ user, onLogout }: Props) {
   const pinnedMessage = activeRoom?.pinnedMessageId
     ? activeRoom.messages.find((message) => message.id === activeRoom.pinnedMessageId)
     : undefined;
-  const totalUnread = rooms.reduce((sum, room) => sum + (room.unread ?? 0), 0);
   const normalizedChatSearch = chatSearchQuery.trim().toLowerCase();
   const displayedMessages = useMemo(() => {
     if (!activeRoom) return [];
@@ -252,11 +252,20 @@ export default function ChatPage({ user, onLogout }: Props) {
     }
   };
 
+  const handleBackToApp = () => {
+    navigate("/app/home");
+  };
+
   return (
-    <AppLayout user={user} title={`${t("app.nav.chat")}${totalUnread > 0 ? ` (${totalUnread})` : ""}`} onLogout={onLogout}>
+    <div
+      className="fixed inset-0 z-[100] flex min-h-0 overflow-hidden bg-white text-[#111827] dark:bg-gray-950 dark:text-gray-100"
+      style={{
+        background:
+          "radial-gradient(circle at 12% 0%, var(--upz-shell-glow-a), transparent 28%), radial-gradient(circle at 92% 8%, var(--upz-shell-glow-b), transparent 24%), var(--upz-bg)",
+      }}
+    >
       <div
-        className="flex min-h-[560px] overflow-hidden rounded-[28px] border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900"
-        style={{ height: "calc(100vh - 136px)" }}
+        className="flex h-full min-h-0 w-full overflow-hidden bg-white dark:bg-gray-900"
       >
         <ChatSidebar
           rooms={rooms}
@@ -265,6 +274,7 @@ export default function ChatPage({ user, onLogout }: Props) {
           query={searchQuery}
           onQueryChange={setSearchQuery}
           onSelectRoom={handleSelectRoom}
+          onBackToApp={handleBackToApp}
           className={cn("w-full md:flex md:w-[360px] md:flex-shrink-0", mobilePane === "chat" ? "hidden" : "flex")}
         />
 
@@ -278,25 +288,34 @@ export default function ChatPage({ user, onLogout }: Props) {
               onStartCall={handleStartCall}
             />
 
-            <div className="relative z-20 border-b border-gray-200 bg-white px-3 py-2 dark:border-gray-700 dark:bg-gray-900">
-              <div className="flex min-h-11 items-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-50 via-white to-blue-50 px-3 py-2 ring-1 ring-indigo-100 dark:from-indigo-950/30 dark:via-gray-800 dark:to-blue-950/30 dark:ring-indigo-900/40">
-                <span className="grid h-8 w-8 flex-shrink-0 place-items-center rounded-xl bg-white text-indigo-600 shadow-sm ring-1 ring-indigo-100 dark:bg-gray-900 dark:ring-indigo-900/50">
-                  <CheckSquare className="h-4 w-4" />
+            <div className="relative z-20 border-b border-gray-200 bg-white/96 px-3 py-1.5 backdrop-blur dark:border-gray-700 dark:bg-gray-900/96">
+              <div className="flex h-9 items-center gap-2 rounded-2xl bg-gray-50/80 px-2.5 ring-1 ring-gray-200/80 dark:bg-gray-800/70 dark:ring-gray-700">
+                <span className="grid h-6 w-6 flex-shrink-0 place-items-center rounded-lg bg-white text-indigo-600 ring-1 ring-gray-200 dark:bg-gray-900 dark:ring-gray-700">
+                  <CheckSquare className="h-3.5 w-3.5" />
                 </span>
-                <div className="min-w-0 flex-1">
-                  <div className="flex min-w-0 items-center gap-2">
-                    <Pill tone="indigo" className="hidden sm:inline-flex">Linked</Pill>
-                    <p className="truncate text-sm font-black text-[#111827] dark:text-gray-100">{SMART_TASKS[0].title}</p>
-                  </div>
-                  <p className="truncate text-[11px] text-[#6B7280] dark:text-gray-400">Task card, pinned context and AI summary are local MVP actions.</p>
+                <div className="flex min-w-0 flex-1 items-center gap-2">
+                  <span className="hidden rounded-full bg-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-indigo-600 ring-1 ring-gray-200 dark:bg-gray-900 dark:ring-gray-700 sm:inline-flex">
+                    Linked
+                  </span>
+                  <p className="truncate text-xs font-semibold text-[#111827] dark:text-gray-100">{SMART_TASKS[0].title}</p>
                 </div>
-                <div className="flex flex-shrink-0 gap-1">
-                  <ActionButton variant="secondary" className="px-2.5 py-1.5 text-xs" onClick={() => setNotice("Task created from selected message locally")}>
-                    <CheckSquare className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Task</span>
-                  </ActionButton>
-                  <ActionButton className="px-2.5 py-1.5 text-xs" onClick={() => setNotice("AI summarized this chat locally")}>
-                    <Sparkles className="h-3.5 w-3.5" /> <span className="hidden sm:inline">AI</span>
-                  </ActionButton>
+                <div className="flex flex-shrink-0 items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setNotice("Task created from selected message locally")}
+                    className="grid h-7 w-7 place-items-center rounded-full text-gray-500 transition-colors hover:bg-white hover:text-indigo-600 dark:text-gray-400 dark:hover:bg-gray-900"
+                    aria-label="Create task from chat"
+                  >
+                    <CheckSquare className="h-3.5 w-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setNotice("AI summarized this chat locally")}
+                    className="grid h-7 w-7 place-items-center rounded-full text-gray-500 transition-colors hover:bg-white hover:text-indigo-600 dark:text-gray-400 dark:hover:bg-gray-900"
+                    aria-label="Summarize chat with AI"
+                  >
+                    <Sparkles className="h-3.5 w-3.5" />
+                  </button>
                 </div>
               </div>
             </div>
@@ -357,20 +376,20 @@ export default function ChatPage({ user, onLogout }: Props) {
               <button
                 type="button"
                 onClick={() => setNotice(t("app.chat.pinnedNotice"))}
-                className="relative z-20 flex items-center gap-2 border-b border-indigo-100 bg-gradient-to-r from-indigo-50 via-white to-blue-50 px-4 py-1.5 text-left shadow-sm transition-colors hover:from-indigo-100 hover:to-blue-50 dark:border-indigo-900/50 dark:from-indigo-950/30 dark:via-gray-900 dark:to-blue-950/30"
+                className="relative z-20 flex h-9 items-center gap-2 border-b border-gray-200 bg-white/96 px-3 text-left backdrop-blur transition-colors hover:bg-indigo-50/70 dark:border-gray-700 dark:bg-gray-900/96 dark:hover:bg-indigo-950/25"
               >
-                <span className="grid h-7 w-7 place-items-center rounded-xl bg-white text-indigo-600 shadow-sm ring-1 ring-indigo-100 dark:bg-gray-900 dark:ring-indigo-900/50">
-                  <Pin className="h-3.5 w-3.5" />
+                <span className="grid h-6 w-6 place-items-center rounded-lg bg-indigo-50 text-indigo-600 ring-1 ring-indigo-100 dark:bg-indigo-950/40 dark:ring-indigo-900/60">
+                  <Pin className="h-3 w-3" />
                 </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-indigo-600">{t("app.chat.pinnedMessage")}</span>
-                  <span className="block truncate text-xs text-[#111827] dark:text-gray-100">{getReplySnippet(pinnedMessage, t)}</span>
+                <span className="flex min-w-0 flex-1 items-center gap-2">
+                  <span className="flex-shrink-0 text-[10px] font-bold uppercase tracking-[0.14em] text-indigo-600">{t("app.chat.pinnedMessage")}</span>
+                  <span className="truncate text-xs text-[#111827] dark:text-gray-100">{getReplySnippet(pinnedMessage, t)}</span>
                 </span>
               </button>
             )}
 
             <div
-              className="relative z-0 min-h-0 flex-1 overflow-y-auto px-3 py-4 sm:px-5"
+              className="relative z-0 min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-3 py-3 sm:px-5"
               style={{
                 background:
                   "radial-gradient(circle at 12% 0%, var(--upz-chat-glow-a), transparent 28%), radial-gradient(circle at 100% 20%, var(--upz-chat-glow-b), transparent 24%), linear-gradient(135deg, var(--upz-chat-bg-a), var(--upz-chat-bg-b))",
@@ -444,6 +463,6 @@ export default function ChatPage({ user, onLogout }: Props) {
       <AnimatePresence>
         <Toast message={notice} />
       </AnimatePresence>
-    </AppLayout>
+    </div>
   );
 }

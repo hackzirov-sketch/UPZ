@@ -1,4 +1,4 @@
-import type { AutomationRule, ChatRoom, DocPage, SmartTask, Task, TaskView, Note, UserProfile } from '@/types';
+import type { AutomationRule, ChatRoom, DocPage, Profession, SmartTask, Task, TaskView, Note, UserProfile } from '@/types';
 
 const K = {
   USER: 'upz_user',
@@ -13,6 +13,15 @@ const K = {
   DASHBOARD_LAYOUT: 'upz_dashboard_layout',
   ACTIVE_VIEW: 'upz_active_view',
   ACTIVE_BOARD: 'upz_active_board',
+  WORKSPACE_PROFESSION: 'upz_workspace_profession',
+  WORKSPACE_SNAPSHOTS: 'upz_workspace_snapshots',
+  WORKSPACE_CREATED_ITEMS: 'upz_workspace_created_items',
+  WORKSPACE_FIELDS: 'upz_workspace_fields',
+  WORKSPACE_RULES: 'upz_workspace_rules',
+  WORKSPACE_MILESTONES: 'upz_workspace_milestones',
+  WORKSPACE_VIEW_PRESETS: 'upz_workspace_view_presets',
+  TEAM_OPTIMA_TASKS: 'upz_team_optima_tasks',
+  TEAM_REVIEW_LOG: 'upz_team_review_log',
 };
 
 function get<T>(key: string): T | null {
@@ -65,4 +74,31 @@ export const storage = {
 
   getActiveBoard: (): string | null => get<string>(K.ACTIVE_BOARD),
   saveActiveBoard: (board: string) => set(K.ACTIVE_BOARD, board),
+
+  getWorkspaceProfession: (): Profession | null => get<Profession>(K.WORKSPACE_PROFESSION),
+  saveWorkspaceProfession: (profession: Profession) => set(K.WORKSPACE_PROFESSION, profession),
+
+  getWorkspaceSnapshots: <T>(): T[] => get<T[]>(K.WORKSPACE_SNAPSHOTS) ?? [],
+  saveWorkspaceSnapshots: (snapshots: unknown[]) => set(K.WORKSPACE_SNAPSHOTS, snapshots),
+
+  getWorkspaceCreatedItems: <T>(): T[] => get<T[]>(K.WORKSPACE_CREATED_ITEMS) ?? [],
+  saveWorkspaceCreatedItems: (items: unknown[]) => set(K.WORKSPACE_CREATED_ITEMS, items),
+
+  getWorkspaceFields: <T>(): T[] => get<T[]>(K.WORKSPACE_FIELDS) ?? [],
+  saveWorkspaceFields: (fields: unknown[]) => set(K.WORKSPACE_FIELDS, fields),
+
+  getWorkspaceRules: <T>(): T[] => get<T[]>(K.WORKSPACE_RULES) ?? [],
+  saveWorkspaceRules: (rules: unknown[]) => set(K.WORKSPACE_RULES, rules),
+
+  getWorkspaceMilestones: <T>(): T[] => get<T[]>(K.WORKSPACE_MILESTONES) ?? [],
+  saveWorkspaceMilestones: (milestones: unknown[]) => set(K.WORKSPACE_MILESTONES, milestones),
+
+  getWorkspaceViewPresets: <T>(): T[] => get<T[]>(K.WORKSPACE_VIEW_PRESETS) ?? [],
+  saveWorkspaceViewPresets: (presets: unknown[]) => set(K.WORKSPACE_VIEW_PRESETS, presets),
+
+  getTeamOptimaTasks: <T>(): T[] => get<T[]>(K.TEAM_OPTIMA_TASKS) ?? [],
+  saveTeamOptimaTasks: (tasks: unknown[]) => set(K.TEAM_OPTIMA_TASKS, tasks),
+
+  getTeamReviewLog: <T>(): T[] => get<T[]>(K.TEAM_REVIEW_LOG) ?? [],
+  saveTeamReviewLog: (logs: unknown[]) => set(K.TEAM_REVIEW_LOG, logs),
 };

@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import type { CSSProperties, MouseEvent as ReactMouseEvent } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { CSSProperties, MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Pin, Smile } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -95,8 +96,9 @@ export function MessageBubble({
   onToggleReaction,
 }: MessageBubbleProps) {
   const { t } = useTranslation();
-  const [menu, setMenu] = useState<FloatingState | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [picker, setPicker] = useState<FloatingState | null>(null);
+  const menuOpenedAtRef = useRef(0);
   const isOwn = message.userId === "me";
   const sender = getUser(message.userId, users);
   const showSender = !isOwn && room.type !== "1on1";
@@ -105,23 +107,38 @@ export function MessageBubble({
   const largeEmojiOnly = isLargeEmojiOnly(text);
 
   useEffect(() => {
-    if (!menu && !picker) return;
+    if (!menuOpen && !picker) return;
     const close = () => {
-      setMenu(null);
+      setMenuOpen(false);
       setPicker(null);
     };
-    window.addEventListener("click", close);
-    return () => window.removeEventListener("click", close);
-  }, [menu, picker]);
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") close();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [menuOpen, picker]);
 
-  const calcFixedPos = (event: ReactMouseEvent, menuW = 240, menuH = 52) => {
+  useEffect(() => {
+    if (!picker) return;
+    const close = () => setPicker(null);
+    const closeListenerId = window.setTimeout(() => window.addEventListener("click", close), 0);
+    return () => {
+      window.clearTimeout(closeListenerId);
+      window.removeEventListener("click", close);
+    };
+  }, [picker]);
+
+  const calcFixedPos = (event: ReactMouseEvent, menuW = 196, menuH = 236) => {
     const vw = window.innerWidth;
     const vh = window.innerHeight;
     const x = event.clientX;
     const y = event.clientY;
     const above = y + menuH + 12 > vh;
     const alignRight = x + menuW + 8 > vw;
-    const minY = vw < 768 ? 84 : 76;
+    const minY = vw < 768 ? 76 : 72;
     const clampedX = alignRight ? Math.max(10, x - menuW) : Math.min(Math.max(10, x), vw - menuW - 10);
     const clampedY = above ? Math.max(minY, y - menuH - 8) : Math.max(minY, Math.min(y + 10, vh - menuH - 10));
     return { fixed: true, x: clampedX, y: clampedY, above, alignRight };
@@ -130,31 +147,37 @@ export function MessageBubble({
   const openPickerFromHoverButton = (event: ReactMouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
-    setMenu(null);
-    setPicker(calcFixedPos(event, 280, 220));
+    setMenuOpen(false);
+    setPicker(calcFixedPos(event, 284, 216));
   };
 
-  const openMenuFromClick = (event: ReactMouseEvent) => {
+  const openMenuFromClick = (event: ReactMouseEvent | ReactPointerEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setPicker(null);
-    setMenu((current) => (current ? null : calcFixedPos(event)));
+    menuOpenedAtRef.current = Date.now();
+    setMenuOpen(true);
   };
 
   const openMenuFromContext = (event: ReactMouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
     setPicker(null);
-    setMenu(calcFixedPos(event));
+    menuOpenedAtRef.current = Date.now();
+    setMenuOpen(true);
   };
 
   const handleAction = (action: MessageOptionAction) => {
     if (action === "react") {
-      setPicker(menu ? { ...menu, x: Math.min(menu.x, window.innerWidth - 288), y: Math.max(84, menu.y + 46) } : null);
-      setMenu(null);
+      setPicker({
+        fixed: true,
+        x: Math.max(10, Math.round((window.innerWidth - 284) / 2)),
+        y: Math.max(76, Math.round((window.innerHeight - 216) / 2)),
+      });
+      setMenuOpen(false);
       return;
     }
 
-    setMenu(null);
+    setMenuOpen(false);
     setPicker(null);
 
     if (action === "reply") onReply(message);
@@ -175,39 +198,37 @@ export function MessageBubble({
     setPicker(null);
   };
 
-  const menuStyle: CSSProperties = menu
-    ? { position: "fixed", left: menu.x, top: menu.y, zIndex: 9999 }
-    : {};
-
   const pickerStyle: CSSProperties = picker
     ? { position: "fixed", left: picker.x, top: picker.y, zIndex: 9999 }
     : {};
 
   return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 8 }}
-      transition={{ duration: 0.18, ease: "easeOut" }}
-      className={cn("flex items-end gap-2.5", isOwn && "flex-row-reverse")}
-    >
-      {!isOwn && <Avatar user={sender} size={30} />}
-      <div className={cn("relative flex max-w-[78%] flex-col sm:max-w-[68%] lg:max-w-[58%]", isOwn ? "items-end" : "items-start")}>
-        {showSender && <span className="mb-1 ml-2 text-xs font-medium text-[#6B7280]">{sender?.name}</span>}
-        <div className="group/message relative">
-          <button
-            type="button"
-            onClick={openMenuFromClick}
-            onContextMenu={openMenuFromContext}
-            className={cn(
-              "group/bubble relative rounded-[22px] px-4 py-2.5 text-left text-sm leading-relaxed shadow-sm transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-400/30",
-              largeEmojiOnly && "px-4 py-3 text-4xl leading-tight",
-              isOwn
-                ? "rounded-br-md bg-gradient-to-br from-indigo-500 to-blue-500 text-white shadow-indigo-950/25 hover:shadow-indigo-500/25"
-                : "rounded-bl-md border border-[#E5E7EB] bg-white text-[#111827] hover:bg-white hover:shadow-indigo-100",
-            )}
-          >
+    <>
+      <motion.div
+        layout
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 8 }}
+        transition={{ duration: 0.18, ease: "easeOut" }}
+        className={cn("flex items-end gap-2.5", isOwn && "flex-row-reverse")}
+      >
+        {!isOwn && <Avatar user={sender} size={30} />}
+        <div className={cn("relative flex max-w-[78%] flex-col sm:max-w-[68%] lg:max-w-[58%]", isOwn ? "items-end" : "items-start")}>
+          {showSender && <span className="mb-1 ml-2 text-xs font-medium text-[#6B7280]">{sender?.name}</span>}
+          <div className="group/message relative">
+            <button
+              type="button"
+              onPointerDown={openMenuFromClick}
+              onClick={openMenuFromClick}
+              onContextMenu={openMenuFromContext}
+              className={cn(
+                "group/bubble relative rounded-[22px] px-4 py-2.5 text-left text-sm leading-relaxed shadow-sm transition-all duration-150 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-400/30",
+                largeEmojiOnly && "px-4 py-3 text-4xl leading-tight",
+                isOwn
+                  ? "rounded-br-md bg-gradient-to-br from-indigo-500 to-blue-500 text-white shadow-indigo-950/25 hover:shadow-indigo-500/25"
+                  : "rounded-bl-md border border-[#E5E7EB] bg-white text-[#111827] hover:bg-white hover:shadow-indigo-100",
+              )}
+            >
             {replyMessage && (
               <div
                 className={cn(
@@ -239,22 +260,22 @@ export function MessageBubble({
               <span>{formatMessageTime(message.timestamp)}</span>
               {isOwn && <span className={message.read === false ? "text-white/65" : "text-cyan-100"}>{message.read === false ? t("app.chat.sent") : t("app.chat.readStatus")}</span>}
             </div>
-          </button>
-          <button
-            type="button"
-            onClick={openPickerFromHoverButton}
-            className={cn(
-              "absolute top-1/2 z-10 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full border border-white/70 bg-white/90 text-gray-500 opacity-0 shadow-lg shadow-indigo-950/10 backdrop-blur transition-all hover:scale-105 hover:text-indigo-600 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-indigo-400/30 group-hover/message:opacity-100 dark:border-gray-700 dark:bg-gray-800/90 dark:text-gray-300",
-              isOwn ? "-left-10" : "-right-10",
-            )}
-            aria-label="Open quick reactions"
-          >
-            <Smile className="h-4 w-4" />
-          </button>
-        </div>
+            </button>
+            <button
+              type="button"
+              onClick={openPickerFromHoverButton}
+              className={cn(
+                "absolute top-1.5 z-10 grid h-7 w-7 place-items-center rounded-full border border-white/70 bg-white/86 text-gray-500 opacity-0 shadow-md shadow-indigo-950/10 backdrop-blur transition-all hover:scale-105 hover:text-indigo-600 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-indigo-400/30 group-hover/message:opacity-100 dark:border-gray-700 dark:bg-gray-800/88 dark:text-gray-300",
+                isOwn ? "left-1.5" : "right-1.5",
+              )}
+              aria-label="Open quick reactions"
+            >
+              <Smile className="h-3.5 w-3.5" />
+            </button>
+          </div>
 
         {!!message.reactions?.length && (
-          <div className={cn("mt-1 flex max-w-full gap-1 overflow-x-auto", isOwn ? "justify-end pr-2" : "justify-start pl-2")}>
+          <div className={cn("mt-1 flex max-w-[min(100%,300px)] flex-wrap gap-1 overflow-visible", isOwn ? "justify-end pr-2" : "justify-start pl-2")}>
             {message.reactions.map((reaction) => {
               const reactionId = normalizeReactionId(reaction.emoji);
               const active = reaction.userIds.includes("me");
@@ -272,15 +293,34 @@ export function MessageBubble({
           </div>
         )}
 
-        <AnimatePresence>
-          {menu && <MessageOptionsMenu isOwn={isOwn} onAction={handleAction} style={menuStyle} />}
-          {picker && (
-            <div key="reaction-picker" style={pickerStyle}>
-              <ReactionPicker activeEmojis={activeReactionEmojis} onSelect={handleReaction} onSelectNative={handleNativeReaction} />
-            </div>
-          )}
-        </AnimatePresence>
-      </div>
-    </motion.div>
+        </div>
+      </motion.div>
+
+      {menuOpen &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[9998] grid place-items-center bg-gray-950/10 px-3 py-6 backdrop-blur-[1.5px]"
+            style={{ zIndex: 2147483000 }}
+            onClick={(event) => {
+              event.stopPropagation();
+              if (Date.now() - menuOpenedAtRef.current < 250) return;
+              setMenuOpen(false);
+            }}
+          >
+            <MessageOptionsMenu isOwn={isOwn} onAction={handleAction} className="w-[min(92vw,224px)]" />
+          </div>,
+          document.body,
+        )}
+
+      {picker &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div style={pickerStyle}>
+            <ReactionPicker activeEmojis={activeReactionEmojis} onSelect={handleReaction} onSelectNative={handleNativeReaction} />
+          </div>,
+          document.body,
+        )}
+    </>
   );
 }

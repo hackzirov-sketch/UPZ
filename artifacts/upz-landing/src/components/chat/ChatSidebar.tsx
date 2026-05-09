@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Pin, Search } from "lucide-react";
+import { ArrowLeft, Pin, Search } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { ChatRoom, ChatUser } from "@/types";
 import { ChatListItem } from "./ChatListItem";
@@ -12,6 +12,7 @@ interface ChatSidebarProps {
   query: string;
   onQueryChange: (query: string) => void;
   onSelectRoom: (roomId: string) => void;
+  onBackToApp?: () => void;
   className?: string;
 }
 
@@ -22,7 +23,7 @@ function sortRooms(rooms: ChatRoom[]) {
   });
 }
 
-export function ChatSidebar({ rooms, users, activeId, query, onQueryChange, onSelectRoom, className }: ChatSidebarProps) {
+export function ChatSidebar({ rooms, users, activeId, query, onQueryChange, onSelectRoom, onBackToApp, className }: ChatSidebarProps) {
   const { t } = useTranslation();
   const normalizedQuery = query.trim().toLowerCase();
   const visibleRooms = sortRooms(
@@ -39,15 +40,28 @@ export function ChatSidebar({ rooms, users, activeId, query, onQueryChange, onSe
   return (
     <aside className={cn("flex min-h-0 flex-col border-r border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900", className)}>
       <div className="border-b border-gray-200 p-2.5 dark:border-gray-700 sm:p-3">
-        <div className="flex h-10 items-center gap-2 rounded-2xl border border-gray-200 bg-gray-50 px-3 text-gray-500 transition-colors focus-within:border-indigo-300 focus-within:bg-white dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:focus-within:bg-gray-700">
-          <Search className="h-4 w-4 flex-shrink-0" />
-          <input
-            value={query}
-            onChange={(event) => onQueryChange(event.target.value)}
-            placeholder={t("app.chat.searchChats")}
-            className="w-full bg-transparent text-sm text-gray-900 outline-none placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-500"
-            type="search"
-          />
+        <div className="flex items-center gap-2">
+          {onBackToApp && (
+            <button
+              type="button"
+              onClick={onBackToApp}
+              className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-full border border-gray-200 bg-white text-gray-600 shadow-sm transition-colors hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-indigo-700 dark:hover:bg-indigo-950/40"
+              aria-label="Asosiy menyuga qaytish"
+              title="Orqaga"
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </button>
+          )}
+          <div className="flex h-10 min-w-0 flex-1 items-center gap-2 rounded-2xl border border-gray-200 bg-gray-50 px-3 text-gray-500 transition-colors focus-within:border-indigo-300 focus-within:bg-white dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:focus-within:bg-gray-700">
+            <Search className="h-4 w-4 flex-shrink-0" />
+            <input
+              value={query}
+              onChange={(event) => onQueryChange(event.target.value)}
+              placeholder={t("app.chat.searchChats")}
+              className="w-full bg-transparent text-sm text-gray-900 outline-none placeholder:text-gray-400 dark:text-gray-100 dark:placeholder:text-gray-500"
+              type="search"
+            />
+          </div>
         </div>
       </div>
 

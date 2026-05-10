@@ -1,4 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&subset=latin,latin-ext,cyrillic,cyrillic-ext&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -115,7 +116,7 @@
   --chart-4: 38 92% 50%;
   --chart-5: 0 84% 60%;
 
-  --app-font-sans: 'Inter', 'Noto Sans Arabic', sans-serif;
+  --app-font-sans: 'Inter', 'Noto Sans', 'Noto Sans Arabic', sans-serif;
   --app-font-serif: Georgia, serif;
   --app-font-mono: Menlo, monospace;
   --radius: .5rem; /* 8px */
@@ -254,7 +255,7 @@ html {
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
-    transition: background-color 180ms ease, color 180ms ease;
+    transition: background-color 80ms ease, color 80ms ease;
   }
 
   * {
@@ -439,6 +440,18 @@ html {
   .dark input::placeholder,
   .dark textarea::placeholder {
     color: #64748B;
+  }
+
+  .dark .bg-indigo-50\/70 {
+    background-color: rgb(49 46 129 / 0.22) !important;
+  }
+
+  .dark .bg-slate-200 {
+    background-color: rgb(51 65 85 / 0.9) !important;
+  }
+
+  .dark .hover\:bg-\[\#F7FAFC\]:hover {
+    background-color: var(--upz-surface-soft) !important;
   }
 }
 

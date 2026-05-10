@@ -235,7 +235,7 @@
       "dashboard": "Panel",
       "workspace": "Ish maydoni",
       "chat": "Chat",
-      "meetings": "Meetings",
+      "meetings": "Uchrashuvlar",
       "projects": "Loyihalar",
       "teams": "Jamoalar",
       "tasks": "Vazifalar va eslatmalar",
@@ -482,7 +482,7 @@
       }
     },
     "meetings": {
-      "eyebrow": "Meetings",
+      "eyebrow": "Uchrashuvlar",
       "title": "Jamoa va mijoz qo'ng'iroqlari uchun lux video uchrashuvlar",
       "description": "Instant call, scheduled session, team sync, screen sharing va kelajak calendar integratsiyasi uchun premium UPZ meeting room.",
       "newMeeting": "Yangi meeting",
@@ -580,17 +580,17 @@
     },
     "search": {
       "types": {
-        "User": "User",
+        "User": "Foydalanuvchi",
         "Chat": "Chat",
-        "Meeting": "Meeting",
+        "Meeting": "Uchrashuv",
         "Task": "Vazifa",
-        "Project": "Project",
+        "Project": "Loyiha",
         "Article": "Maqola",
         "Wallet": "Hamyon",
         "Premium": "Premium",
         "Animation": "Animatsiya",
-        "Learning": "Learning",
-        "Team": "Team"
+        "Learning": "O'rganish",
+        "Team": "Jamoa"
       }
     },
     "premium": {
@@ -916,7 +916,7 @@
         },
         "c5": {
           "name": "Design Systems Weekly",
-          "category": "Design",
+          "category": "Dizayn",
           "last": "SaaS teamlar uchun token naming patternlar"
         },
         "c6": {
@@ -972,7 +972,7 @@
         },
         "n4": {
           "title": "Learning pathlar qisqaroq va adaptive bo'lmoqda",
-          "category": "Learning",
+          "category": "O'rganish",
           "readTime": "3 min",
           "summary": "Skill platformlar user goaliga bog'langan personal practice looplarga o'tmoqda."
         }
@@ -1067,11 +1067,11 @@
       "modeLabel": "Mode",
       "modes": {
         "learning": {
-          "title": "Learning",
+          "title": "O'rganish",
           "desc": "Conceptlarni tushuntiradi va study path quradi"
         },
         "projects": {
-          "title": "Projects",
+          "title": "Loyihalar",
           "desc": "Scope, milestone va idea yaratadi"
         },
         "tasks": {
@@ -1079,7 +1079,7 @@
           "desc": "Suggest, prioritize va summarize qiladi"
         },
         "team": {
-          "title": "Team",
+          "title": "Jamoa",
           "desc": "Standup va activity report tayyorlaydi"
         }
       },
@@ -1110,14 +1110,14 @@
       "membersRolesDesc": "Admin/member role display va add-member placeholder.",
       "roles": {
         "admin": "Admin",
-        "member": "Member"
+        "member": "A'zo"
       },
       "focus": {
         "frontend": "Frontend",
-        "design": "Design",
-        "delivery": "Delivery",
+        "design": "Dizayn",
+        "delivery": "Yetkazib berish",
         "marketing": "Marketing",
-        "product": "Product",
+        "product": "Mahsulot",
         "backend": "Backend"
       },
       "modalTitle": "Team yaratish",
@@ -1132,7 +1132,7 @@
       "description": "Keyinchalik task, chat, team role, file va wallet invoice bilan ulanadigan production-ready project yuzasi.",
       "createProject": "Project yaratish",
       "deadlines": "Deadlinelar",
-      "kanban": "Kanban board",
+      "kanban": "Kanban taxtasi",
       "kanbanDesc": "Cardlar drag-and-drop behavior uchun joylashgan. MVP static column va hover affordance ishlatadi.",
       "dueMay": "May {{day}} deadline",
       "assignment": "Assignment",
@@ -1166,7 +1166,7 @@
           }
         },
         "review": {
-          "title": "Review",
+          "title": "Ko'rib chiqish",
           "tasks": {
             "0": "Chat mobile polish",
             "1": "Workspace integration cardlar",

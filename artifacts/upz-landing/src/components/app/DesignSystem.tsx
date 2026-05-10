@@ -36,8 +36,9 @@ interface PageHeaderProps {
 export function PageHeader({ eyebrow, title, description, children }: PageHeaderProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 14 }}
+      initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.18 }}
       className="relative flex flex-col gap-4 overflow-hidden rounded-[28px] border border-[#E5E7EB] bg-white p-6 shadow-sm md:flex-row md:items-center md:justify-between"
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-indigo-500 via-blue-500 to-indigo-400" />
@@ -60,9 +61,9 @@ interface SurfaceCardProps {
 export function SurfaceCard({ children, className, delay = 0 }: SurfaceCardProps) {
   return (
     <motion.section
-      initial={{ opacity: 0, y: 12 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.28, delay }}
+      transition={{ duration: 0.18, delay }}
       className={cn("rounded-[24px] border border-[#E5E7EB] bg-white p-5 shadow-sm", className)}
     >
       {children}

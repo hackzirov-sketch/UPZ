@@ -181,9 +181,10 @@ export function Topbar({ user, title, onToggleSidebar }: TopbarProps) {
       <AnimatePresence>
         {searchOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 8, scale: 0.98 }}
+            initial={{ opacity: 0, y: 6, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 6, scale: 0.99 }}
+            exit={{ opacity: 0, y: 4, scale: 0.99 }}
+            transition={{ duration: 0.13 }}
             className="absolute inset-x-3 top-[58px] z-50 overflow-hidden rounded-[22px] border border-[#E5E7EB] bg-white p-2.5 shadow-2xl sm:inset-x-auto sm:right-4 sm:w-[min(520px,calc(100vw-2rem))] sm:p-3 lg:w-[520px]"
           >
             <div className="flex h-10 items-center gap-2 rounded-2xl border border-[#E5E7EB] bg-[#F7FAFC] px-3">
@@ -224,9 +225,10 @@ export function Topbar({ user, title, onToggleSidebar }: TopbarProps) {
 
         {bellOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 8, scale: 0.98 }}
+            initial={{ opacity: 0, y: 6, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 6, scale: 0.99 }}
+            exit={{ opacity: 0, y: 4, scale: 0.99 }}
+            transition={{ duration: 0.13 }}
             className="absolute right-4 top-[58px] z-50 w-[min(430px,calc(100vw-2rem))] rounded-[24px] border border-[#E5E7EB] bg-white p-3 shadow-2xl"
           >
             <div className="mb-2 flex items-center justify-between px-1">

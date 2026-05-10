@@ -1,0 +1,47 @@
+Fix and upgrade the entire i18n/localization system.
+
+Main problems:
+1. Languages like Russian, Turkish, Arabic and other non-Latin/non-English languages are displayed as question marks like "??????".
+2. The interface does not fully switch to the selected language.
+3. Some words, buttons, cards, menus, titles and descriptions remain in the old/default language.
+4. All letters, words, punctuation and UI text must properly match the selected language.
+
+Requirements:
+- Make the whole app fully multilingual.
+- Ensure every visible text in the UI is connected to i18n.
+- Remove all hardcoded user-facing text from components.
+- Replace hardcoded labels with translation keys.
+- Check sidebar, header, dashboard cards, buttons, modals, dropdowns, notifications, tooltips, empty states, profile section, onboarding, settings, AI assistant button, calendar, tasks, chat, team, news, community and payment sections.
+- Every word must change when the user changes language.
+- All translation files must have the exact same keys.
+- Add missing keys for uz, en, ru, tr, ar and any other supported languages.
+- Replace broken "?????" values with correct real translations.
+- Make sure all files are saved and loaded as UTF-8.
+- Use proper Unicode support for Cyrillic, Arabic, Turkish special letters and Uzbek Latin characters.
+- Russian text must display Cyrillic correctly.
+- Turkish text must display characters like ğ, ü, ş, ö, ç, ı correctly.
+- Arabic text must display Arabic letters correctly and support RTL direction.
+- Uzbek text must correctly display o‘, g‘, sh, ch and apostrophe characters.
+- English text must stay clean and natural.
+- Do not mix languages in the same interface after language selection.
+- When Russian is selected, the full interface must be Russian.
+- When Turkish is selected, the full interface must be Turkish.
+- When Arabic is selected, the full interface must be Arabic and RTL.
+- When Uzbek is selected, the full interface must be Uzbek.
+- When English is selected, the full interface must be English.
+- Fix language switching so the whole UI rerenders immediately.
+- Persist selected language in localStorage or cookie.
+- On refresh, load the saved selected language.
+- Add fallback language only for missing keys, but also log missing keys during development.
+- Add a validation script that compares all locale files and reports missing or extra keys.
+- Add a script/check that detects broken values containing "????".
+- Add a Unicode-supported font stack:
+  Inter, "Noto Sans", "Noto Sans Arabic", system-ui, sans-serif.
+- For Arabic, set:
+  dir="rtl"
+  text-align and layout direction should adapt properly.
+- For all other languages, set:
+  dir="ltr"
+- Make sure date, time, numbers and plural words are formatted according to the selected locale.
+- Make sure page title, meta text and dynamic dashboard greetings are also translated.
+- Final result must be production-ready: no question marks, no mixed languages, no untranslated visible UI text.

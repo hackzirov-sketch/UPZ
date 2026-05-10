@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Edit, Mic, Paperclip, Reply, Send, Smile } from "lucide-react";
+import { Bot, Edit, Mic, Paperclip, Reply, Send, Smile, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { ChatMessage, ChatReactionEmoji, ChatRoom, ChatUser } from "@/types";
 import { StickerPicker, getReactionAsset } from "@/components/premium/PremiumAssets";
@@ -34,8 +34,9 @@ export function MessageInput({
   const [emojiOpen, setEmojiOpen] = useState(false);
   const [stickerOpen, setStickerOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const canMention = room.type !== "1on1";
+  const canMention = room.type !== "1on1" && room.type !== "ai" && room.type !== "saved";
   const mentionOpen = canMention && value.includes("@");
+  const aiCommandOpen = value.trimStart().toLowerCase().startsWith("/ai");
   const typingUser = room.memberIds.map((id) => getUser(id, users)).find((candidate) => candidate && candidate.id !== "me" && candidate.status === "online");
   const roomName = getRoomName(room, t);
 
@@ -71,6 +72,32 @@ export function MessageInput({
     textareaRef.current?.focus();
   };
 
+  const getAiDraftText = () => value.replace(/^(\s*)\/ai\s*/i, "").trim();
+
+  const applyAiDraft = (mode: "fix" | "professional" | "shorten" | "task") => {
+    const source = getAiDraftText();
+    if (!source) {
+      onChange("/ai ");
+      textareaRef.current?.focus();
+      return;
+    }
+
+    const normalized = source.replace(/\s+/g, " ").trim();
+    const capitalized = `${normalized.charAt(0).toUpperCase()}${normalized.slice(1)}`;
+    const withPunctuation = /[.!?]$/.test(capitalized) ? capitalized : `${capitalized}.`;
+    const nextValue =
+      mode === "fix"
+        ? withPunctuation
+        : mode === "professional"
+          ? `Salom, ${withPunctuation} Iltimos, imkon bo'lsa bugun ko'rib chiqamiz.`
+          : mode === "shorten"
+            ? `${capitalized.slice(0, 120)}${capitalized.length > 120 ? "..." : ""}`
+            : `Task: ${withPunctuation}\nOwner: me\nPriority: medium\nNext step: review and confirm.`;
+
+    onChange(nextValue);
+    textareaRef.current?.focus();
+  };
+
   return (
     <div className="flex-shrink-0 border-t border-gray-200 bg-white px-3 py-2.5 backdrop-blur-xl dark:border-gray-700 dark:bg-gray-900 sm:px-5">
       <AnimatePresence>
@@ -93,6 +120,46 @@ export function MessageInput({
       </AnimatePresence>
 
       <AnimatePresence>
+        {aiCommandOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 6 }}
+            className="mb-2 overflow-hidden rounded-2xl border border-indigo-200 bg-gradient-to-br from-indigo-50 via-white to-blue-50 p-2.5 shadow-sm dark:border-indigo-900/50 dark:from-indigo-950/35 dark:via-gray-900 dark:to-blue-950/25"
+          >
+            <div className="flex items-start gap-2">
+              <span className="grid h-8 w-8 flex-shrink-0 place-items-center rounded-xl bg-indigo-600 text-white shadow-sm shadow-indigo-300 dark:shadow-indigo-950">
+                <Bot className="h-4 w-4" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2 text-xs font-bold text-indigo-700 dark:text-indigo-300">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  {t("app.chat.aiComposeTitle", "AI yozish yordamchisi")}
+                </div>
+                <p className="mt-0.5 text-xs leading-5 text-gray-500 dark:text-gray-400">
+                  {t("app.chat.aiComposeDesc", "/ai dan keyin matn yozing, keyin uni tuzating yoki professional qiling.")}
+                </p>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {[
+                    ["fix", t("app.chat.aiFix", "Tuzatish")],
+                    ["professional", t("app.chat.aiProfessional", "Professional")],
+                    ["shorten", t("app.chat.aiShorten", "Qisqartirish")],
+                    ["task", t("app.chat.aiTask", "Task qilish")],
+                  ].map(([mode, label]) => (
+                    <button
+                      key={mode}
+                      type="button"
+                      onClick={() => applyAiDraft(mode as "fix" | "professional" | "shorten" | "task")}
+                      className="rounded-full border border-indigo-100 bg-white px-3 py-1.5 text-xs font-semibold text-indigo-700 transition-colors hover:bg-indigo-600 hover:text-white dark:border-indigo-800 dark:bg-gray-900 dark:text-indigo-300 dark:hover:bg-indigo-600 dark:hover:text-white"
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
         {replyTo && (
           <motion.div
             initial={{ opacity: 0, y: 8 }}
@@ -210,6 +277,12 @@ export function MessageInput({
           )}
         </AnimatePresence>
       </div>
+
+      {!aiCommandOpen && (
+        <div className="mt-1.5 px-2 text-[11px] text-gray-400 dark:text-gray-500">
+          {t("app.chat.aiComposeHint", "Maslahat: xabarni yozishda /ai yozib matnni tuzatish yoki qisqartirish mumkin.")}
+        </div>
+      )}
 
       <AnimatePresence>
         {mentionOpen && (

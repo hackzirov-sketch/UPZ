@@ -29,7 +29,24 @@ interface ActiveCall {
 
 function getInitialRooms() {
   const saved = storage.getChatRooms();
-  return saved.length > 0 ? saved : MOCK_CHAT_ROOMS;
+  if (saved.length === 0) return MOCK_CHAT_ROOMS;
+
+  const savedIds = new Set(saved.map((room) => room.id));
+  const requiredDemoRooms = MOCK_CHAT_ROOMS.filter((room) => ["r-ai", "r-saved"].includes(room.id) && !savedIds.has(room.id));
+  return [...requiredDemoRooms, ...saved];
+}
+
+function createAiReply(text: string) {
+  const clean = text.replace(/^\/ai\s*/i, "").trim();
+  if (!clean) {
+    return "Men tayyorman. Matn, loyiha yoki vazifa yozing, men uni tartiblayman.";
+  }
+
+  if (clean.length < 90) {
+    return `Tushunarli. Mana professionalroq variant: "${clean.charAt(0).toUpperCase()}${clean.slice(1)}"`;
+  }
+
+  return `Qisqa xulosa: ${clean.slice(0, 150)}${clean.length > 150 ? "..." : ""}\n\nTaklif: buni task, meeting agenda yoki chat reply formatiga aylantirish mumkin.`;
 }
 
 function updateMessageReaction(message: ChatMessage, emoji: ChatReactionEmoji): ChatMessage {
@@ -150,7 +167,20 @@ export default function ChatPage(_: Props) {
     updateActiveRoom((room) => ({
       ...room,
       unread: 0,
-      messages: [...room.messages, newMessage],
+      messages:
+        room.type === "ai"
+          ? [
+              ...room.messages,
+              newMessage,
+              {
+                id: `m-ai-${Date.now() + 1}`,
+                userId: "ai",
+                text: createAiReply(text),
+                timestamp: Date.now() + 600,
+                read: true,
+              },
+            ]
+          : [...room.messages, newMessage],
     }));
     setDraft("");
     setReplyTo(null);

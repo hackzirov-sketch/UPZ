@@ -370,11 +370,22 @@
       "noChatsMatch": "No chats match that search.",
       "archived": "Archived",
       "archivedDesc": "Placeholder for hidden chats",
+      "categories": {
+        "all": "All",
+        "direct": "Direct",
+        "groups": "Groups",
+        "teams": "Teams",
+        "projects": "Projects",
+        "ai": "AI",
+        "saved": "Saved"
+      },
       "types": {
         "1on1": "Direct",
         "group": "Group",
         "team": "Team",
-        "project": "Project"
+        "project": "Project",
+        "saved": "Saved",
+        "ai": "AI"
       },
       "read": "Read",
       "today": "Today",
@@ -402,6 +413,15 @@
       "pressEnterSave": "Press Enter to save changes",
       "mentionPlaceholder": "Message {{room}}. Use @ to mention teammates...",
       "messagePlaceholder": "Message {{room}}...",
+      "aiOnline": "UPZ AI online",
+      "savedPrivate": "Private saved messages",
+      "aiComposeTitle": "AI writing assistant",
+      "aiComposeDesc": "Write text after /ai, then fix it or make it professional.",
+      "aiFix": "Fix",
+      "aiProfessional": "Professional",
+      "aiShorten": "Shorten",
+      "aiTask": "Make task",
+      "aiComposeHint": "Tip: type /ai while composing to fix, shorten, or polish your message.",
       "sent": "sent",
       "readStatus": "read",
       "menu": {

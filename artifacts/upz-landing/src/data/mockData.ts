@@ -1,6 +1,7 @@
 import type { ChatUser, ChatRoom, Task, Note } from '@/types';
 
 export const MOCK_USERS: ChatUser[] = [
+  { id: 'ai', name: 'UPZ AI', initials: 'AI', color: '#0EA5E9', status: 'online', role: 'AI Assistant' },
   { id: 'u1', name: 'Alex Kim', initials: 'AK', color: '#6366F1', status: 'online', role: 'Lead Developer' },
   { id: 'u2', name: 'Sara Chen', initials: 'SC', color: '#3B82F6', status: 'online', role: 'Designer' },
   { id: 'u3', name: 'James Wright', initials: 'JW', color: '#10B981', status: 'away', role: 'Project Manager' },
@@ -10,6 +11,30 @@ export const MOCK_USERS: ChatUser[] = [
 ];
 
 export const MOCK_CHAT_ROOMS: ChatRoom[] = [
+  {
+    id: 'r-ai',
+    type: 'ai',
+    name: 'UPZ AI Assistant',
+    memberIds: ['me', 'ai'],
+    unread: 0,
+    pinned: true,
+    messages: [
+      { id: 'm-ai-1', userId: 'ai', text: 'Men UPZ ichidagi shaxsiy AI yordamchingizman. Goya, task, xabar matni, summary yoki project reja bo\'yicha yozing.', timestamp: Date.now() - 900000, read: true },
+      { id: 'm-ai-2', userId: 'ai', text: 'Istalgan chatda /ai yozib matnni tuzatish, professional qilish yoki qisqartirish mumkin.', timestamp: Date.now() - 840000, read: true },
+    ],
+  },
+  {
+    id: 'r-saved',
+    type: 'saved',
+    name: 'Saqlangan xabarlar',
+    memberIds: ['me'],
+    unread: 0,
+    pinned: true,
+    messages: [
+      { id: 'm-saved-1', userId: 'me', text: 'UPZ launch checklist: workspace, chat, teams, AI assistant and premium polish.', timestamp: Date.now() - 1200000, read: true, reactions: [{ emoji: 'done', userIds: ['me'] }] },
+      { id: 'm-saved-2', userId: 'me', text: 'Saved messages can work like a private productivity inbox for links, notes and quick reminders.', timestamp: Date.now() - 600000, read: true },
+    ],
+  },
   {
     id: 'r1',
     type: '1on1',

@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import { FolderOpen, Hash, Users, User as UserIcon } from "lucide-react";
+import { Bot, Bookmark, FolderOpen, Hash, Users, User as UserIcon } from "lucide-react";
 import type { ChatMessage, ChatReactionEmoji, ChatRoom, ChatType, ChatUser } from "@/types";
 import { MOCK_USERS } from "@/data/mockData";
 import { PREMIUM_REACTIONS, PremiumAvatarRing, PremiumStatusBadge, getPremiumStatusForUser } from "@/components/premium/PremiumAssets";
@@ -11,6 +11,8 @@ export const CHAT_TYPE_LABELS: Record<ChatType, string> = {
   group: "Group",
   team: "Team",
   project: "Project",
+  saved: "Saved",
+  ai: "AI",
 };
 
 export const CHAT_TYPE_ICONS: Record<ChatType, ComponentType<{ className?: string }>> = {
@@ -18,6 +20,8 @@ export const CHAT_TYPE_ICONS: Record<ChatType, ComponentType<{ className?: strin
   group: Users,
   team: Hash,
   project: FolderOpen,
+  saved: Bookmark,
+  ai: Bot,
 };
 
 export function cn(...classes: Array<string | false | null | undefined>) {

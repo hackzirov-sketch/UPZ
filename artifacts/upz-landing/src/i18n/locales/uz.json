@@ -370,11 +370,22 @@
       "noChatsMatch": "Bu qidiruvga mos chat yo'q.",
       "archived": "Arxiv",
       "archivedDesc": "Yashirilgan chatlar uchun placeholder",
+      "categories": {
+        "all": "Hammasi",
+        "direct": "Shaxsiy",
+        "groups": "Guruhlar",
+        "teams": "Jamoa",
+        "projects": "Loyihalar",
+        "ai": "AI",
+        "saved": "Saqlangan"
+      },
       "types": {
         "1on1": "Shaxsiy",
         "group": "Guruh",
         "team": "Jamoa",
-        "project": "Loyiha"
+        "project": "Loyiha",
+        "saved": "Saqlangan",
+        "ai": "AI"
       },
       "read": "O'qildi",
       "today": "Bugun",
@@ -402,6 +413,15 @@
       "pressEnterSave": "Saqlash uchun Enter bosing",
       "mentionPlaceholder": "{{room}}ga xabar. Teammate mention uchun @ ishlating...",
       "messagePlaceholder": "{{room}}ga xabar...",
+      "aiOnline": "UPZ AI onlayn",
+      "savedPrivate": "Shaxsiy saqlangan xabarlar",
+      "aiComposeTitle": "AI yozish yordamchisi",
+      "aiComposeDesc": "/ai dan keyin matn yozing, keyin uni tuzating yoki professional qiling.",
+      "aiFix": "Tuzatish",
+      "aiProfessional": "Professional",
+      "aiShorten": "Qisqartirish",
+      "aiTask": "Task qilish",
+      "aiComposeHint": "Maslahat: xabar yozishda /ai yozib matnni tuzatish yoki qisqartirish mumkin.",
       "sent": "yuborildi",
       "readStatus": "o'qildi",
       "menu": {

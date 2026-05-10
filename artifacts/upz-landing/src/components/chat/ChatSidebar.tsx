@@ -1,5 +1,6 @@
+import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowLeft, Pin, Search } from "lucide-react";
+import { ArrowLeft, Bot, Bookmark, FolderOpen, Hash, MessageCircle, Pin, Search, User, Users } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { ChatRoom, ChatUser } from "@/types";
 import { ChatListItem } from "./ChatListItem";
@@ -23,12 +24,43 @@ function sortRooms(rooms: ChatRoom[]) {
   });
 }
 
+type ChatCategory = "all" | "direct" | "groups" | "teams" | "projects" | "ai" | "saved";
+
+const CHAT_CATEGORIES: Array<{
+  id: ChatCategory;
+  label: string;
+  icon: typeof MessageCircle;
+  match: (room: ChatRoom) => boolean;
+}> = [
+  { id: "all", label: "Hammasi", icon: MessageCircle, match: () => true },
+  { id: "direct", label: "Shaxsiy", icon: User, match: (room) => room.type === "1on1" },
+  { id: "groups", label: "Guruhlar", icon: Users, match: (room) => room.type === "group" },
+  { id: "teams", label: "Jamoa", icon: Hash, match: (room) => room.type === "team" },
+  { id: "projects", label: "Loyihalar", icon: FolderOpen, match: (room) => room.type === "project" },
+  { id: "ai", label: "AI", icon: Bot, match: (room) => room.type === "ai" },
+  { id: "saved", label: "Saved", icon: Bookmark, match: (room) => room.type === "saved" },
+];
+
 export function ChatSidebar({ rooms, users, activeId, query, onQueryChange, onSelectRoom, onBackToApp, className }: ChatSidebarProps) {
   const { t } = useTranslation();
+  const [activeCategory, setActiveCategory] = useState<ChatCategory>("all");
   const normalizedQuery = query.trim().toLowerCase();
+  const categoryCounts = useMemo(
+    () =>
+      CHAT_CATEGORIES.reduce(
+        (counts, category) => ({
+          ...counts,
+          [category.id]: rooms.filter((room) => !room.archived && category.match(room)).length,
+        }),
+        {} as Record<ChatCategory, number>,
+      ),
+    [rooms],
+  );
+  const activeCategoryConfig = CHAT_CATEGORIES.find((category) => category.id === activeCategory) ?? CHAT_CATEGORIES[0];
   const visibleRooms = sortRooms(
     rooms.filter((room) => {
       if (room.archived) return false;
+      if (!activeCategoryConfig.match(room)) return false;
       if (!normalizedQuery) return true;
       const last = getMessageText(getLastMessage(room), t).toLowerCase();
       return getRoomName(room, t).toLowerCase().includes(normalizedQuery) || last.includes(normalizedQuery);
@@ -63,6 +95,30 @@ export function ChatSidebar({ rooms, users, activeId, query, onQueryChange, onSe
             />
           </div>
         </div>
+        <div className="mt-2 flex gap-1.5 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {CHAT_CATEGORIES.map(({ id, label, icon: Icon }) => {
+            const active = activeCategory === id;
+            const count = categoryCounts[id] ?? 0;
+            return (
+              <button
+                key={id}
+                type="button"
+                onClick={() => setActiveCategory(id)}
+                className={cn(
+                  "inline-flex h-8 flex-shrink-0 items-center gap-1.5 rounded-full border px-3 text-xs font-semibold transition-colors",
+                  active
+                    ? "border-indigo-200 bg-indigo-50 text-indigo-700 dark:border-indigo-800 dark:bg-indigo-950/50 dark:text-indigo-200"
+                    : "border-gray-200 bg-white text-gray-500 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800",
+                )}
+                aria-pressed={active}
+              >
+                <Icon className="h-3.5 w-3.5" />
+                <span>{t(`app.chat.categories.${id}`, label)}</span>
+                <span className={cn("rounded-full px-1.5 py-0.5 text-[10px]", active ? "bg-white/80 dark:bg-gray-900/70" : "bg-gray-100 dark:bg-gray-800")}>{count}</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-2 py-2">
@@ -84,7 +140,7 @@ export function ChatSidebar({ rooms, users, activeId, query, onQueryChange, onSe
 
         <section>
           <div className="mb-1 px-2 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-gray-400 dark:text-gray-500">
-            {t("app.chat.allConversations")}
+            {activeCategory === "all" ? t("app.chat.allConversations") : t(`app.chat.categories.${activeCategory}`, activeCategoryConfig.label)}
           </div>
           <div className="space-y-1">
             <AnimatePresence initial={false}>

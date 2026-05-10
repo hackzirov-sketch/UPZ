@@ -2,7 +2,7 @@ export type Profession = 'developer' | 'teacher' | 'student' | 'freelancer' | 'd
 export type Goal = 'learn' | 'find_work' | 'manage_team' | 'build_portfolio' | 'freelance';
 export type Experience = 'beginner' | 'intermediate' | 'advanced';
 export type Priority = 'low' | 'medium' | 'high';
-export type ChatType = '1on1' | 'group' | 'team' | 'project';
+export type ChatType = '1on1' | 'group' | 'team' | 'project' | 'saved' | 'ai';
 export type UserStatus = 'online' | 'offline' | 'away';
 export type ChatReactionEmoji =
   | 'like'

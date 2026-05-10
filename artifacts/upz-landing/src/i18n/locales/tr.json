@@ -370,11 +370,22 @@
       "noChatsMatch": "Bu aramaya uygun sohbet yok.",
       "archived": "Ar?iv",
       "archivedDesc": "Gizli sohbetler i?in placeholder",
+      "categories": {
+        "all": "Tumu",
+        "direct": "Direkt",
+        "groups": "Gruplar",
+        "teams": "Ekip",
+        "projects": "Projeler",
+        "ai": "AI",
+        "saved": "Kaydedilen"
+      },
       "types": {
         "1on1": "Direkt",
         "group": "Grup",
         "team": "Ekip",
-        "project": "Proje"
+        "project": "Proje",
+        "saved": "Kaydedilen",
+        "ai": "AI"
       },
       "read": "Okundu",
       "today": "Bug?n",
@@ -402,6 +413,15 @@
       "pressEnterSave": "Kaydetmek i?in Enter?a bas",
       "mentionPlaceholder": "{{room}} mesaj?. Teammate mention i?in @ kullan...",
       "messagePlaceholder": "{{room}} mesaj?...",
+      "aiOnline": "UPZ AI online",
+      "savedPrivate": "Ozel kaydedilen mesajlar",
+      "aiComposeTitle": "AI yazma yardimcisi",
+      "aiComposeDesc": "/ai sonrasina metin yaz, sonra duzelt veya profesyonel yap.",
+      "aiFix": "Duzelt",
+      "aiProfessional": "Profesyonel",
+      "aiShorten": "Kisalt",
+      "aiTask": "Task yap",
+      "aiComposeHint": "Ipucu: mesaj yazarken /ai yazarak metni duzeltebilir veya kisaltabilirsin.",
       "sent": "g?nderildi",
       "readStatus": "okundu",
       "menu": {

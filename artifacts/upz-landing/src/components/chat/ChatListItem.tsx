@@ -5,6 +5,7 @@ import type { ChatRoom, ChatUser } from "@/types";
 import { PremiumStatusBadge, getPremiumStatusForUser } from "@/components/premium/PremiumAssets";
 import {
   Avatar,
+  CHAT_TYPE_LABELS,
   RoomGlyph,
   cn,
   formatSidebarTime,
@@ -13,6 +14,15 @@ import {
   getRoomName,
   messagePreview,
 } from "./chatShared";
+
+const ROOM_STATUS_BY_TYPE = {
+  "1on1": "available",
+  group: "learning",
+  team: "meeting",
+  project: "building",
+  saved: "focused",
+  ai: "coding",
+} as const;
 
 interface ChatListItemProps {
   room: ChatRoom;
@@ -28,13 +38,7 @@ export function ChatListItem({ room, users, active, onSelect }: ChatListItemProp
   const unread = room.unread ?? 0;
   const isDirect = room.type === "1on1";
   const roomName = getRoomName(room, t);
-  const roomStatus = isDirect
-    ? getPremiumStatusForUser(peer)
-    : room.type === "project"
-      ? "building"
-      : room.type === "team"
-        ? "meeting"
-        : "learning";
+  const roomStatus = isDirect ? getPremiumStatusForUser(peer) : ROOM_STATUS_BY_TYPE[room.type];
 
   return (
     <motion.button
@@ -66,7 +70,7 @@ export function ChatListItem({ room, users, active, onSelect }: ChatListItemProp
         </div>
         <div className="mt-1 flex items-center gap-2">
           <span className="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-gray-500 dark:bg-gray-700 dark:text-gray-400">
-            {t(`app.chat.types.${room.type}`)}
+            {t(`app.chat.types.${room.type}`, CHAT_TYPE_LABELS[room.type])}
           </span>
           <p className="min-w-0 flex-1 truncate text-xs text-gray-400 group-hover:text-gray-600 dark:text-gray-500 dark:group-hover:text-gray-300">
             {messagePreview(lastMessage, users, t)}

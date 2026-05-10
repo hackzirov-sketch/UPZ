@@ -19,6 +19,9 @@ interface ChatHeaderProps {
 
 function roomStatus(room: ChatRoom, users: ChatUser[], t: (key: string, options?: Record<string, unknown>) => string) {
   const peer = getRoomPeer(room, users);
+  if (room.type === "ai") return { label: t("app.chat.aiOnline", { defaultValue: "UPZ AI online" }) };
+  if (room.type === "saved") return { label: t("app.chat.savedPrivate", { defaultValue: "Private saved messages" }) };
+
   if (room.type === "1on1") {
     if (peer?.status === "online") return { label: t("app.chat.online") };
     if (peer?.status === "away") return { label: t("app.chat.away") };
@@ -37,7 +40,8 @@ export function ChatHeader({ room, users, onBackToList, onAction, onStartCall }:
   const memberPreview = room.memberIds.filter((id) => id !== "me").slice(0, 4);
   const roomName = getRoomName(room, t);
   const linkedTask = getLinkedTask(room, t);
-  const headerStatus = room.type === "1on1" ? getPremiumStatusForUser(peer) : room.type === "project" ? "building" : "meeting";
+  const headerStatus = room.type === "1on1" ? getPremiumStatusForUser(peer) : room.type === "ai" ? "coding" : room.type === "saved" ? "focused" : room.type === "project" ? "building" : "meeting";
+  const canCall = room.type !== "ai" && room.type !== "saved";
 
   useEffect(() => {
     if (!open) return;
@@ -76,7 +80,7 @@ export function ChatHeader({ room, users, onBackToList, onAction, onStartCall }:
         </div>
       </div>
 
-      {room.type !== "1on1" && (
+      {room.type !== "1on1" && room.type !== "ai" && room.type !== "saved" && (
         <div className="hidden items-center -space-x-2 lg:flex">
           {memberPreview.map((memberId) => (
             <Avatar key={memberId} userId={memberId} size={28} showOnline className="rounded-full ring-2 ring-white dark:ring-gray-900" />
@@ -85,22 +89,26 @@ export function ChatHeader({ room, users, onBackToList, onAction, onStartCall }:
       )}
 
       <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
-        <button
-          type="button"
-          onClick={() => onStartCall("voice")}
-          className="grid h-10 w-10 place-items-center rounded-full transition-colors hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-gray-100"
-          aria-label={t("app.chat.startVoice")}
-        >
-          <Phone className="h-4 w-4" />
-        </button>
-        <button
-          type="button"
-          onClick={() => onStartCall("video")}
-          className="grid h-10 w-10 place-items-center rounded-full transition-colors hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-gray-100"
-          aria-label={t("app.chat.startVideo")}
-        >
-          <Video className="h-4 w-4" />
-        </button>
+        {canCall && (
+          <>
+            <button
+              type="button"
+              onClick={() => onStartCall("voice")}
+              className="grid h-10 w-10 place-items-center rounded-full transition-colors hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-gray-100"
+              aria-label={t("app.chat.startVoice")}
+            >
+              <Phone className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => onStartCall("video")}
+              className="grid h-10 w-10 place-items-center rounded-full transition-colors hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-gray-100"
+              aria-label={t("app.chat.startVideo")}
+            >
+              <Video className="h-4 w-4" />
+            </button>
+          </>
+        )}
         <button
           type="button"
           onClick={() => onAction("search")}

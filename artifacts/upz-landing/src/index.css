@@ -370,13 +370,26 @@ html {
 
   .dark .ring-\[\#E5E7EB\],
   .dark .ring-indigo-100,
+  .dark .ring-indigo-200,
   .dark .ring-blue-100,
+  .dark .ring-blue-200,
   .dark .ring-emerald-100,
   .dark .ring-amber-100,
   .dark .ring-rose-100,
   .dark .ring-slate-200,
   .dark .ring-white\/80 {
     --tw-ring-color: var(--upz-border) !important;
+  }
+
+  .dark .border-indigo-200,
+  .dark .border-indigo-300 {
+    border-color: rgb(99 102 241 / 0.35) !important;
+  }
+
+  .dark .bg-indigo-50\/60,
+  .dark .bg-indigo-50\/70,
+  .dark .bg-indigo-50\/80 {
+    background-color: rgb(49 46 129 / 0.22) !important;
   }
 
   .dark .shadow-indigo-200,
